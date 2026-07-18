@@ -10,11 +10,11 @@ html{
     margin:0;
     padding:0;
     box-sizing:border-box;
-    font-family:Arial, Helvetica, sans-serif;
+    font-family:"Poppins",sans-serif;
 }
 
 body{
-    background:#0b1120;
+    background:#08111f;
     color:white;
 }
 
@@ -23,13 +23,13 @@ body{
 /* ========================= */
 
 .navbar{
+
     position:fixed;
+
     top:0;
     left:0;
-    width:100%;
 
-    background:rgba(11,17,32,.95);
-    backdrop-filter:blur(10px);
+    width:100%;
 
     display:flex;
     justify-content:space-between;
@@ -37,29 +37,57 @@ body{
 
     padding:20px 60px;
 
+    background:rgba(8,17,31,.92);
+
+    backdrop-filter:blur(15px);
+
     z-index:1000;
+
 }
 
 .logo{
-    font-size:26px;
-    font-weight:bold;
+
+    font-size:28px;
+    font-weight:700;
+
+}
+
+.menu-toggle{
+
+    display:none;
+
+    font-size:32px;
+
+    cursor:pointer;
+
 }
 
 .nav-links{
-    list-style:none;
+
     display:flex;
+
     gap:35px;
+
+    list-style:none;
+
 }
 
 .nav-links a{
-    text-decoration:none;
+
     color:white;
-    font-weight:bold;
+
+    text-decoration:none;
+
+    font-weight:600;
+
     transition:.3s;
+
 }
 
 .nav-links a:hover{
-    color:#7dd3fc;
+
+    color:#4ea8ff;
+
 }
 
 /* ========================= */
@@ -67,59 +95,67 @@ body{
 /* ========================= */
 
 header{
+
     height:100vh;
 
     display:flex;
-    flex-direction:column;
+
     justify-content:center;
+
     align-items:center;
+
+    flex-direction:column;
 
     text-align:center;
 
-    background:linear-gradient(135deg,#0b1120,#16213e);
+    background:
+    linear-gradient(rgba(8,17,31,.82),rgba(8,17,31,.82)),
+    linear-gradient(135deg,#08111f,#142850);
 
-    padding-top:90px;
 }
 
 header h1{
-    font-size:70px;
-    margin-bottom:20px;
+
+    font-size:80px;
+
+    margin-bottom:15px;
+
 }
 
 header h2{
-    font-size:28px;
+
+    font-size:30px;
+
     color:#7dd3fc;
+
     margin-bottom:50px;
+
 }
 
 /* ========================= */
-/* HERO BUTTONS */
+/* BUTTONS */
 /* ========================= */
 
 .hero-buttons{
+
     display:flex;
+
     gap:20px;
-    justify-content:center;
-    flex-wrap:wrap;
-    margin-bottom:40px;
+
 }
 
 .play-button,
 .discord-button{
 
-    display:inline-block;
+    padding:16px 36px;
 
-    padding:15px 35px;
-
-    color:white;
+    border-radius:12px;
 
     text-decoration:none;
 
-    font-size:20px;
+    color:white;
 
-    font-weight:bold;
-
-    border-radius:10px;
+    font-weight:600;
 
     transition:.3s;
 
@@ -131,25 +167,16 @@ header h2{
 
 }
 
-.play-button:hover{
-
-    background:#3b82f6;
-
-    transform:scale(1.05);
-
-}
-
 .discord-button{
 
     background:#5865F2;
 
 }
 
+.play-button:hover,
 .discord-button:hover{
 
-    background:#6d78ff;
-
-    transform:scale(1.05);
+    transform:translateY(-5px);
 
 }
 
@@ -163,7 +190,9 @@ header h2{
 
     text-decoration:none;
 
-    font-size:50px;
+    font-size:45px;
+
+    margin-top:60px;
 
     animation:bounce 2s infinite;
 
@@ -172,15 +201,21 @@ header h2{
 @keyframes bounce{
 
     0%,20%,50%,80%,100%{
+
         transform:translateY(0);
+
     }
 
     40%{
-        transform:translateY(-12px);
+
+        transform:translateY(-10px);
+
     }
 
     60%{
-        transform:translateY(-6px);
+
+        transform:translateY(-5px);
+
     }
 
 }
@@ -191,7 +226,7 @@ header h2{
 
 section{
 
-    padding:120px 20px;
+    padding:120px 40px;
 
     text-align:center;
 
@@ -199,35 +234,39 @@ section{
 
 section h1{
 
-    font-size:50px;
+    font-size:48px;
 
     margin-bottom:40px;
 
 }
 
 /* ========================= */
-/* GAME CARDS */
+/* GAME CARD */
 /* ========================= */
 
 .game-card{
+
+    background:#16213e;
 
     max-width:450px;
 
     margin:30px auto;
 
-    padding:25px;
+    padding:30px;
 
-    background:#1e293b;
-
-    border-radius:15px;
+    border-radius:18px;
 
     transition:.3s;
+
+    border:1px solid rgba(255,255,255,.08);
 
 }
 
 .game-card:hover{
 
     transform:translateY(-8px);
+
+    box-shadow:0 0 30px rgba(37,99,235,.35);
 
 }
 
@@ -246,13 +285,13 @@ section h1{
 #about p,
 #contact p{
 
-    max-width:800px;
+    max-width:850px;
 
     margin:auto;
 
-    line-height:1.8;
-
     font-size:20px;
+
+    line-height:1.8;
 
 }
 
@@ -262,74 +301,10 @@ section h1{
 
 footer{
 
-    padding:25px;
+    background:#111827;
 
     text-align:center;
 
-    background:#111827;
-
-}
-
-/* ========================= */
-/* MOBILE RESPONSIVE */
-/* ========================= */
-
-@media (max-width:768px){
-
-    .navbar{
-        flex-direction:column;
-        justify-content:center;
-        align-items:center;
-        padding:15px;
-        gap:15px;
-    }
-
-    .logo{
-        font-size:28px;
-        text-align:center;
-    }
-
-    .nav-links{
-        flex-wrap:wrap;
-        justify-content:center;
-        gap:18px;
-    }
-
-    .nav-links a{
-        font-size:16px;
-    }
-
-    header{
-        padding:140px 20px 40px;
-    }
-
-    header h1{
-        font-size:56px;
-    }
-
-    header h2{
-        font-size:22px;
-    }
-
-    .hero-buttons{
-        flex-direction:column;
-        width:100%;
-        align-items:center;
-    }
-
-    .play-button,
-    .discord-button{
-        width:90%;
-        max-width:350px;
-        text-align:center;
-    }
-
-    section h1{
-        font-size:36px;
-    }
-
-    .game-card{
-        width:95%;
-    }
+    padding:30px;
 
 }
