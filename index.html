@@ -1,21 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Manaton Games</title>
 
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="style.css">
 
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-
-    <!-- CSS -->
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/responsive.css">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
 </head>
 
@@ -23,102 +17,301 @@
 
     <!-- NAVBAR -->
 
-    <nav class="navbar">
-
-        <div class="logo">
-            🎮 Manaton Games
-        </div>
-
-        <div class="menu-toggle" id="menu-toggle">
-            ☰
-        </div>
-
-        <ul class="nav-links" id="nav-links">
-            <li><a href="#">Home</a></li>
-            <li><a href="#games">Games</a></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="#contact">Contact</a></li>
-        </ul>
-
-    </nav>
-
-    <!-- HERO -->
-
     <header>
 
-        <h1>🎮 Manaton Games</h1>
+        <nav class="navbar">
 
-        <h2>Creating Amazing Roblox Experiences</h2>
+            <div class="logo">
+                <span>M</span>
+                Manaton Games
+            </div>
 
-        <div class="hero-buttons">
 
-            <a href="#games" class="play-button">
-                ▶ Play Games
-            </a>
+            <button class="menu-btn">
+                <i class="fa-solid fa-bars"></i>
+            </button>
 
-            <a href="#contact" class="discord-button">
-                💬 Join Discord
-            </a>
 
-        </div>
+            <ul class="nav-links">
 
-        <a href="#games" class="scroll-down">
-            ↓
-        </a>
+                <li>
+                    <a href="#home">Home</a>
+                </li>
+
+                <li>
+                    <a href="#games">Games</a>
+                </li>
+
+                <li>
+                    <a href="#news">News</a>
+                </li>
+
+                <li>
+                    <a href="#community">Community</a>
+                </li>
+
+            </ul>
+
+
+        </nav>
 
     </header>
 
-    <!-- GAMES -->
 
-    <section id="games">
 
-        <h1>Featured Games</h1>
+    <!-- HERO SECTION -->
 
-        <div class="game-card">
-            <h2>🎮 PLS DONATE 3</h2>
-            <p>Coming Soon...</p>
+    <section class="hero" id="home">
+
+        <div class="hero-content">
+
+            <h1>
+                Welcome to
+                <span>Manaton Games</span>
+            </h1>
+
+
+            <p>
+                Creating amazing Roblox experiences,
+                communities and unforgettable moments.
+            </p>
+
+
+            <div class="hero-buttons">
+
+                <a href="#" class="btn primary">
+                    <i class="fa-solid fa-gamepad"></i>
+                    Play Games
+                </a>
+
+
+                <a href="#" class="btn secondary">
+                    <i class="fa-brands fa-discord"></i>
+                    Discord
+                </a>
+
+            </div>
+
+
         </div>
 
-        <div class="game-card">
-            <h2>🌱 Grow a Garden Modded</h2>
-            <p>Coming Soon...</p>
-        </div>
 
     </section>
 
-    <!-- ABOUT -->
 
-    <section id="about">
 
-        <h1>About Manaton Games</h1>
+
+    <!-- GAMES SECTION -->
+
+
+    <section class="games" id="games">
+
+        <h2>
+            Our Games
+        </h2>
+
+
+        <div class="game-container">
+
+
+            <div class="game-card">
+
+                <div class="game-image">
+                    <img src="assets/plsdonate3.png" alt="PLS DONATE 3">
+                </div>
+
+
+                <div class="game-info">
+
+                    <h3>
+                        PLS DONATE 3
+                    </h3>
+
+
+                    <p>
+                        The next generation donation experience.
+                    </p>
+
+
+                    <span class="status">
+                        Development
+                    </span>
+
+
+                    <a href="#" class="game-btn">
+                        View Game
+                    </a>
+
+
+                </div>
+
+            </div>
+
+
+
+
+            <div class="game-card">
+
+                <div class="game-image">
+
+                    <img src="assets/gagmodded.png" alt="Grow a Garden Modded">
+
+                </div>
+
+
+                <div class="game-info">
+
+
+                    <h3>
+                        Grow a Garden Modded
+                    </h3>
+
+
+                    <p>
+                        Grow, collect pets and discover events.
+                    </p>
+
+
+                    <span class="status">
+                        Coming Soon
+                    </span>
+
+
+                    <a href="#" class="game-btn">
+                        View Game
+                    </a>
+
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+    </section>
+
+
+
+
+
+    <!-- NEWS SECTION -->
+
+
+    <section class="news" id="news">
+
+
+        <h2>
+            Latest News
+        </h2>
+
+
+
+        <div class="news-container">
+
+
+            <div class="news-card">
+
+                <h3>
+                    🎮 PLS DONATE 3
+                </h3>
+
+                <p>
+                    New features are being developed.
+                </p>
+
+            </div>
+
+
+
+            <div class="news-card">
+
+                <h3>
+                    🌱 Grow a Garden Modded
+                </h3>
+
+                <p>
+                    New events and updates coming soon.
+                </p>
+
+            </div>
+
+
+
+        </div>
+
+
+    </section>
+
+
+
+
+
+
+    <!-- COMMUNITY SECTION -->
+
+
+    <section class="community" id="community">
+
+
+        <h2>
+            Join Our Community
+        </h2>
+
 
         <p>
-            Manaton Games is an independent Roblox game studio dedicated to creating
-            fun, creative and high-quality Roblox experiences.
+            Follow Manaton Games and stay updated.
         </p>
 
+
+
+        <div class="social-buttons">
+
+
+            <a href="#">
+                <i class="fa-brands fa-discord"></i>
+                Discord
+            </a>
+
+
+            <a href="#">
+                <i class="fa-brands fa-roblox"></i>
+                Roblox Group
+            </a>
+
+
+            <a href="#">
+                <i class="fa-brands fa-youtube"></i>
+                YouTube
+            </a>
+
+
+        </div>
+
+
     </section>
 
-    <!-- CONTACT -->
 
-    <section id="contact">
 
-        <h1>Contact</h1>
 
-        <p>💬 Discord - Coming Soon</p>
-        <p>👥 Roblox Group - Coming Soon</p>
-
-    </section>
 
     <!-- FOOTER -->
 
+
     <footer>
 
-        © 2026 Manaton Games™
+        <p>
+            © 2026 Manaton Games. All rights reserved.
+        </p>
 
     </footer>
 
-    <script src="js/script.js"></script>
+
+
+
+<script src="script.js"></script>
 
 </body>
 
