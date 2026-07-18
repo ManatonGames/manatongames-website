@@ -1,1 +1,84 @@
+@media(max-width:768px){
 
+    .navbar{
+
+        padding:20px;
+
+    }
+
+    .menu-toggle{
+
+        display:block;
+
+    }
+
+    .nav-links{
+
+        display:none;
+
+        position:absolute;
+
+        top:80px;
+
+        left:0;
+
+        width:100%;
+
+        background:#08111f;
+
+        flex-direction:column;
+
+        text-align:center;
+
+        padding:25px 0;
+
+        gap:25px;
+
+    }
+
+    .nav-links.active{
+
+        display:flex;
+
+    }
+
+    .logo{
+
+        font-size:24px;
+
+    }
+
+    header h1{
+
+        font-size:52px;
+
+    }
+
+    header h2{
+
+        font-size:22px;
+
+    }
+
+    .hero-buttons{
+
+        flex-direction:column;
+
+        width:90%;
+
+    }
+
+    .play-button,
+    .discord-button{
+
+        text-align:center;
+
+    }
+
+    section h1{
+
+        font-size:36px;
+
+    }
+
+}
