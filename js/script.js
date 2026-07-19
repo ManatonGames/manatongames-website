@@ -22,23 +22,3 @@ document.addEventListener("DOMContentLoaded", async () => {
         data.stats.totalFavorites.toLocaleString();
 
 });
-
-/* ===========================
-   HEADER EFFECT
-=========================== */
-
-const header = document.getElementById("header");
-
-window.addEventListener("scroll", () => {
-
-    if(window.scrollY > 30){
-
-        header.classList.add("scrolled");
-
-    }else{
-
-        header.classList.remove("scrolled");
-
-    }
-
-});
