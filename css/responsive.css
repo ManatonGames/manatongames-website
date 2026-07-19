@@ -297,3 +297,33 @@
     }
 
 }
+
+/* =========================
+   FEATURED RESPONSIVE
+========================= */
+
+@media (max-width:768px){
+
+    .featured-card{
+
+        flex-direction:column-reverse;
+
+        text-align:center;
+
+        padding:35px;
+
+    }
+
+    .featured-info h2{
+
+        font-size:38px;
+
+    }
+
+    .featured-buttons{
+
+        justify-content:center;
+
+    }
+
+}
