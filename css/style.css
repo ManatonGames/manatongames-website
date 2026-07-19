@@ -958,3 +958,118 @@ footer{
     font-size:18px;
 
 }
+
+/* =========================
+   FEATURED GAME
+========================= */
+
+#featured{
+
+    margin:100px auto;
+
+}
+
+.featured-card{
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:60px;
+
+    background:linear-gradient(135deg,#1e293b,#111827);
+
+    border-radius:25px;
+
+    padding:60px;
+
+    border:1px solid rgba(255,255,255,.08);
+
+}
+
+.featured-info{
+
+    flex:1;
+
+}
+
+.featured-tag{
+
+    display:inline-block;
+
+    background:#2563eb;
+
+    padding:8px 18px;
+
+    border-radius:999px;
+
+    margin-bottom:20px;
+
+    font-size:14px;
+
+    font-weight:600;
+
+}
+
+.featured-info h2{
+
+    font-size:54px;
+
+    margin-bottom:20px;
+
+}
+
+.featured-info p{
+
+    color:#cbd5e1;
+
+    font-size:20px;
+
+    line-height:1.8;
+
+    margin-bottom:35px;
+
+}
+
+.featured-buttons{
+
+    display:flex;
+
+    gap:20px;
+
+    flex-wrap:wrap;
+
+}
+
+.secondary-btn{
+
+    background:#334155;
+
+}
+
+.secondary-btn:hover{
+
+    background:#475569;
+
+}
+
+.featured-image{
+
+    flex:1;
+
+    display:flex;
+
+    justify-content:center;
+
+}
+
+.featured-image img{
+
+    width:100%;
+
+    max-width:500px;
+
+    border-radius:20px;
+
+    box-shadow:0 25px 60px rgba(0,0,0,.35);
+
+}
