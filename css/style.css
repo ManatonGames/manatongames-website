@@ -330,3 +330,72 @@ section h2{
     background:#3b82f6;
 
 }
+
+/* =========================
+   PREMIUM GAME CARDS
+========================= */
+
+.game-card{
+
+    position:relative;
+
+}
+
+.game-card::before{
+
+    content:"";
+
+    position:absolute;
+
+    top:0;
+    left:-100%;
+
+    width:100%;
+    height:100%;
+
+    background:linear-gradient(
+        120deg,
+        transparent,
+        rgba(255,255,255,.08),
+        transparent
+    );
+
+    transition:.7s;
+
+}
+
+.game-card:hover::before{
+
+    left:100%;
+
+}
+
+.game-card img{
+
+    transition:.4s;
+
+}
+
+.game-card:hover img{
+
+    transform:scale(1.05);
+
+}
+
+.play-btn{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    gap:8px;
+
+}
+
+.play-btn::before{
+
+    content:"▶";
+
+    font-size:13px;
+
+}
