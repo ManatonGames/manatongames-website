@@ -788,3 +788,119 @@ section h2{
     line-height:1.7;
 
 }
+
+/* =========================
+   FOOTER
+========================= */
+
+footer{
+
+    background:#0b1220;
+
+    margin-top:120px;
+
+    padding:70px 0 30px;
+
+    border-top:1px solid rgba(255,255,255,.08);
+
+}
+
+.footer-grid{
+
+    display:grid;
+
+    grid-template-columns:2fr 1fr 1fr;
+
+    gap:50px;
+
+}
+
+.footer-brand img{
+
+    width:70px;
+
+    margin-bottom:20px;
+
+}
+
+.footer-brand h3{
+
+    font-size:28px;
+
+    margin-bottom:15px;
+
+}
+
+.footer-brand p{
+
+    color:#cbd5e1;
+
+    line-height:1.8;
+
+    max-width:350px;
+
+}
+
+.footer-links,
+.footer-social{
+
+    display:flex;
+
+    flex-direction:column;
+
+}
+
+.footer-links h4,
+.footer-social h4{
+
+    margin-bottom:20px;
+
+    font-size:20px;
+
+}
+
+.footer-links a,
+.footer-social a{
+
+    color:#cbd5e1;
+
+    text-decoration:none;
+
+    margin-bottom:12px;
+
+    transition:.3s;
+
+}
+
+.footer-links a:hover,
+.footer-social a:hover{
+
+    color:#3b82f6;
+
+}
+
+.footer-bottom{
+
+    margin-top:50px;
+
+    padding-top:25px;
+
+    border-top:1px solid rgba(255,255,255,.08);
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    flex-wrap:wrap;
+
+    gap:15px;
+
+}
+
+.footer-bottom p{
+
+    color:#94a3b8;
+
+}
