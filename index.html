@@ -1,36 +1,151 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prueba Manaton Games</title>
+    <title>Manaton Games</title>
 
     <style>
-        body{
+
+        *{
             margin:0;
-            background:red;
-            color:white;
-            display:flex;
-            justify-content:center;
-            align-items:center;
-            height:100vh;
-            font-family:Arial, sans-serif;
+            padding:0;
+            box-sizing:border-box;
+            font-family:Arial, Helvetica, sans-serif;
         }
 
-        h1{
-            font-size:70px;
-            text-align:center;
+        body{
+            background:#0d1117;
+            color:white;
         }
+
+        header{
+            background:#161b22;
+            padding:20px 40px;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            position:fixed;
+            width:100%;
+            top:0;
+            left:0;
+        }
+
+        .logo{
+            font-size:28px;
+            font-weight:bold;
+            color:#4da3ff;
+        }
+
+        nav a{
+            color:white;
+            text-decoration:none;
+            margin-left:25px;
+            transition:.3s;
+        }
+
+        nav a:hover{
+            color:#4da3ff;
+        }
+
+        .hero{
+            height:100vh;
+            display:flex;
+            flex-direction:column;
+            justify-content:center;
+            align-items:center;
+            text-align:center;
+            padding:20px;
+        }
+
+        .hero h1{
+            font-size:60px;
+            margin-bottom:20px;
+        }
+
+        .hero h1 span{
+            color:#4da3ff;
+        }
+
+        .hero p{
+            font-size:20px;
+            color:#c9d1d9;
+            max-width:700px;
+        }
+
+        .btn{
+            margin-top:35px;
+            padding:15px 35px;
+            background:#4da3ff;
+            color:white;
+            border-radius:10px;
+            text-decoration:none;
+            display:inline-block;
+            transition:.3s;
+        }
+
+        .btn:hover{
+            transform:scale(1.05);
+        }
+
+        @media(max-width:768px){
+
+            header{
+                flex-direction:column;
+                gap:15px;
+            }
+
+            nav a{
+                margin:0 10px;
+            }
+
+            .hero h1{
+                font-size:38px;
+            }
+
+            .hero p{
+                font-size:17px;
+            }
+
+        }
+
     </style>
 
 </head>
 
 <body>
 
+<header>
+
+    <div class="logo">
+        Manaton Games
+    </div>
+
+    <nav>
+        <a href="#">Home</a>
+        <a href="#">Games</a>
+        <a href="#">News</a>
+        <a href="#">Community</a>
+    </nav>
+
+</header>
+
+<section class="hero">
+
     <h1>
-        ESTA ES MI PAGINA
+        Welcome to <span>Manaton Games</span>
     </h1>
+
+    <p>
+        Creating high-quality Roblox experiences for players around the world.
+    </p>
+
+    <a href="#" class="btn">
+        Explore Our Games
+    </a>
+
+</section>
 
 </body>
 
