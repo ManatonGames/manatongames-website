@@ -5,13 +5,20 @@ document.addEventListener("DOMContentLoaded", async () => {
     if(!data){
 
         console.log("API Error");
-
         return;
 
     }
 
-    console.log("Manaton Games API");
+    document.getElementById("games-count").textContent =
+        data.stats.totalGames;
 
-    console.log(data);
+    document.getElementById("members-count").textContent =
+        data.group.members.toLocaleString();
+
+    document.getElementById("visits-count").textContent =
+        data.stats.totalVisits.toLocaleString();
+
+    document.getElementById("favorites-count").textContent =
+        data.stats.totalFavorites.toLocaleString();
 
 });
