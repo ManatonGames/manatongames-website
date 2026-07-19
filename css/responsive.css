@@ -26,10 +26,26 @@
         display:block;
     }
 
+    header .container{
+        height:80px;
+    }
+
+    .logo{
+        display:flex;
+        align-items:center;
+        gap:12px;
+        font-size:24px;
+    }
+
+    .logo img{
+        width:48px;
+        height:48px;
+        object-fit:contain;
+    }
+
     #navbar{
 
         position:absolute;
-
         top:80px;
         left:0;
 
@@ -50,7 +66,6 @@
     .nav-links{
 
         flex-direction:column;
-
         gap:0;
 
     }
@@ -64,7 +79,6 @@
     .nav-links a{
 
         display:block;
-
         padding:18px 25px;
 
     }
@@ -89,10 +103,111 @@
 
     }
 
+    .hero-buttons{
+
+        flex-direction:column;
+        align-items:center;
+        gap:15px;
+
+    }
+
+    .hero-buttons a,
     .hero-content button{
 
         width:100%;
         max-width:320px;
+
+    }
+
+    /* GAMES */
+
+    .games-grid{
+
+        grid-template-columns:1fr;
+
+    }
+
+    /* ABOUT */
+
+    .about-grid{
+
+        grid-template-columns:1fr;
+
+    }
+
+    /* STATS */
+
+    .stats-grid{
+
+        grid-template-columns:1fr;
+
+    }
+
+    /* COMMUNITY */
+
+    .community-grid{
+
+        grid-template-columns:1fr;
+
+    }
+
+    /* CONTACT */
+
+    .contact-grid{
+
+        grid-template-columns:1fr;
+
+    }
+
+    /* FOOTER */
+
+    .footer-grid{
+
+        display:flex;
+        flex-direction:column;
+        align-items:center;
+        text-align:center;
+
+        gap:45px;
+
+    }
+
+    .footer-brand,
+    .footer-links,
+    .footer-social{
+
+        width:100%;
+        max-width:320px;
+
+    }
+
+    .footer-brand img{
+
+        display:block;
+        margin:0 auto 20px;
+
+    }
+
+    .footer-brand p{
+
+        margin:15px auto;
+
+    }
+
+    .footer-links a,
+    .footer-social a{
+
+        display:block;
+        margin:10px 0;
+
+    }
+
+    .footer-bottom{
+
+        flex-direction:column;
+        align-items:center;
+        text-align:center;
+        gap:10px;
 
     }
 
@@ -106,7 +221,14 @@
 
     .logo{
 
-        font-size:22px;
+        font-size:20px;
+
+    }
+
+    .logo img{
+
+        width:42px;
+        height:42px;
 
     }
 
@@ -122,20 +244,30 @@
 
     }
 
+    .section-title h2{
+
+        font-size:36px;
+
+    }
+
+    section h2{
+
+        font-size:34px;
+
+    }
+
 }
 
 /* =========================
    HERO RESPONSIVE
 ========================= */
 
-@media (max-width: 768px){
+@media (max-width:768px){
 
     .hero-content{
 
         flex-direction:column-reverse;
-
         text-align:center;
-
         gap:40px;
 
     }
