@@ -4,148 +4,204 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Manaton Games</title>
 
-    <style>
-
-        *{
-            margin:0;
-            padding:0;
-            box-sizing:border-box;
-            font-family:Arial, Helvetica, sans-serif;
-        }
-
-        body{
-            background:#0d1117;
-            color:white;
-        }
-
-        header{
-            background:#161b22;
-            padding:20px 40px;
-            display:flex;
-            justify-content:space-between;
-            align-items:center;
-            position:fixed;
-            width:100%;
-            top:0;
-            left:0;
-        }
-
-        .logo{
-            font-size:28px;
-            font-weight:bold;
-            color:#4da3ff;
-        }
-
-        nav a{
-            color:white;
-            text-decoration:none;
-            margin-left:25px;
-            transition:.3s;
-        }
-
-        nav a:hover{
-            color:#4da3ff;
-        }
-
-        .hero{
-            height:100vh;
-            display:flex;
-            flex-direction:column;
-            justify-content:center;
-            align-items:center;
-            text-align:center;
-            padding:20px;
-        }
-
-        .hero h1{
-            font-size:60px;
-            margin-bottom:20px;
-        }
-
-        .hero h1 span{
-            color:#4da3ff;
-        }
-
-        .hero p{
-            font-size:20px;
-            color:#c9d1d9;
-            max-width:700px;
-        }
-
-        .btn{
-            margin-top:35px;
-            padding:15px 35px;
-            background:#4da3ff;
-            color:white;
-            border-radius:10px;
-            text-decoration:none;
-            display:inline-block;
-            transition:.3s;
-        }
-
-        .btn:hover{
-            transform:scale(1.05);
-        }
-
-        @media(max-width:768px){
-
-            header{
-                flex-direction:column;
-                gap:15px;
-            }
-
-            nav a{
-                margin:0 10px;
-            }
-
-            .hero h1{
-                font-size:38px;
-            }
-
-            .hero p{
-                font-size:17px;
-            }
-
-        }
-
-    </style>
-
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="responsive.css">
 </head>
 
 <body>
 
-<header>
+    <!-- ===========================
+         HEADER
+    ============================ -->
 
-    <div class="logo">
-        Manaton Games
-    </div>
+    <header>
 
-    <nav>
-        <a href="#">Home</a>
-        <a href="#">Games</a>
-        <a href="#">News</a>
-        <a href="#">Community</a>
-    </nav>
+        <div class="logo">
+            Manaton Games
+        </div>
 
-</header>
+        <button class="menu-btn">
+            ☰
+        </button>
 
-<section class="hero">
+        <nav>
 
-    <h1>
-        Welcome to <span>Manaton Games</span>
-    </h1>
+            <ul class="nav-links">
 
-    <p>
-        Creating high-quality Roblox experiences for players around the world.
-    </p>
+                <li><a href="#home">Home</a></li>
 
-    <a href="#" class="btn">
-        Explore Our Games
-    </a>
+                <li><a href="#games">Games</a></li>
 
-</section>
+                <li><a href="#news">News</a></li>
+
+                <li><a href="#community">Community</a></li>
+
+            </ul>
+
+        </nav>
+
+    </header>
+
+
+
+
+
+    <!-- ===========================
+         HERO
+    ============================ -->
+
+    <section class="hero" id="home">
+
+        <div class="hero-content">
+
+            <h1>
+                Welcome to
+                <span>Manaton Games</span>
+            </h1>
+
+            <p>
+                Creating high-quality Roblox experiences for players around the world.
+            </p>
+
+            <a href="#" class="btn">
+                Explore Our Games
+            </a>
+
+        </div>
+
+    </section>
+
+
+
+
+
+    <!-- ===========================
+         GAMES
+    ============================ -->
+
+    <section class="games" id="games">
+
+        <h2>Our Games</h2>
+
+        <div class="cards">
+
+            <div class="card">
+
+                <h3>PLS DONATE 3</h3>
+
+                <p>
+                    The next generation donation experience.
+                </p>
+
+            </div>
+
+            <div class="card">
+
+                <h3>Grow a Garden Modded</h3>
+
+                <p>
+                    Grow plants, collect pets and enjoy special events.
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+
+
+
+    <!-- ===========================
+         NEWS
+    ============================ -->
+
+    <section class="news" id="news">
+
+        <h2>Latest News</h2>
+
+        <div class="cards">
+
+            <div class="card">
+
+                <h3>Website Development</h3>
+
+                <p>
+                    The official Manaton Games website is under development.
+                </p>
+
+            </div>
+
+            <div class="card">
+
+                <h3>PLS DONATE 3</h3>
+
+                <p>
+                    New systems and improvements are coming soon.
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+
+
+
+    <!-- ===========================
+         COMMUNITY
+    ============================ -->
+
+    <section class="community" id="community">
+
+        <h2>Join Our Community</h2>
+
+        <p>
+            Follow us to stay updated with our games and announcements.
+        </p>
+
+        <div class="community-buttons">
+
+            <a href="#">Discord</a>
+
+            <a href="#">Roblox Group</a>
+
+            <a href="#">YouTube</a>
+
+        </div>
+
+    </section>
+
+
+
+
+
+
+    <!-- ===========================
+         FOOTER
+    ============================ -->
+
+    <footer>
+
+        <p>
+            © 2026 Manaton Games. All Rights Reserved.
+        </p>
+
+    </footer>
+
+
+
+    <!-- JavaScript -->
+    <script src="script.js"></script>
 
 </body>
 
