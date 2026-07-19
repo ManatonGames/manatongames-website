@@ -1,6 +1,17 @@
-const menuToggle = document.getElementById("menu-toggle");
-const navbar = document.getElementById("navbar");
+document.addEventListener("DOMContentLoaded", async () => {
 
-menuToggle.addEventListener("click", () => {
-    navbar.classList.toggle("active");
+    const data = await RobloxAPI.getStats();
+
+    if(!data){
+
+        console.log("API Error");
+
+        return;
+
+    }
+
+    console.log("Manaton Games API");
+
+    console.log(data);
+
 });
