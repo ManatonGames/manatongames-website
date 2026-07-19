@@ -1,46 +1,52 @@
-const games = [
+const GAMES = [
     {
         id: 90485309557694,
         name: "PLS DONATE 3",
-        status: "In Development",
-        url: "https://www.roblox.com/games/90485309557694/PLS-DONATE-3"
+        status: "In Development"
     },
     {
         id: 91290129805346,
         name: "+1 Speed Escape",
-        status: "Released",
-        url: "https://www.roblox.com/games/91290129805346"
+        status: "Released"
     }
 ];
 
 export default async function handler(req, res) {
 
-    res.status(200).json({
+    res.setHeader("Access-Control-Allow-Origin", "*");
+
+    const data = {
 
         success: true,
 
-        studio: {
-            name: "Manaton Games",
-            version: "2.1.0"
-        },
+        studio: "Manaton Games",
+
+        version: "2.1.0",
 
         group: {
+
             id: 15973191,
-            url: "https://www.roblox.com/communities/15973191"
-        },
 
-        social: {
-
-            youtube: "https://www.youtube.com/@ManatonGames",
-
-            twitch: "https://www.twitch.tv/manatongames2026",
-
-            discord: "https://discord.gg/uYRCyAtWp5"
+            members: 0
 
         },
 
-        games
+        stats: {
 
-    });
+            totalGames: GAMES.length,
+
+            totalVisits: 0,
+
+            totalFavorites: 0,
+
+            totalPlaying: 0
+
+        },
+
+        games: GAMES
+
+    };
+
+    res.status(200).json(data);
 
 }
