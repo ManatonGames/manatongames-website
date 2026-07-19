@@ -4,148 +4,265 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Manaton Games</title>
 
-    <style>
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="responsive.css">
 
-        *{
-            margin:0;
-            padding:0;
-            box-sizing:border-box;
-            font-family:Arial, Helvetica, sans-serif;
-        }
-
-        body{
-            background:#0d1117;
-            color:white;
-        }
-
-        header{
-            background:#161b22;
-            padding:20px 40px;
-            display:flex;
-            justify-content:space-between;
-            align-items:center;
-            position:fixed;
-            width:100%;
-            top:0;
-            left:0;
-        }
-
-        .logo{
-            font-size:28px;
-            font-weight:bold;
-            color:#4da3ff;
-        }
-
-        nav a{
-            color:white;
-            text-decoration:none;
-            margin-left:25px;
-            transition:.3s;
-        }
-
-        nav a:hover{
-            color:#4da3ff;
-        }
-
-        .hero{
-            height:100vh;
-            display:flex;
-            flex-direction:column;
-            justify-content:center;
-            align-items:center;
-            text-align:center;
-            padding:20px;
-        }
-
-        .hero h1{
-            font-size:60px;
-            margin-bottom:20px;
-        }
-
-        .hero h1 span{
-            color:#4da3ff;
-        }
-
-        .hero p{
-            font-size:20px;
-            color:#c9d1d9;
-            max-width:700px;
-        }
-
-        .btn{
-            margin-top:35px;
-            padding:15px 35px;
-            background:#4da3ff;
-            color:white;
-            border-radius:10px;
-            text-decoration:none;
-            display:inline-block;
-            transition:.3s;
-        }
-
-        .btn:hover{
-            transform:scale(1.05);
-        }
-
-        @media(max-width:768px){
-
-            header{
-                flex-direction:column;
-                gap:15px;
-            }
-
-            nav a{
-                margin:0 10px;
-            }
-
-            .hero h1{
-                font-size:38px;
-            }
-
-            .hero p{
-                font-size:17px;
-            }
-
-        }
-
-    </style>
-
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 
 <body>
 
-<header>
+    <!-- ==========================
+         HEADER
+    =========================== -->
 
-    <div class="logo">
-        Manaton Games
-    </div>
+    <header>
 
-    <nav>
-        <a href="#">Home</a>
-        <a href="#">Games</a>
-        <a href="#">News</a>
-        <a href="#">Community</a>
-    </nav>
+        <div class="container">
 
-</header>
+            <div class="logo">
+                <span>M</span>
+                Manaton Games
+            </div>
 
-<section class="hero">
+            <nav>
 
-    <h1>
-        Welcome to <span>Manaton Games</span>
-    </h1>
+                <ul class="nav-links">
 
-    <p>
-        Creating high-quality Roblox experiences for players around the world.
-    </p>
+                    <li><a href="#home">Home</a></li>
 
-    <a href="#" class="btn">
-        Explore Our Games
-    </a>
+                    <li><a href="#games">Games</a></li>
 
-</section>
+                    <li><a href="#about">About</a></li>
+
+                    <li><a href="#news">News</a></li>
+
+                    <li><a href="#community">Community</a></li>
+
+                </ul>
+
+            </nav>
+
+            <button class="menu-btn">
+                ☰
+            </button>
+
+        </div>
+
+    </header>
+
+
+
+
+
+    <!-- ==========================
+         HERO
+    =========================== -->
+
+    <section class="hero" id="home">
+
+        <div class="hero-content">
+
+            <h1>
+                Welcome to
+                <span>Manaton Games</span>
+            </h1>
+
+            <p>
+                Creating amazing Roblox experiences, building communities,
+                and bringing players together through fun and creativity.
+            </p>
+
+            <div class="hero-buttons">
+
+                <a href="#games" class="btn primary">
+                    🎮 Explore Games
+                </a>
+
+                <a href="#community" class="btn secondary">
+                    💬 Join Community
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+
+
+    <!-- ==========================
+         GAMES
+    =========================== -->
+
+    <section class="games" id="games">
+
+        <div class="container">
+
+            <h2>Our Games</h2>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <h3>PLS DONATE 3</h3>
+
+                    <p>
+                        The next generation donation experience on Roblox.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <h3>Grow a Garden Modded</h3>
+
+                    <p>
+                        Grow plants, collect pets and enjoy exciting events.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+
+
+    <!-- ==========================
+         ABOUT
+    =========================== -->
+
+    <section class="about" id="about">
+
+        <div class="container">
+
+            <h2>About Us</h2>
+
+            <p>
+
+                Manaton Games is a Roblox development studio focused on creating
+                high-quality experiences with unique gameplay, polished systems,
+                and an active community.
+
+            </p>
+
+        </div>
+
+    </section>
+
+
+
+
+
+    <!-- ==========================
+         NEWS
+    =========================== -->
+
+    <section class="news" id="news">
+
+        <div class="container">
+
+            <h2>Latest News</h2>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <h3>Website Development</h3>
+
+                    <p>
+                        Our official website is currently under development.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <h3>PLS DONATE 3</h3>
+
+                    <p>
+                        New features and improvements are coming soon.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+
+
+    <!-- ==========================
+         COMMUNITY
+    =========================== -->
+
+    <section class="community" id="community">
+
+        <div class="container">
+
+            <h2>Join Our Community</h2>
+
+            <p>
+
+                Stay connected with the latest announcements,
+                updates and events.
+
+            </p>
+
+            <div class="community-buttons">
+
+                <a href="#">Discord</a>
+
+                <a href="#">Roblox Group</a>
+
+                <a href="#">YouTube</a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+
+
+    <!-- ==========================
+         FOOTER
+    =========================== -->
+
+    <footer>
+
+        <div class="container">
+
+            <p>
+                © 2026 Manaton Games. All Rights Reserved.
+            </p>
+
+        </div>
+
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="script.js"></script>
 
 </body>
 
