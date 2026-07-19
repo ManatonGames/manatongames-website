@@ -1,47 +1,102 @@
+/* =========================
+   RESET
+========================= */
+
 *{
     margin:0;
     padding:0;
     box-sizing:border-box;
-    font-family:Arial, Helvetica, sans-serif;
 }
 
 body{
+    font-family:'Poppins',sans-serif;
     background:#0d1117;
-    color:white;
+    color:#ffffff;
 }
 
+/* =========================
+   CONTAINER
+========================= */
+
+.container{
+    width:90%;
+    max-width:1200px;
+    margin:auto;
+}
+
+/* =========================
+   HEADER
+========================= */
+
 header{
-    background:#161b22;
-    padding:20px 40px;
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    background:rgba(13,17,23,.85);
+    backdrop-filter:blur(12px);
+    z-index:1000;
+}
+
+header .container{
     display:flex;
     justify-content:space-between;
     align-items:center;
-    position:fixed;
-    width:100%;
-    top:0;
-    left:0;
+    padding:20px 0;
 }
 
 .logo{
     font-size:28px;
-    font-weight:bold;
-    color:#4da3ff;
+    font-weight:700;
+    color:#58a6ff;
 }
 
-nav a{
+.logo span{
+    color:#ffffff;
+}
+
+.nav-links{
+    list-style:none;
+    display:flex;
+    gap:30px;
+}
+
+.nav-links a{
     color:white;
     text-decoration:none;
-    margin-left:25px;
+    transition:.3s;
 }
 
+.nav-links a:hover{
+    color:#58a6ff;
+}
+
+.menu-btn{
+    display:none;
+    border:none;
+    background:none;
+    color:white;
+    font-size:28px;
+    cursor:pointer;
+}
+
+/* =========================
+   HERO
+========================= */
+
 .hero{
-    height:100vh;
+    min-height:100vh;
     display:flex;
-    flex-direction:column;
     justify-content:center;
     align-items:center;
     text-align:center;
-    padding:20px;
+    padding:120px 20px 80px;
+    background:
+        radial-gradient(circle at top,#1d4ed8 0%,#0d1117 65%);
+}
+
+.hero-content{
+    max-width:800px;
 }
 
 .hero h1{
@@ -50,21 +105,125 @@ nav a{
 }
 
 .hero h1 span{
-    color:#4da3ff;
+    color:#58a6ff;
 }
 
 .hero p{
-    color:#c9d1d9;
     font-size:20px;
-    max-width:700px;
+    color:#c9d1d9;
+    line-height:1.8;
+}
+
+.hero-buttons{
+    margin-top:40px;
+    display:flex;
+    justify-content:center;
+    gap:20px;
 }
 
 .btn{
-    display:inline-block;
-    margin-top:35px;
     padding:15px 35px;
-    background:#4da3ff;
-    color:white;
-    text-decoration:none;
     border-radius:10px;
+    text-decoration:none;
+    font-weight:600;
+    transition:.3s;
+}
+
+.primary{
+    background:#2388ff;
+    color:white;
+}
+
+.secondary{
+    border:2px solid #2388ff;
+    color:white;
+}
+
+.btn:hover{
+    transform:translateY(-4px);
+}
+
+/* =========================
+   SECTIONS
+========================= */
+
+section{
+    padding:100px 0;
+}
+
+section h2{
+    text-align:center;
+    font-size:42px;
+    margin-bottom:50px;
+}
+
+/* =========================
+   CARDS
+========================= */
+
+.cards{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+    gap:30px;
+}
+
+.card{
+    background:#161b22;
+    border-radius:18px;
+    padding:30px;
+    transition:.3s;
+}
+
+.card:hover{
+    transform:translateY(-8px);
+}
+
+.card h3{
+    margin-bottom:15px;
+    color:#58a6ff;
+}
+
+.card p{
+    color:#c9d1d9;
+    line-height:1.7;
+}
+
+/* =========================
+   COMMUNITY
+========================= */
+
+.community{
+    text-align:center;
+}
+
+.community-buttons{
+    margin-top:35px;
+    display:flex;
+    justify-content:center;
+    gap:20px;
+    flex-wrap:wrap;
+}
+
+.community-buttons a{
+    text-decoration:none;
+    color:white;
+    background:#2388ff;
+    padding:14px 30px;
+    border-radius:10px;
+    transition:.3s;
+}
+
+.community-buttons a:hover{
+    transform:translateY(-4px);
+}
+
+/* =========================
+   FOOTER
+========================= */
+
+footer{
+    padding:30px;
+    text-align:center;
+    background:#090c10;
+    color:#888;
 }
