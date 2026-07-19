@@ -1,1 +1,125 @@
+/* ===========================
+   TABLETS
+=========================== */
 
+@media (max-width: 992px){
+
+    .hero-content h1{
+        font-size:56px;
+    }
+
+    .hero-content p{
+        font-size:20px;
+    }
+
+}
+
+/* ===========================
+   CELULARES
+=========================== */
+
+@media (max-width:768px){
+
+    /* HEADER */
+
+    .menu-toggle{
+        display:block;
+    }
+
+    #navbar{
+
+        position:absolute;
+
+        top:80px;
+        left:0;
+
+        width:100%;
+
+        background:#0f172a;
+
+        display:none;
+
+        border-top:1px solid rgba(255,255,255,.1);
+
+    }
+
+    #navbar.active{
+        display:block;
+    }
+
+    .nav-links{
+
+        flex-direction:column;
+
+        gap:0;
+
+    }
+
+    .nav-links li{
+
+        border-bottom:1px solid rgba(255,255,255,.08);
+
+    }
+
+    .nav-links a{
+
+        display:block;
+
+        padding:18px 25px;
+
+    }
+
+    /* HERO */
+
+    #home{
+
+        padding:140px 20px 80px;
+
+    }
+
+    .hero-content h1{
+
+        font-size:42px;
+
+    }
+
+    .hero-content p{
+
+        font-size:18px;
+
+    }
+
+    .hero-content button{
+
+        width:100%;
+        max-width:320px;
+
+    }
+
+}
+
+/* ===========================
+   CELULARES PEQUEÑOS
+=========================== */
+
+@media (max-width:480px){
+
+    .logo{
+
+        font-size:22px;
+
+    }
+
+    .hero-content h1{
+
+        font-size:34px;
+
+    }
+
+    .hero-content p{
+
+        font-size:16px;
+
+    }
+
+}
