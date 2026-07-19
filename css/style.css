@@ -652,3 +652,73 @@ section h2{
     color:#cbd5e1;
 
 }
+
+/* =========================
+   COMMUNITY
+========================= */
+
+.community-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+
+    gap:30px;
+
+    margin-top:60px;
+
+}
+
+.community-card{
+
+    background:#182235;
+
+    border:1px solid rgba(255,255,255,.08);
+
+    border-radius:18px;
+
+    padding:35px 25px;
+
+    text-align:center;
+
+    text-decoration:none;
+
+    color:white;
+
+    transition:.35s;
+
+}
+
+.community-card:hover{
+
+    transform:translateY(-10px);
+
+    box-shadow:0 20px 45px rgba(37,99,235,.25);
+
+    border-color:#3b82f6;
+
+}
+
+.community-icon{
+
+    font-size:55px;
+
+    margin-bottom:20px;
+
+}
+
+.community-card h3{
+
+    font-size:26px;
+
+    margin-bottom:15px;
+
+}
+
+.community-card p{
+
+    color:#cbd5e1;
+
+    line-height:1.7;
+
+}
