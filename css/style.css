@@ -586,3 +586,69 @@ section h2{
     line-height:1.8;
 
 }
+
+/* =========================
+   STUDIO STATS
+========================= */
+
+.stats-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+
+    gap:30px;
+
+    margin-top:60px;
+
+}
+
+.stat-card{
+
+    background:#182235;
+
+    border:1px solid rgba(255,255,255,.08);
+
+    border-radius:18px;
+
+    padding:35px 25px;
+
+    text-align:center;
+
+    transition:.35s;
+
+}
+
+.stat-card:hover{
+
+    transform:translateY(-10px);
+
+    box-shadow:0 20px 45px rgba(37,99,235,.25);
+
+}
+
+.stat-icon{
+
+    font-size:55px;
+
+    margin-bottom:20px;
+
+}
+
+.stat-card h3{
+
+    font-size:34px;
+
+    color:#3b82f6;
+
+    margin-bottom:10px;
+
+}
+
+.stat-card p{
+
+    font-size:18px;
+
+    color:#cbd5e1;
+
+}
