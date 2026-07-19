@@ -1,35 +1,45 @@
+const games = [
+    {
+        id: 90485309557694,
+        name: "PLS DONATE 3",
+        status: "In Development",
+        url: "https://www.roblox.com/games/90485309557694/PLS-DONATE-3"
+    },
+    {
+        id: 91290129805346,
+        name: "+1 Speed Escape",
+        status: "Released",
+        url: "https://www.roblox.com/games/91290129805346"
+    }
+];
+
 export default async function handler(req, res) {
 
-    res.setHeader("Access-Control-Allow-Origin", "*");
-    res.setHeader("Content-Type", "application/json");
-
-    return res.status(200).json({
+    res.status(200).json({
 
         success: true,
 
-        studio: "Manaton Games",
+        studio: {
+            name: "Manaton Games",
+            version: "2.1.0"
+        },
 
-        version: "2.0.0",
+        group: {
+            id: 15973191,
+            url: "https://www.roblox.com/communities/15973191"
+        },
 
-        roblox: {
+        social: {
 
-            groupId: 15973191,
+            youtube: "https://www.youtube.com/@ManatonGames",
 
-            games: [
+            twitch: "https://www.twitch.tv/manatongames2026",
 
-                {
-                    id: 90485309557694,
-                    name: "PLS DONATE 3"
-                },
+            discord: "https://discord.gg/uYRCyAtWp5"
 
-                {
-                    id: 91290129805346,
-                    name: "+1 Speed Escape"
-                }
+        },
 
-            ]
-
-        }
+        games
 
     });
 
