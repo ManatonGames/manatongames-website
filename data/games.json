@@ -33,12 +33,5 @@
         "status": "In Development",
         "image": "speedescape.png",
         "description": "You get faster every second, but the obstacles get harder! Control your extreme velocity, jump across giant gaps, and prove you have the skills to escape the ultimate speed challenge. 🏁"
-    },
-      {
-        "id": 0,
-        "name": "Manaton Games",
-        "status": "In development",
-        "image": "comingsoon.png",
-        "description": "Coming soon!"
     }
 ]
