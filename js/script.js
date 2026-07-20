@@ -1,12 +1,36 @@
 document.addEventListener("DOMContentLoaded", async () => {
 
+    // ==========================
+    // MENÚ HAMBURGUESA
+    // ==========================
+
+    const menuToggle = document.getElementById("menu-toggle");
+    const navbar = document.getElementById("navbar");
+
+    if (menuToggle && navbar) {
+
+        menuToggle.addEventListener("click", () => {
+            navbar.classList.toggle("active");
+        });
+
+        // Cerrar el menú al pulsar un enlace
+        document.querySelectorAll("#navbar a").forEach(link => {
+            link.addEventListener("click", () => {
+                navbar.classList.remove("active");
+            });
+        });
+
+    }
+
+    // ==========================
+    // API DE ROBLOX
+    // ==========================
+
     const data = await RobloxAPI.getStats();
 
-    if(!data){
-
+    if (!data) {
         console.log("API Error");
         return;
-
     }
 
     document.getElementById("games-count").textContent =
