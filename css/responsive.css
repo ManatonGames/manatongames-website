@@ -22,6 +22,12 @@
 
     /* HEADER */
 
+   /* Ocultar botón Discord en celular */
+
+.discord-btn{
+    display: none;
+}
+
     .menu-toggle{
         display:block;
     }
