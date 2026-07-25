@@ -89,6 +89,30 @@ async function loadNews(){
 
     const news = await RobloxAPI.getNews();
 
-    console.log(news);
+    const newsContainer = document.getElementById("news-container");
+
+    if(!newsContainer || news.length === 0){
+
+        return;
+
+    }
+
+    newsContainer.innerHTML = "";
+
+    news.forEach(item => {
+
+        newsContainer.innerHTML += `
+            <div class="news-card">
+
+                <span class="news-date">${item.date}</span>
+
+                <h3>${item.title}</h3>
+
+                <p>${item.description}</p>
+
+            </div>
+        `;
+
+    });
 
 }
