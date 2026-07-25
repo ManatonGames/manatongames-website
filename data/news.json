@@ -2,16 +2,22 @@
     {
         "title": "Welcome to Manaton Games!",
         "date": "July 2026",
+        "category": "Announcement",
+        "icon": "🚀",
         "description": "Our official website is now online with our latest Roblox experiences."
     },
     {
         "title": "PLS DONATE 3",
         "date": "Coming Soon",
+        "category": "Game Update",
+        "icon": "🎮",
         "description": "The next generation donation experience is currently in development."
     },
     {
         "title": "More Games Coming",
         "date": "Soon",
+        "category": "Studio",
+        "icon": "⭐",
         "description": "More Roblox experiences will be added to the Manaton Games universe."
     }
 ]
