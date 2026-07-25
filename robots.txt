@@ -1,1 +1,5 @@
+User-agent: *
 
+Allow: /
+
+Sitemap: https://manatongames.vercel.app/sitemap.xml
