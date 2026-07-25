@@ -1,5 +1,9 @@
 class RobloxAPI {
 
+    // ==========================
+    // ROBLOX STATS
+    // ==========================
+
     static async getStats(){
 
         try{
@@ -12,9 +16,33 @@ class RobloxAPI {
 
         catch(error){
 
-            console.error(error);
+            console.error("Stats API Error:", error);
 
             return null;
+
+        }
+
+    }
+
+    // ==========================
+    // GAMES
+    // ==========================
+
+    static async getGames(){
+
+        try{
+
+            const response = await fetch("/data/games.json");
+
+            return await response.json();
+
+        }
+
+        catch(error){
+
+            console.error("Games API Error:", error);
+
+            return [];
 
         }
 
