@@ -249,3 +249,29 @@ if ("serviceWorker" in navigator) {
     });
 
 }
+
+// ==========================================
+// Loading Screen
+// ==========================================
+
+window.addEventListener("load", () => {
+
+    const loader = document.getElementById("loader");
+
+    if (!loader) return;
+
+    // Espera un poco para que se vea la animación
+    setTimeout(() => {
+
+        loader.classList.add("hidden");
+
+        // Elimina el loader del DOM cuando termine la animación
+        setTimeout(() => {
+
+            loader.remove();
+
+        }, 600);
+
+    }, 1200);
+
+});
