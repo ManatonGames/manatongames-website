@@ -1171,3 +1171,57 @@ footer{
     line-height:1.7;
 
 }
+
+.news-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:15px;
+
+}
+
+.news-category{
+
+    background:#2563eb;
+
+    color:white;
+
+    padding:6px 12px;
+
+    border-radius:999px;
+
+    font-size:12px;
+
+    font-weight:700;
+
+    letter-spacing:.5px;
+
+}
+
+.news-date{
+
+    color:#94a3b8;
+
+    font-size:14px;
+
+}
+
+.news-card h3{
+
+    margin:15px 0;
+
+    font-size:24px;
+
+}
+
+.news-card p{
+
+    margin:0;
+
+    line-height:1.7;
+
+}
