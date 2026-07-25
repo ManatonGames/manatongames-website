@@ -4,9 +4,12 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     await loadStats();
 
-    // Próximamente
-    // await loadGames();
-    // await loadNews();
+// Próximamente
+// await loadGames();
+
+await loadNews();
+
+    
 
 });
 
