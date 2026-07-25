@@ -1,15 +1,16 @@
 document.addEventListener("DOMContentLoaded", async () => {
 
+    // Inicializar funciones
     initializeMenu();
+    initializeGameSearch();
 
+    // Cargar datos
     await loadStats();
 
-// Próximamente
-// await loadGames();
+    // Próximamente
+    // await loadGames();
 
-await loadNews();
-
-    
+    await loadNews();
 
 });
 
@@ -31,9 +32,7 @@ function initializeMenu(){
         document.querySelectorAll("#navbar a").forEach(link => {
 
             link.addEventListener("click", () => {
-
                 navbar.classList.remove("active");
-
             });
 
         });
@@ -58,17 +57,22 @@ async function loadStats(){
 
     }
 
-    document.getElementById("games-count").textContent =
-        data.stats.totalGames;
+    const gamesCount = document.getElementById("games-count");
+    const membersCount = document.getElementById("members-count");
+    const visitsCount = document.getElementById("visits-count");
+    const favoritesCount = document.getElementById("favorites-count");
 
-    document.getElementById("members-count").textContent =
-        data.group.members.toLocaleString();
+    if(gamesCount)
+        gamesCount.textContent = data.stats.totalGames;
 
-    document.getElementById("visits-count").textContent =
-        data.stats.totalVisits.toLocaleString();
+    if(membersCount)
+        membersCount.textContent = data.group.members.toLocaleString();
 
-    document.getElementById("favorites-count").textContent =
-        data.stats.totalFavorites.toLocaleString();
+    if(visitsCount)
+        visitsCount.textContent = data.stats.totalVisits.toLocaleString();
+
+    if(favoritesCount)
+        favoritesCount.textContent = data.stats.totalFavorites.toLocaleString();
 
 }
 
@@ -82,10 +86,14 @@ async function loadGames(){
 
     console.log(games);
 
+    // Próximamente aquí se generarán
+    // automáticamente las tarjetas
+    // de Our Games.
+
 }
 
 // ==========================
-// NOTICIAS
+// STUDIO NEWS
 // ==========================
 
 async function loadNews(){
@@ -121,6 +129,48 @@ async function loadNews(){
             </div>
 
         `;
+
+    });
+
+}
+
+// ==========================
+// BUSCADOR DE JUEGOS
+// ==========================
+
+function initializeGameSearch(){
+
+    const searchInput = document.getElementById("game-search");
+
+    if(!searchInput){
+        return;
+    }
+
+    searchInput.addEventListener("input", () => {
+
+        const search = searchInput.value.toLowerCase();
+
+        const cards = document.querySelectorAll(".game-card");
+
+        cards.forEach(card => {
+
+            const title = card.querySelector("h3").textContent.toLowerCase();
+            const description = card.querySelector("p").textContent.toLowerCase();
+
+            if(
+                title.includes(search) ||
+                description.includes(search)
+            ){
+
+                card.style.display = "";
+
+            }else{
+
+                card.style.display = "none";
+
+            }
+
+        });
 
     });
 
