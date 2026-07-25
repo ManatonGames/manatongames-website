@@ -356,3 +356,17 @@
     }
 
 }
+
+/* =========================
+   NEWS RESPONSIVE
+========================= */
+
+@media (max-width:768px){
+
+    .news-grid{
+
+        grid-template-columns:1fr;
+
+    }
+
+}
