@@ -333,3 +333,26 @@
     }
 
 }
+
+/* =========================
+   STATUS BAR RESPONSIVE
+========================= */
+
+@media (max-width:768px){
+
+    .status-bar .container{
+
+        flex-direction:column;
+        gap:12px;
+
+        text-align:center;
+
+    }
+
+    .status-bar span{
+
+        font-size:14px;
+
+    }
+
+}
