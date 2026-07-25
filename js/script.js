@@ -1,39 +1,58 @@
 document.addEventListener("DOMContentLoaded", async () => {
 
-    // ==========================
-    // MENÚ HAMBURGUESA
-    // ==========================
+    initializeMenu();
+
+    await loadStats();
+
+    // Próximamente
+    // await loadGames();
+    // await loadNews();
+
+});
+
+// ==========================
+// MENÚ HAMBURGUESA
+// ==========================
+
+function initializeMenu(){
 
     const menuToggle = document.getElementById("menu-toggle");
     const navbar = document.getElementById("navbar");
 
-    if (menuToggle && navbar) {
+    if(menuToggle && navbar){
 
         menuToggle.addEventListener("click", () => {
             navbar.classList.toggle("active");
         });
 
-        // Cerrar el menú al pulsar un enlace
         document.querySelectorAll("#navbar a").forEach(link => {
+
             link.addEventListener("click", () => {
+
                 navbar.classList.remove("active");
+
             });
+
         });
 
     }
 
-    // ==========================
-    // API DE ROBLOX
-    // ==========================
+}
+
+// ==========================
+// ESTADÍSTICAS
+// ==========================
+
+async function loadStats(){
 
     const data = await RobloxAPI.getStats();
-    const games = await RobloxAPI.getGames();
 
-console.log(games);
+    if(!data){
 
-    if (!data) {
         console.log("API Error");
+
         return;
+
     }
 
     document.getElementById("games-count").textContent =
@@ -48,4 +67,28 @@ console.log(games);
     document.getElementById("favorites-count").textContent =
         data.stats.totalFavorites.toLocaleString();
 
-});
+}
+
+// ==========================
+// JUEGOS
+// ==========================
+
+async function loadGames(){
+
+    const games = await RobloxAPI.getGames();
+
+    console.log(games);
+
+}
+
+// ==========================
+// NOTICIAS
+// ==========================
+
+async function loadNews(){
+
+    const news = await RobloxAPI.getNews();
+
+    console.log(news);
+
+}
