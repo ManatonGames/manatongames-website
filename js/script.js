@@ -95,9 +95,7 @@ async function loadNews(){
     const newsContainer = document.getElementById("news-container");
 
     if(!newsContainer || news.length === 0){
-
         return;
-
     }
 
     newsContainer.innerHTML = "";
@@ -105,15 +103,23 @@ async function loadNews(){
     news.forEach(item => {
 
         newsContainer.innerHTML += `
+
             <div class="news-card">
 
-                <span class="news-date">${item.date}</span>
+                <div class="news-header">
 
-                <h3>${item.title}</h3>
+                    <span class="news-category">${item.category}</span>
+
+                    <span class="news-date">${item.date}</span>
+
+                </div>
+
+                <h3>${item.icon} ${item.title}</h3>
 
                 <p>${item.description}</p>
 
             </div>
+
         `;
 
     });
