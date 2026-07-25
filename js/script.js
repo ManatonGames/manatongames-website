@@ -84,11 +84,59 @@ async function loadGames(){
 
     const games = await RobloxAPI.getGames();
 
-    console.log(games);
+    const container = document.getElementById("games-container");
 
-    // Próximamente aquí se generarán
-    // automáticamente las tarjetas
-    // de Our Games.
+    if(!container || games.length === 0){
+        return;
+    }
+
+    container.innerHTML = "";
+
+    games.forEach(game => {
+
+        container.innerHTML += `
+
+        <div class="game-card">
+
+            <img src="assets/games/${game.image}" alt="${game.name}">
+
+            <div class="game-info">
+
+                <span class="game-status released">
+
+                    🟢 ${game.status}
+
+                </span>
+
+                <h3>${game.name}</h3>
+
+                <p>${game.description}</p>
+
+                <div class="game-stats">
+
+                    <span>👥 Coming Soon</span>
+
+                    <span>👁️ Coming Soon</span>
+
+                </div>
+
+                <a
+                    href="https://www.roblox.com/games/${game.id}"
+                    target="_blank"
+                    class="play-btn"
+                >
+
+                    Play Now
+
+                </a>
+
+            </div>
+
+        </div>
+
+        `;
+
+    });
 
 }
 
