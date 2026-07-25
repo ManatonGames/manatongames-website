@@ -62,16 +62,28 @@ self.addEventListener("activate", event => {
 
 });
 
-// Obtener archivos
+// Obtener archivos (Network First)
 self.addEventListener("fetch", event => {
+
+    if (event.request.method !== "GET") return;
 
     event.respondWith(
 
-        caches.match(event.request)
-
+        fetch(event.request)
             .then(response => {
 
-                return response || fetch(event.request);
+                const responseClone = response.clone();
+
+                caches.open(CACHE_NAME).then(cache => {
+                    cache.put(event.request, responseClone);
+                });
+
+                return response;
+
+            })
+            .catch(() => {
+
+                return caches.match(event.request);
 
             })
 
