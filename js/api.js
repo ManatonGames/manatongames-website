@@ -30,6 +30,30 @@ class RobloxAPI {
 
     static async getGames(){
 
+        // ==========================
+// NEWS
+// ==========================
+
+static async getNews(){
+
+    try{
+
+        const response = await fetch("/data/news.json");
+
+        return await response.json();
+
+    }
+
+    catch(error){
+
+        console.error("News API Error:", error);
+
+        return [];
+
+    }
+
+}
+
         try{
 
             const response = await fetch("/data/games.json");
