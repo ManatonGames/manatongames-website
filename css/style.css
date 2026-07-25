@@ -1073,3 +1073,41 @@ footer{
     box-shadow:0 25px 60px rgba(0,0,0,.35);
 
 }
+
+/* =========================
+   STATUS BAR
+========================= */
+
+.status-bar{
+
+    background:#111827;
+
+    border-top:1px solid rgba(255,255,255,.08);
+    border-bottom:1px solid rgba(255,255,255,.08);
+
+    padding:12px 0;
+
+}
+
+.status-bar .container{
+
+    display:flex;
+
+    justify-content:center;
+    align-items:center;
+    gap:40px;
+
+    flex-wrap:wrap;
+
+}
+
+.status-bar span{
+
+    color:#ffffff;
+
+    font-size:15px;
+    font-weight:600;
+
+    white-space:nowrap;
+
+}
