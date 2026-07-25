@@ -1225,3 +1225,52 @@ footer{
     line-height:1.7;
 
 }
+
+/* =========================
+   GAMES SEARCH
+========================= */
+
+.games-search{
+
+    display:flex;
+
+    justify-content:center;
+
+    margin:40px 0;
+
+}
+
+.games-search input{
+
+    width:100%;
+    max-width:500px;
+
+    padding:16px 22px;
+
+    border:none;
+
+    border-radius:14px;
+
+    background:#1e293b;
+
+    color:white;
+
+    font-size:16px;
+
+    outline:none;
+
+    transition:.3s;
+
+}
+
+.games-search input:focus{
+
+    box-shadow:0 0 0 3px rgba(37,99,235,.35);
+
+}
+
+.games-search input::placeholder{
+
+    color:#94a3b8;
+
+}
