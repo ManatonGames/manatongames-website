@@ -27,6 +27,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     // ==========================
 
     const data = await RobloxAPI.getStats();
+    const games = await RobloxAPI.getGames();
+
+console.log(games);
 
     if (!data) {
         console.log("API Error");
