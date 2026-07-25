@@ -1,4 +1,4 @@
-const CACHE_NAME = "manaton-games-v1";
+const CACHE_NAME = "manaton-games-v2";
 
 const FILES_TO_CACHE = [
     "/",
