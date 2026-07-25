@@ -1111,3 +1111,63 @@ footer{
     white-space:nowrap;
 
 }
+
+/* =========================
+   STUDIO NEWS
+========================= */
+
+.news-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+
+    gap:30px;
+
+}
+
+.news-card{
+
+    background:#1e293b;
+
+    border-radius:18px;
+
+    padding:25px;
+
+    transition:.3s;
+
+    border:1px solid rgba(255,255,255,.08);
+
+}
+
+.news-card:hover{
+
+    transform:translateY(-6px);
+
+}
+
+.news-date{
+
+    color:#60a5fa;
+
+    font-size:14px;
+
+    font-weight:600;
+
+}
+
+.news-card h3{
+
+    margin:15px 0;
+
+    color:white;
+
+}
+
+.news-card p{
+
+    color:#cbd5e1;
+
+    line-height:1.7;
+
+}
