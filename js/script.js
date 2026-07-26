@@ -293,7 +293,7 @@ if (versionElement) {
 // ==========================================
 
 const revealElements = document.querySelectorAll(
-    ".reveal, .reveal-left, .reveal-right, .reveal-zoom"
+    ".reveal, .reveal-left, .reveal-right, .reveal-zoom, .stagger"
 );
 
 const revealOnScroll = () => {
