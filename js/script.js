@@ -347,9 +347,41 @@ async function loadSystemStatus() {
 
         status.textContent = `${data.icon} ${data.title}`;
 
+        // Elimina clases anteriores
+        status.classList.remove(
+            "status-operational",
+            "status-minor",
+            "status-maintenance",
+            "status-outage"
+        );
+
+        // Agrega la clase correspondiente
+        switch(data.status){
+
+            case "operational":
+                status.classList.add("status-operational");
+                break;
+
+            case "minor":
+                status.classList.add("status-minor");
+                break;
+
+            case "maintenance":
+                status.classList.add("status-maintenance");
+                break;
+
+            case "outage":
+                status.classList.add("status-outage");
+                break;
+
+            default:
+                status.classList.add("status-operational");
+
+        }
+
     }
 
-    catch (error) {
+    catch(error){
 
         console.error("Status Error:", error);
 
@@ -358,7 +390,6 @@ async function loadSystemStatus() {
 }
 
 loadSystemStatus();
-
 
 // ==========================================
 // Status Bar Live Stats
