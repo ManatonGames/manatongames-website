@@ -1,6 +1,6 @@
 {
-    "status": "operational",
-    "icon": "🟢",
-    "title": "All Systems Operational",
-    "message": "All Manaton Games services are running normally."
+    "status": "maintenance",
+    "icon": "🟡",
+    "title": "Minor Issues",
+    "message": "ome features may experience minor delays"
 }
