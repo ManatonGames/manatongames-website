@@ -1406,3 +1406,25 @@ footer{
     opacity: 1;
     transform: scale(1);
 }
+
+/* ==========================================
+   STAGGER ANIMATION
+========================================== */
+
+.stagger {
+
+    opacity: 0;
+    transform: translateY(35px);
+
+    transition:
+        opacity .7s ease,
+        transform .7s ease;
+
+}
+
+.stagger.active {
+
+    opacity: 1;
+    transform: translateY(0);
+
+}
