@@ -336,23 +336,45 @@ document.querySelectorAll(".stagger").forEach((element, index) => {
 
 async function loadSystemStatus() {
 
-    try {
-
-        const response = await fetch("data/status.json");
-        const data = await response.json();
-
-        const status = document.getElementById("system-status");
-
-        if (!status) return;
-
-        status.textContent = `${data.icon} ${data.title}`;
-
-    } catch (error) {
-
-        console.error("Error loading system status:", error);
-
-    }
+    // tu código...
 
 }
 
 loadSystemStatus();
+
+
+// ==========================================
+// Status Bar Live Stats
+// ==========================================
+
+async function loadStatusStats() {
+
+    const data = await RobloxAPI.getStats();
+
+    if (!data || !data.success) {
+
+        document.getElementById("games-status").textContent =
+            "🎮 Unavailable";
+
+        document.getElementById("members-status").textContent =
+            "👥 Unavailable";
+
+        document.getElementById("visits-status").textContent =
+            "🔥 Unavailable";
+
+        return;
+
+    }
+
+    document.getElementById("games-status").textContent =
+        `🎮 ${data.stats.totalGames} Games`;
+
+    document.getElementById("members-status").textContent =
+        `👥 ${Number(data.group.members).toLocaleString()} Members`;
+
+    document.getElementById("visits-status").textContent =
+        `🔥 ${Number(data.stats.totalVisits).toLocaleString()} Visits`;
+
+}
+
+loadStatusStats();
