@@ -342,42 +342,64 @@ async function loadSystemStatus() {
         const data = await response.json();
 
         const status = document.getElementById("system-status");
+        const statusBar = document.getElementById("status-bar");
 
         if (!status) return;
 
         status.textContent = `${data.icon} ${data.title}`;
 
         // Elimina clases anteriores
-        status.classList.remove(
-            "status-operational",
-            "status-minor",
-            "status-maintenance",
-            "status-outage"
-        );
+ status.classList.remove(
+    "status-operational",
+    "status-minor",
+    "status-maintenance",
+    "status-outage"
+);
+
+statusBar.classList.remove(
+    "statusbar-operational",
+    "statusbar-minor",
+    "statusbar-maintenance",
+    "statusbar-outage"
+);
 
         // Agrega la clase correspondiente
-        switch(data.status){
+switch(data.status){
 
-            case "operational":
-                status.classList.add("status-operational");
-                break;
+    case "operational":
 
-            case "minor":
-                status.classList.add("status-minor");
-                break;
+        status.classList.add("status-operational");
+        statusBar.classList.add("statusbar-operational");
 
-            case "maintenance":
-                status.classList.add("status-maintenance");
-                break;
+        break;
 
-            case "outage":
-                status.classList.add("status-outage");
-                break;
+    case "minor":
 
-            default:
-                status.classList.add("status-operational");
+        status.classList.add("status-minor");
+        statusBar.classList.add("statusbar-minor");
 
-        }
+        break;
+
+    case "maintenance":
+
+        status.classList.add("status-maintenance");
+        statusBar.classList.add("statusbar-maintenance");
+
+        break;
+
+    case "outage":
+
+        status.classList.add("status-outage");
+        statusBar.classList.add("statusbar-outage");
+
+        break;
+
+    default:
+
+        status.classList.add("status-operational");
+        statusBar.classList.add("statusbar-operational");
+
+}
 
     }
 
