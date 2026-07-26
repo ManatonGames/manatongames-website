@@ -336,7 +336,24 @@ document.querySelectorAll(".stagger").forEach((element, index) => {
 
 async function loadSystemStatus() {
 
-    // tu código...
+    try {
+
+        const response = await fetch("/data/status.json");
+        const data = await response.json();
+
+        const status = document.getElementById("system-status");
+
+        if (!status) return;
+
+        status.textContent = `${data.icon} ${data.title}`;
+
+    }
+
+    catch (error) {
+
+        console.error("Status Error:", error);
+
+    }
 
 }
 
