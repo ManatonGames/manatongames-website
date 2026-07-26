@@ -287,3 +287,33 @@ if (versionElement) {
     versionElement.textContent = `Website Version v${APP_VERSION}`;
 
 }
+
+// ==========================================
+// Scroll Reveal Animations
+// ==========================================
+
+const revealElements = document.querySelectorAll(
+    ".reveal, .reveal-left, .reveal-right, .reveal-zoom"
+);
+
+const revealOnScroll = () => {
+
+    const windowHeight = window.innerHeight;
+
+    revealElements.forEach(element => {
+
+        const elementTop = element.getBoundingClientRect().top;
+
+        if (elementTop < windowHeight - 100) {
+
+            element.classList.add("active");
+
+        }
+
+    });
+
+};
+
+window.addEventListener("scroll", revealOnScroll);
+
+window.addEventListener("load", revealOnScroll);
