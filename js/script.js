@@ -329,3 +329,30 @@ document.querySelectorAll(".stagger").forEach((element, index) => {
     element.style.transitionDelay = `${index * 0.08}s`;
 
 });
+
+// ==========================================
+// System Status
+// ==========================================
+
+async function loadSystemStatus() {
+
+    try {
+
+        const response = await fetch("data/status.json");
+        const data = await response.json();
+
+        const status = document.getElementById("system-status");
+
+        if (!status) return;
+
+        status.textContent = `${data.icon} ${data.title}`;
+
+    } catch (error) {
+
+        console.error("Error loading system status:", error);
+
+    }
+
+}
+
+loadSystemStatus();
