@@ -14,6 +14,13 @@
         "description": "The next generation donation experience is currently in development."
     },
     {
+        "title": "Fixing Bugs in Manaton Games",
+        "date": "July 25 2026",
+        "category": "Web Bugged",
+        "icon": "🟡",
+        "description": "Fixing some bugs in the Manaton Games web, it will be operational back."
+    },
+    {
         "title": "More Games Coming",
         "date": "Soon",
         "category": "Studio",
