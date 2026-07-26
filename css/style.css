@@ -1168,6 +1168,59 @@ footer{
 
 }
 
+/* ==========================================
+   STATUS BAR COLORS
+========================================== */
+
+#status-bar{
+
+    transition:
+        background .4s ease,
+        border-color .4s ease,
+        box-shadow .4s ease;
+
+}
+
+/* 🟢 */
+
+.statusbar-operational{
+
+    background:#14532d;
+
+    border-bottom:1px solid #22c55e;
+
+}
+
+/* 🟡 */
+
+.statusbar-minor{
+
+    background:#713f12;
+
+    border-bottom:1px solid #facc15;
+
+}
+
+/* 🟠 */
+
+.statusbar-maintenance{
+
+    background:#7c2d12;
+
+    border-bottom:1px solid #fb923c;
+
+}
+
+/* 🔴 */
+
+.statusbar-outage{
+
+    background:#7f1d1d;
+
+    border-bottom:1px solid #ef4444;
+
+}
+
 /* =========================
    STUDIO NEWS
 ========================= */
