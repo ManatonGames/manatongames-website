@@ -300,18 +300,21 @@ const revealOnScroll = () => {
 
     const windowHeight = window.innerHeight;
 
-    revealElements.forEach(element => {
+    revealElements.forEach((element, index) => {
 
-        const elementTop = element.getBoundingClientRect().top;
+    const elementTop = element.getBoundingClientRect().top;
 
-        if (elementTop < windowHeight - 100) {
+    if (elementTop < windowHeight - 100) {
+
+        setTimeout(() => {
 
             element.classList.add("active");
 
-        }
+        }, index * 120);
 
-    });
+    }
 
+});
 };
 
 window.addEventListener("scroll", revealOnScroll);
