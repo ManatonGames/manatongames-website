@@ -275,3 +275,15 @@ window.addEventListener("load", () => {
     }, 1200);
 
 });
+
+// ==========================================
+// Website Version
+// ==========================================
+
+const versionElement = document.getElementById("website-version");
+
+if (versionElement) {
+
+    versionElement.textContent = `Website Version v${APP_VERSION}`;
+
+}
