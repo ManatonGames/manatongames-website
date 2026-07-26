@@ -20,6 +20,13 @@
         "icon": "🟡",
         "description": "Fixing some bugs in the Manaton Games web, it will be operational back."
     },
+       {
+        "title": "Bugs Fixed in Manaton Games",
+        "date": "July 25 2026 / 22:21 p.m",
+        "category": "Web Bugged",
+        "icon": "🟢",
+        "description": "The Bugs are fixed on the Manaton Games web, all Systems are Operational."
+    },
     {
         "title": "More Games Coming",
         "date": "Soon",
