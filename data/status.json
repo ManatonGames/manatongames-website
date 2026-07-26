@@ -1,6 +1,6 @@
 {
-    "status": "maintenance",
-    "icon": "🟡",
-    "title": "Minor Issues",
-    "message": "ome features may experience minor delays"
+    "status": "Operational",
+    "icon": "🟢",
+    "title": "All Systems Operational",
+    "message": "All Systems Operational"
 }
