@@ -1112,6 +1112,62 @@ footer{
 
 }
 
+/* ==========================================
+   STATUS COLORS
+========================================== */
+
+#system-status{
+
+    padding:8px 16px;
+
+    border-radius:999px;
+
+    font-weight:600;
+
+    transition:.35s;
+
+}
+
+/* 🟢 Operational */
+
+.status-operational{
+
+    background:#16a34a;
+
+    color:white;
+
+}
+
+/* 🟡 Minor Issues */
+
+.status-minor{
+
+    background:#eab308;
+
+    color:#111827;
+
+}
+
+/* 🟠 Maintenance */
+
+.status-maintenance{
+
+    background:#f97316;
+
+    color:white;
+
+}
+
+/* 🔴 Outage */
+
+.status-outage{
+
+    background:#dc2626;
+
+    color:white;
+
+}
+
 /* =========================
    STUDIO NEWS
 ========================= */
