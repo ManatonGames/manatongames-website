@@ -289,34 +289,43 @@ if (versionElement) {
 }
 
 // ==========================================
-// Scroll Reveal Animations
+// Scroll Reveal (Intersection Observer)
 // ==========================================
 
-const revealElements = document.querySelectorAll(
-    ".reveal, .reveal-left, .reveal-right, .reveal-zoom, .stagger"
-);
+const observer = new IntersectionObserver((entries) => {
 
-const revealOnScroll = () => {
+    entries.forEach((entry) => {
 
-    const windowHeight = window.innerHeight;
+        if (entry.isIntersecting) {
 
-    revealElements.forEach((element, index) => {
+            entry.target.classList.add("active");
 
-    const elementTop = element.getBoundingClientRect().top;
+            observer.unobserve(entry.target);
 
-    if (elementTop < windowHeight - 100) {
+        }
 
-        setTimeout(() => {
+    });
 
-            element.classList.add("active");
+}, {
 
-        }, index * 120);
-
-    }
+    threshold: 0.15
 
 });
-};
 
-window.addEventListener("scroll", revealOnScroll);
+document.querySelectorAll(
+    ".reveal, .reveal-left, .reveal-right, .reveal-zoom, .stagger"
+).forEach((element) => {
 
-window.addEventListener("load", revealOnScroll);
+    observer.observe(element);
+
+});
+
+// ==========================================
+// Stagger Delay
+// ==========================================
+
+document.querySelectorAll(".stagger").forEach((element, index) => {
+
+    element.style.transitionDelay = `${index * 0.08}s`;
+
+});
