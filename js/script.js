@@ -436,8 +436,10 @@ async function loadStatusStats() {
 
     }
 
-    document.getElementById("games-status").textContent =
-        `🎮 ${data.stats.totalGames} Games`;
+    const games = await RobloxAPI.getGames();
+
+document.getElementById("games-status").textContent =
+    `🎮 ${games.length} Games`;
 
     document.getElementById("members-status").textContent =
         `👥 ${Number(data.group.members).toLocaleString()} Members`;
