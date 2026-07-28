@@ -450,3 +450,41 @@ document.getElementById("games-status").textContent =
 }
 
 loadStatusStats();
+
+// ==========================================
+// Update Manager
+// ==========================================
+
+async function checkWebsiteUpdate() {
+
+    const versionData = await RobloxAPI.getVersion();
+
+    if (!versionData) return;
+
+    const currentVersion = versionData.version;
+
+    const savedVersion = localStorage.getItem("website-version");
+
+    // Primera visita
+    if (!savedVersion) {
+
+        localStorage.setItem("website-version", currentVersion);
+
+        return;
+
+    }
+
+    // ¿Hay una versión nueva?
+    if (savedVersion !== currentVersion) {
+
+        showUpdateBanner(versionData);
+
+    }
+
+}
+
+function showUpdateBanner(versionData) {
+
+    console.log("🚀 Nueva versión disponible:", versionData.version);
+
+}
