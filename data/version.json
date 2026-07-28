@@ -1,6 +1,14 @@
 {
     "version": "1.0.0",
     "released": "2026-07-27",
-    "title": "Version 1.0.0",
-    "message": "Welcome to the first official release of Manaton Games."
+    "title": "Welcome to Version 1.0.0",
+    "message": "Thanks for visiting Manaton Games!",
+    "changes": [
+        "Official website released",
+        "Loading Screen",
+        "PWA Support",
+        "Live Status Bar",
+        "Studio News",
+        "Performance Improvements"
+    ]
 }
