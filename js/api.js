@@ -4,9 +4,9 @@ class RobloxAPI {
     // ROBLOX STATS
     // ==========================
 
-    static async getStats(){
+    static async getStats() {
 
-        try{
+        try {
 
             const response = await fetch("/api/roblox");
 
@@ -14,7 +14,7 @@ class RobloxAPI {
 
         }
 
-        catch(error){
+        catch (error) {
 
             console.error("Stats API Error:", error);
 
@@ -28,9 +28,9 @@ class RobloxAPI {
     // GAMES
     // ==========================
 
-    static async getGames(){
+    static async getGames() {
 
-        try{
+        try {
 
             const response = await fetch("/data/games.json");
 
@@ -38,7 +38,7 @@ class RobloxAPI {
 
         }
 
-        catch(error){
+        catch (error) {
 
             console.error("Games API Error:", error);
 
@@ -52,9 +52,9 @@ class RobloxAPI {
     // NEWS
     // ==========================
 
-    static async getNews(){
+    static async getNews() {
 
-        try{
+        try {
 
             const response = await fetch("/data/news.json");
 
@@ -62,7 +62,7 @@ class RobloxAPI {
 
         }
 
-        catch(error){
+        catch (error) {
 
             console.error("News API Error:", error);
 
@@ -72,27 +72,27 @@ class RobloxAPI {
 
     }
 
-}
+    // ==========================
+    // WEBSITE VERSION
+    // ==========================
 
-// ==========================
-// WEBSITE VERSION
-// ==========================
+    static async getVersion() {
 
-static async getVersion(){
+        try {
 
-    try{
+            const response = await fetch("/data/version.json");
 
-        const response = await fetch("/data/version.json");
+            return await response.json();
 
-        return await response.json();
+        }
 
-    }
+        catch (error) {
 
-    catch(error){
+            console.error("Version API Error:", error);
 
-        console.error("Version API Error:", error);
+            return null;
 
-        return null;
+        }
 
     }
 
