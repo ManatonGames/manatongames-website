@@ -1,14 +1,12 @@
 {
-    "version": "1.0.0",
+    "version": "1.0.1",
+    "title": "Version 1.0.1",
     "released": "2026-07-27",
-    "title": "Welcome to Version 1.0.0",
-    "message": "Thanks for visiting Manaton Games!",
+    "message": "Performance improvements and bug fixes.",
     "changes": [
-        "Official website released",
-        "Loading Screen",
-        "PWA Support",
-        "Live Status Bar",
-        "Studio News",
-        "Performance Improvements"
+        "Improved loading speed",
+        "Updated PWA",
+        "Better mobile compatibility",
+        "General bug fixes"
     ]
 }
