@@ -71,22 +71,25 @@ self.addEventListener("fetch", event => {
     event.respondWith(
 
         fetch(event.request)
-            .then(response => {
+    .then(response => {
 
-                const responseClone = response.clone();
+        // Solo cachear peticiones HTTP/HTTPS
+        if (
+            event.request.url.startsWith("http://") ||
+            event.request.url.startsWith("https://")
+        ) {
 
-                caches.open(CACHE_NAME).then(cache => {
-                    cache.put(event.request, responseClone);
-                });
+            const responseClone = response.clone();
 
-                return response;
+            caches.open(CACHE_NAME).then(cache => {
+                cache.put(event.request, responseClone);
+            });
 
-            })
-            .catch(() => {
+        }
 
-                return caches.match(event.request);
+        return response;
 
-            })
+    })
 
     );
 
