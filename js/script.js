@@ -488,3 +488,5 @@ function showUpdateBanner(versionData) {
     console.log("🚀 Nueva versión disponible:", versionData.version);
 
 }
+
+checkWebsiteUpdate();
