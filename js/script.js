@@ -523,6 +523,24 @@ function showUpdateBanner(versionData) {
 
     document.body.appendChild(popup);
 
+// Botón Later
+document.getElementById("later-update").addEventListener("click", () => {
+
+    popup.remove();
+
+});
+
+// Botón Update Now
+document.getElementById("update-now").addEventListener("click", () => {
+
+    // Guardar la nueva versión
+    localStorage.setItem("website-version", versionData.version);
+
+    // Recargar la página
+    location.reload();
+
+});
+
 }
 
 checkWebsiteUpdate();
