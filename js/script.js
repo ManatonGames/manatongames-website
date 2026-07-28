@@ -485,7 +485,43 @@ async function checkWebsiteUpdate() {
 
 function showUpdateBanner(versionData) {
 
-    console.log("🚀 Nueva versión disponible:", versionData.version);
+    const popup = document.createElement("div");
+
+    popup.id = "update-center";
+
+    popup.innerHTML = `
+
+        <div class="update-box">
+
+            <h2>🚀 ${versionData.title}</h2>
+
+            <p>${versionData.message}</p>
+
+            <ul>
+
+                ${versionData.changes.map(change => `
+                    <li>✅ ${change}</li>
+                `).join("")}
+
+            </ul>
+
+            <div class="update-buttons">
+
+                <button id="later-update">
+                    Later
+                </button>
+
+                <button id="update-now">
+                    Update Now
+                </button>
+
+            </div>
+
+        </div>
+
+    `;
+
+    document.body.appendChild(popup);
 
 }
 
