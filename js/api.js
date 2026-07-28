@@ -73,3 +73,27 @@ class RobloxAPI {
     }
 
 }
+
+// ==========================
+// WEBSITE VERSION
+// ==========================
+
+static async getVersion(){
+
+    try{
+
+        const response = await fetch("/data/version.json");
+
+        return await response.json();
+
+    }
+
+    catch(error){
+
+        console.error("Version API Error:", error);
+
+        return null;
+
+    }
+
+}
