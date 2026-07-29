@@ -417,3 +417,107 @@
     }
 
 }
+
+/* ==========================================
+   BACKGROUND
+========================================== */
+
+.welcome-background{
+
+    position:absolute;
+
+    inset:0;
+
+    overflow:hidden;
+
+}
+
+.welcome-background span{
+
+    position:absolute;
+
+    display:block;
+
+    width:260px;
+
+    height:260px;
+
+    border-radius:50%;
+
+    background:rgba(37,99,235,.12);
+
+    filter:blur(60px);
+
+    animation:float 18s infinite ease-in-out;
+
+}
+
+.welcome-background span:nth-child(1){
+
+    top:-60px;
+    left:-80px;
+
+}
+
+.welcome-background span:nth-child(2){
+
+    top:15%;
+    right:-120px;
+
+    animation-duration:22s;
+
+}
+
+.welcome-background span:nth-child(3){
+
+    bottom:-120px;
+    left:10%;
+
+    animation-duration:16s;
+
+}
+
+.welcome-background span:nth-child(4){
+
+    bottom:15%;
+    right:18%;
+
+}
+
+.welcome-background span:nth-child(5){
+
+    top:45%;
+    left:40%;
+
+    animation-duration:24s;
+
+}
+
+.welcome-background span:nth-child(6){
+
+    bottom:-70px;
+    right:-80px;
+
+}
+
+@keyframes float{
+
+    0%{
+
+        transform:translateY(0) translateX(0);
+
+    }
+
+    50%{
+
+        transform:translateY(-35px) translateX(20px);
+
+    }
+
+    100%{
+
+        transform:translateY(0) translateX(0);
+
+    }
+
+}
