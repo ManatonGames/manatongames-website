@@ -231,3 +231,33 @@
     }
 
 }
+
+/* ==========================================
+   FEATURED GAME
+========================================== */
+
+.featured-title{
+
+    color:white;
+
+    margin-top:20px;
+
+    font-size:26px;
+
+    font-weight:700;
+
+}
+
+.featured-game{
+
+    width:100%;
+
+    max-width:360px;
+
+    border-radius:18px;
+
+    transition:.6s;
+
+    box-shadow:0 20px 40px rgba(0,0,0,.35);
+
+}
