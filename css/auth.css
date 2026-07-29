@@ -24,19 +24,25 @@
 
 .welcome-card{
 
-    width:420px;
+    width:1000px;
 
-    max-width:92%;
+    max-width:95%;
+
+    min-height:620px;
+
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
 
     background:#182235;
 
-    border-radius:22px;
+    border-radius:24px;
 
-    padding:45px;
-
-    text-align:center;
+    overflow:hidden;
 
     border:1px solid rgba(255,255,255,.08);
+
+    box-shadow:0 30px 80px rgba(0,0,0,.45);
 
 }
 
