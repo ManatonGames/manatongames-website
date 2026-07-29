@@ -8,6 +8,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
         <div id="welcome-screen" class="welcome-screen">
 
+        <div class="welcome-background">
+
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+
+</div>
+
             <div class="welcome-card">
 
                 <div class="welcome-left">
