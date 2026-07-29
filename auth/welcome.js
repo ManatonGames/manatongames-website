@@ -4,39 +4,65 @@ document.addEventListener("DOMContentLoaded", () => {
 
         <div id="welcome-screen" class="welcome-screen">
 
-            <div class="welcome-card">
+           <div class="welcome-left">
 
-                <img src="assets/logo/logo.png" class="welcome-logo">
+    <img
+        src="assets/logo/logo.png"
+        class="welcome-logo"
+    >
 
-                <h1>Manaton Games</h1>
+    <h1>Manaton Games</h1>
 
-                <p>Create • Play • Discover</p>
+    <p>Create • Play • Discover</p>
 
-                <button class="welcome-btn primary">
-                    Sign In
-                </button>
+    <img
+        src="assets/games/pd3.png"
+        class="featured-game"
+    >
 
-                <button class="welcome-btn secondary">
-                    Create Account
-                </button>
+</div>
 
-                <div class="welcome-divider">
-                    <span>OR</span>
-                </div>
+<div class="welcome-right">
 
-                <button class="oauth-btn">
-                    Continue with Google
-                </button>
+    <h2>Welcome Back 👋</h2>
 
-                <button class="oauth-btn">
-                    Continue with Discord
-                </button>
+    <button class="welcome-btn primary">
 
-                <button id="guest-btn" class="guest-btn">
-                    Continue as Guest
-                </button>
+        Sign In
 
-            </div>
+    </button>
+
+    <button class="welcome-btn secondary">
+
+        Create Account
+
+    </button>
+
+    <div class="welcome-divider">
+
+        <span>OR</span>
+
+    </div>
+
+    <button class="oauth-btn">
+
+        Continue with Google
+
+    </button>
+
+    <button class="oauth-btn">
+
+        Continue with Discord
+
+    </button>
+
+    <button class="guest-btn">
+
+        Continue as Guest
+
+    </button>
+
+</div>
 
         </div>
 
