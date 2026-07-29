@@ -209,3 +209,25 @@
     font-size:34px;
 
 }
+
+@media (max-width:900px){
+
+    .welcome-card{
+
+        grid-template-columns:1fr;
+
+    }
+
+    .welcome-left{
+
+        display:none;
+
+    }
+
+    .welcome-right{
+
+        padding:35px;
+
+    }
+
+}
