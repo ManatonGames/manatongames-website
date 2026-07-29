@@ -1,77 +1,162 @@
 document.addEventListener("DOMContentLoaded", () => {
 
+    // ==========================================
+    // CREATE WELCOME SCREEN
+    // ==========================================
+
     document.body.insertAdjacentHTML("afterbegin", `
 
         <div id="welcome-screen" class="welcome-screen">
 
-           <div class="welcome-left">
+            <div class="welcome-card">
 
-    <img
-        src="assets/logo/logo.png"
-        class="welcome-logo"
-    >
+                <div class="welcome-left">
 
-    <h1>Manaton Games</h1>
+                    <img
+                        src="assets/logo/logo.png"
+                        class="welcome-logo"
+                        alt="Manaton Games Logo"
+                    >
 
-    <p>Create • Play • Discover</p>
+                    <h1>Manaton Games</h1>
 
-<img
-    id="featured-game-image"
-    src="assets/games/pd3.png"
-    class="featured-game"
-    alt="Featured Game"
->
+                    <p>Create • Play • Discover</p>
 
-<h3 id="featured-game-title" class="featured-title">
-    PLS DONATE 3
-</h3>
+                    <img
+                        id="featured-game-image"
+                        src="assets/games/pd3.png"
+                        class="featured-game"
+                        alt="Featured Game"
+                    >
 
-</div>
+                    <h3
+                        id="featured-game-title"
+                        class="featured-title"
+                    >
+                        PLS DONATE 3
+                    </h3>
 
-<div class="welcome-right">
+                </div>
 
-    <h2>Welcome Back 👋</h2>
+                <div class="welcome-right">
 
-    <button class="welcome-btn primary">
+                    <h2>Welcome Back 👋</h2>
 
-        Sign In
+                    <button
+                        id="signin-btn"
+                        class="welcome-btn primary"
+                    >
+                        Sign In
+                    </button>
 
-    </button>
+                    <button
+                        id="register-btn"
+                        class="welcome-btn secondary"
+                    >
+                        Create Account
+                    </button>
 
-    <button class="welcome-btn secondary">
+                    <div class="welcome-divider">
 
-        Create Account
+                        <span>OR</span>
 
-    </button>
+                    </div>
 
-    <div class="welcome-divider">
+                    <button class="oauth-btn">
 
-        <span>OR</span>
+                        Continue with Google
 
-    </div>
+                    </button>
 
-    <button class="oauth-btn">
+                    <button class="oauth-btn">
 
-        Continue with Google
+                        Continue with Discord
 
-    </button>
+                    </button>
 
-    <button class="oauth-btn">
+                    <button
+                        id="guest-btn"
+                        class="guest-btn"
+                    >
 
-        Continue with Discord
+                        Continue as Guest
 
-    </button>
+                    </button>
 
-    <button class="guest-btn">
+                </div>
 
-        Continue as Guest
-
-    </button>
-
-</div>
+            </div>
 
         </div>
 
     `);
+
+    // ==========================================
+    // FEATURED GAMES
+    // ==========================================
+
+    const featuredGames = [
+
+        {
+
+            image: "assets/games/pd3.png",
+
+            title: "PLS DONATE 3"
+
+        },
+
+        {
+
+            image: "assets/games/pd2.png",
+
+            title: "PLS DONATE 2"
+
+        },
+
+        {
+
+            image: "assets/games/growagarden.png",
+
+            title: "Grow a Garden Modded 2.0"
+
+        },
+
+        {
+
+            image: "assets/games/rsc.png",
+
+            title: "MG | Ranks Shopping Center"
+
+        },
+
+        {
+
+            image: "assets/games/speedescape.png",
+
+            title: "+1 Speed Escape"
+
+        }
+
+    ];
+
+    let currentGame = 0;
+
+    setInterval(() => {
+
+        currentGame++;
+
+        if(currentGame >= featuredGames.length){
+
+            currentGame = 0;
+
+        }
+
+        const image = document.getElementById("featured-game-image");
+        const title = document.getElementById("featured-game-title");
+
+        image.src = featuredGames[currentGame].image;
+        title.textContent = featuredGames[currentGame].title;
+
+    }, 5000);
 
 });
