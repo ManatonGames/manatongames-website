@@ -15,10 +15,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
     <p>Create • Play • Discover</p>
 
-    <img
-        src="assets/games/pd3.png"
-        class="featured-game"
-    >
+<img
+    id="featured-game-image"
+    src="assets/games/pd3.png"
+    class="featured-game"
+    alt="Featured Game"
+>
+
+<h3 id="featured-game-title" class="featured-title">
+    PLS DONATE 3
+</h3>
 
 </div>
 
