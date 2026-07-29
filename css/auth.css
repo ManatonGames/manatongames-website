@@ -22,6 +22,10 @@
 
 }
 
+/* ==========================================
+   CARD
+========================================== */
+
 .welcome-card{
 
     width:1000px;
@@ -46,99 +50,17 @@
 
 }
 
-.welcome-logo{
-
-    width:110px;
-
-    margin-bottom:25px;
-
-}
-
-.welcome-card h1{
-
-    color:white;
-
-    margin-bottom:10px;
-
-}
-
-.welcome-card p{
-
-    color:#94a3b8;
-
-    margin-bottom:30px;
-
-}
-
-.welcome-btn,
-.oauth-btn,
-.guest-btn{
-
-    width:100%;
-
-    padding:14px;
-
-    margin-top:12px;
-
-    border:none;
-
-    border-radius:12px;
-
-    cursor:pointer;
-
-    font-size:16px;
-
-    font-weight:600;
-
-}
-
-.primary{
-
-    background:#2563eb;
-
-    color:white;
-
-}
-
-.secondary{
-
-    background:#334155;
-
-    color:white;
-
-}
-
-.oauth-btn{
-
-    background:#1e293b;
-
-    color:white;
-
-}
-
-.guest-btn{
-
-    background:transparent;
-
-    color:#60a5fa;
-
-}
-
-.welcome-divider{
-
-    margin:25px 0;
-
-    color:#94a3b8;
-
-}
-
 /* ==========================================
    LEFT PANEL
 ========================================== */
 
 .welcome-left{
 
-    background:linear-gradient(180deg,#2563eb,#1d4ed8);
+    background:linear-gradient(
+        180deg,
+        #2563eb,
+        #1d4ed8
+    );
 
     display:flex;
 
@@ -154,13 +76,21 @@
 
 }
 
+.welcome-logo{
+
+    width:110px;
+
+    margin-bottom:20px;
+
+}
+
 .welcome-left h1{
 
     color:white;
 
-    margin-top:25px;
-
     font-size:42px;
+
+    margin-top:15px;
 
 }
 
@@ -170,7 +100,13 @@
 
     margin:15px 0 35px;
 
+    font-size:18px;
+
 }
+
+/* ==========================================
+   FEATURED GAME
+========================================== */
 
 .featured-game{
 
@@ -189,6 +125,38 @@
     opacity:1;
 
     transform:scale(1);
+
+}
+
+.featured-game.fade{
+
+    opacity:0;
+
+    transform:scale(.96);
+
+}
+
+.featured-title{
+
+    color:white;
+
+    margin-top:20px;
+
+    font-size:26px;
+
+    font-weight:700;
+
+    transition:
+        opacity .35s ease,
+        transform .35s ease;
+
+}
+
+.featured-title.fade{
+
+    opacity:0;
+
+    transform:translateY(10px);
 
 }
 
@@ -212,17 +180,193 @@
 
     color:white;
 
-    margin-bottom:35px;
-
     font-size:34px;
 
+    margin-bottom:35px;
+
 }
+
+/* ==========================================
+   BUTTONS
+========================================== */
+
+.welcome-btn,
+.oauth-btn,
+.guest-btn{
+
+    width:100%;
+
+    padding:15px;
+
+    margin-top:12px;
+
+    border:none;
+
+    border-radius:12px;
+
+    cursor:pointer;
+
+    font-size:16px;
+
+    font-weight:600;
+
+    transition:
+        transform .25s,
+        box-shadow .25s,
+        background .25s;
+
+}
+
+.welcome-btn:hover,
+.oauth-btn:hover,
+.guest-btn:hover{
+
+    transform:translateY(-3px);
+
+    box-shadow:0 12px 25px rgba(37,99,235,.30);
+
+}
+
+.primary{
+
+    background:#2563eb;
+
+    color:white;
+
+}
+
+.primary:hover{
+
+    background:#3b82f6;
+
+}
+
+.secondary{
+
+    background:#334155;
+
+    color:white;
+
+}
+
+.secondary:hover{
+
+    background:#475569;
+
+}
+
+.oauth-btn{
+
+    background:#1e293b;
+
+    color:white;
+
+}
+
+.oauth-btn:hover{
+
+    background:#334155;
+
+}
+
+.guest-btn{
+
+    background:transparent;
+
+    color:#60a5fa;
+
+}
+
+.guest-btn:hover{
+
+    background:rgba(96,165,250,.10);
+
+}
+
+/* ==========================================
+   DIVIDER
+========================================== */
+
+.welcome-divider{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    margin:28px 0;
+
+    color:#94a3b8;
+
+    font-size:14px;
+
+    font-weight:600;
+
+}
+
+.welcome-divider::before,
+.welcome-divider::after{
+
+    content:"";
+
+    flex:1;
+
+    height:1px;
+
+    background:rgba(255,255,255,.08);
+
+}
+
+.welcome-divider span{
+
+    padding:0 15px;
+
+}
+
+/* ==========================================
+   ANIMATION
+========================================== */
+
+.welcome-card{
+
+    animation:welcomeFade .6s ease;
+
+}
+
+@keyframes welcomeFade{
+
+    from{
+
+        opacity:0;
+
+        transform:translateY(25px) scale(.96);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:translateY(0) scale(1);
+
+    }
+
+}
+
+/* ==========================================
+   RESPONSIVE
+========================================== */
 
 @media (max-width:900px){
 
     .welcome-card{
 
         grid-template-columns:1fr;
+
+        width:95%;
+
+        min-height:auto;
 
     }
 
@@ -238,34 +382,38 @@
 
     }
 
-}
+    .welcome-right h2{
 
-/* ==========================================
-   FEATURED GAME
-========================================== */
+        text-align:center;
 
-.featured-title{
+        font-size:30px;
 
-    color:white;
-
-    margin-top:20px;
-
-    font-size:26px;
-
-    font-weight:700;
+    }
 
 }
 
-.featured-game{
+@media (max-width:500px){
 
-    width:100%;
+    .welcome-right{
 
-    max-width:360px;
+        padding:25px;
 
-    border-radius:18px;
+    }
 
-    transition:.6s;
+    .welcome-right h2{
 
-    box-shadow:0 20px 40px rgba(0,0,0,.35);
+        font-size:26px;
+
+    }
+
+    .welcome-btn,
+    .oauth-btn,
+    .guest-btn{
+
+        font-size:15px;
+
+        padding:14px;
+
+    }
 
 }
