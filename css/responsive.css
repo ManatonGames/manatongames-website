@@ -32,6 +32,16 @@
         display:block;
     }
 
+   .header-actions{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+}
+
     header .container{
         height:80px;
     }
