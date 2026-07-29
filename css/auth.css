@@ -131,3 +131,81 @@
     color:#94a3b8;
 
 }
+
+/* ==========================================
+   LEFT PANEL
+========================================== */
+
+.welcome-left{
+
+    background:linear-gradient(180deg,#2563eb,#1d4ed8);
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+
+    align-items:center;
+
+    padding:50px;
+
+    text-align:center;
+
+}
+
+.welcome-left h1{
+
+    color:white;
+
+    margin-top:25px;
+
+    font-size:42px;
+
+}
+
+.welcome-left p{
+
+    color:#dbeafe;
+
+    margin:15px 0 35px;
+
+}
+
+.featured-game{
+
+    width:100%;
+
+    max-width:360px;
+
+    border-radius:18px;
+
+    box-shadow:0 15px 40px rgba(0,0,0,.35);
+
+}
+
+/* ==========================================
+   RIGHT PANEL
+========================================== */
+
+.welcome-right{
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+
+    padding:60px;
+
+}
+
+.welcome-right h2{
+
+    color:white;
+
+    margin-bottom:35px;
+
+    font-size:34px;
+
+}
