@@ -28,6 +28,10 @@
 
 .welcome-card{
 
+   position:relative;
+
+   z-index:2;
+
     width:1000px;
 
     max-width:95%;
