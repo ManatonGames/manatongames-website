@@ -141,7 +141,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let currentGame = 0;
 
-    setInterval(() => {
+setInterval(() => {
+
+    const image = document.getElementById("featured-game-image");
+    const title = document.getElementById("featured-game-title");
+
+    image.classList.add("fade");
+    title.classList.add("fade");
+
+    setTimeout(() => {
 
         currentGame++;
 
@@ -151,12 +159,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
         }
 
-        const image = document.getElementById("featured-game-image");
-        const title = document.getElementById("featured-game-title");
-
         image.src = featuredGames[currentGame].image;
-        title.textContent = featuredGames[currentGame].title;
 
-    }, 5000);
+        title.textContent =
+            featuredGames[currentGame].title;
+
+        image.classList.remove("fade");
+        title.classList.remove("fade");
+
+    },450);
+
+},5000);
 
 });
