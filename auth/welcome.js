@@ -183,3 +183,27 @@ setInterval(() => {
 },5000);
 
 });
+
+// ==========================================
+// CONTINUE AS GUEST
+// ==========================================
+
+const guestButton = document.getElementById("guest-btn");
+
+if (guestButton) {
+
+    guestButton.addEventListener("click", () => {
+
+        const welcomeScreen = document.getElementById("welcome-screen");
+
+        welcomeScreen.style.opacity = "0";
+
+        setTimeout(() => {
+
+            welcomeScreen.remove();
+
+        }, 500);
+
+    });
+
+}
