@@ -4,8 +4,12 @@ document.addEventListener("DOMContentLoaded", () => {
 // SESSION CHECK
 // ==========================================
 
-if (localStorage.getItem("mg_logged_in") === "true") {
+const session = JSON.parse(localStorage.getItem("mg_session"));
+
+if(session && session.loggedIn){
+
     return;
+
 }
 
     // ==========================================
@@ -200,7 +204,19 @@ if (guestButton) {
 
     guestButton.addEventListener("click", () => {
 
-    localStorage.setItem("mg_logged_in", "true");
+    localStorage.setItem("mg_session", JSON.stringify({
+
+    loggedIn: true,
+
+    loginType: "guest",
+
+    username: "Guest",
+
+    avatar: "assets/logo/logo.png",
+
+    loginDate: Date.now()
+
+}));
 
         const welcomeScreen = document.getElementById("welcome-screen");
 
