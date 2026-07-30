@@ -1,6 +1,14 @@
 document.addEventListener("DOMContentLoaded", () => {
 
     // ==========================================
+// SESSION CHECK
+// ==========================================
+
+if (localStorage.getItem("mg_logged_in") === "true") {
+    return;
+}
+
+    // ==========================================
     // CREATE WELCOME SCREEN
     // ==========================================
 
@@ -191,6 +199,8 @@ const guestButton = document.getElementById("guest-btn");
 if (guestButton) {
 
     guestButton.addEventListener("click", () => {
+
+    localStorage.setItem("mg_logged_in", "true");
 
         const welcomeScreen = document.getElementById("welcome-screen");
 
