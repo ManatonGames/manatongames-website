@@ -85,10 +85,10 @@ if(session && session.loggedIn){
 
                     </div>
 
-                    <button class="oauth-btn">
-
-                        Continue with Google
-
+                    <button id="google-login-btn" class="oauth-btn">
+                    
+                       Continue with Google
+                       
                     </button>
 
                     <button class="oauth-btn">
