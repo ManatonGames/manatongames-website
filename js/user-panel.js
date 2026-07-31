@@ -76,6 +76,12 @@ function toggleUserMenu() {
     `;
 
     document.body.appendChild(menu);
+    
+    setTimeout(() => {
+
+    document.addEventListener("click", closeUserMenu);
+
+},100);
 
     const loginButton =
         document.getElementById("login-btn");
@@ -98,5 +104,33 @@ function toggleUserMenu() {
             location.reload();
 
         };
+
+}
+
+function closeUserMenu(event){
+
+    const menu =
+        document.getElementById("user-menu");
+
+    const button =
+        document.getElementById("login-btn");
+
+    if(!menu) return;
+
+    if(
+        menu.contains(event.target) ||
+        button.contains(event.target)
+    ){
+
+        return;
+
+    }
+
+    menu.remove();
+
+    document.removeEventListener(
+        "click",
+        closeUserMenu
+    );
 
 }
