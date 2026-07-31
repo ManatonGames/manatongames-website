@@ -1838,3 +1838,133 @@ footer{
     background:#2563eb;
 
 }
+
+/* ==========================================
+   PROFILE MODAL
+========================================== */
+
+#profile-modal{
+
+    position:fixed;
+
+    inset:0;
+
+    background:rgba(0,0,0,.65);
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    z-index:999999;
+
+    animation:fadeProfile .25s ease;
+
+}
+
+@keyframes fadeProfile{
+
+    from{
+
+        opacity:0;
+
+    }
+
+    to{
+
+        opacity:1;
+
+    }
+
+}
+
+.profile-card{
+
+    width:430px;
+
+    max-width:92%;
+
+    background:#111827;
+
+    border-radius:22px;
+
+    padding:35px;
+
+    text-align:center;
+
+    position:relative;
+
+    color:white;
+
+    box-shadow:0 20px 60px rgba(0,0,0,.45);
+
+}
+
+.profile-avatar{
+
+    width:110px;
+
+    height:110px;
+
+    border-radius:50%;
+
+    margin-bottom:20px;
+
+}
+
+#close-profile{
+
+    position:absolute;
+
+    right:20px;
+
+    top:20px;
+
+    background:none;
+
+    border:none;
+
+    color:white;
+
+    font-size:24px;
+
+    cursor:pointer;
+
+}
+
+.profile-info{
+
+    margin-top:30px;
+
+    display:grid;
+
+    gap:15px;
+
+}
+
+.profile-info div{
+
+    background:#1e293b;
+
+    border-radius:12px;
+
+    padding:15px;
+
+}
+
+.profile-info span{
+
+    display:block;
+
+    color:#94a3b8;
+
+    font-size:13px;
+
+}
+
+.profile-info strong{
+
+    font-size:17px;
+
+}
