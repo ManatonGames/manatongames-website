@@ -1713,3 +1713,128 @@ footer{
     transform:translateY(-2px);
 
 }
+
+/* ==========================================
+   USER PANEL
+========================================== */
+
+#user-menu{
+
+    position:fixed;
+
+    width:230px;
+
+    background:#111827;
+
+    border:1px solid rgba(255,255,255,.08);
+
+    border-radius:16px;
+
+    overflow:hidden;
+
+    box-shadow:0 15px 40px rgba(0,0,0,.35);
+
+    z-index:99999;
+
+    animation:userMenu .25s ease;
+
+}
+
+@keyframes userMenu{
+
+    from{
+
+        opacity:0;
+        transform:translateY(-12px);
+
+    }
+
+    to{
+
+        opacity:1;
+        transform:translateY(0);
+
+    }
+
+}
+
+.user-header{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    padding:18px;
+
+    background:#1e293b;
+
+}
+
+.user-avatar{
+
+    width:50px;
+    height:50px;
+
+    border-radius:50%;
+
+    object-fit:cover;
+
+}
+
+.user-header strong{
+
+    display:block;
+
+    color:white;
+
+    font-size:17px;
+
+}
+
+.user-header p{
+
+    color:#94a3b8;
+
+    font-size:13px;
+
+    margin-top:3px;
+
+}
+
+#user-menu hr{
+
+    border:none;
+
+    border-top:1px solid rgba(255,255,255,.08);
+
+}
+
+#user-menu button{
+
+    width:100%;
+
+    background:none;
+
+    border:none;
+
+    color:white;
+
+    text-align:left;
+
+    padding:15px 18px;
+
+    cursor:pointer;
+
+    transition:.25s;
+
+    font-size:15px;
+
+}
+
+#user-menu button:hover{
+
+    background:#2563eb;
+
+}
