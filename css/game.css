@@ -1,0 +1,443 @@
+/* ==========================================
+   GAME PAGE
+========================================== */
+
+.game-page{
+
+    padding:120px 0 80px;
+
+    min-height:100vh;
+
+    background:
+    radial-gradient(circle at top,#2563eb22,transparent 45%),
+    #0f172a;
+
+}
+
+/* ==========================================
+   BACK BUTTON
+========================================== */
+
+.game-page .play-btn{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    margin-bottom:35px;
+
+}
+
+/* ==========================================
+   BANNER
+========================================== */
+
+.game-banner{
+
+    width:100%;
+
+    overflow:hidden;
+
+    border-radius:22px;
+
+    background:#1e293b;
+
+    box-shadow:
+
+        0 15px 40px rgba(0,0,0,.35);
+
+    margin-bottom:35px;
+
+}
+
+.game-banner img{
+
+    width:100%;
+
+    height:420px;
+
+    object-fit:cover;
+
+    display:block;
+
+    transition:.45s;
+
+}
+
+.game-banner:hover img{
+
+    transform:scale(1.03);
+
+}
+
+/* ==========================================
+   INFORMATION
+========================================== */
+
+.game-information{
+
+    background:rgba(30,41,59,.65);
+
+    backdrop-filter:blur(18px);
+
+    border:1px solid rgba(255,255,255,.06);
+
+    border-radius:22px;
+
+    padding:35px;
+
+}
+
+.game-information h1{
+
+    font-size:42px;
+
+    margin:15px 0;
+
+    color:white;
+
+}
+
+.game-information p{
+
+    color:#cbd5e1;
+
+    line-height:1.8;
+
+    font-size:16px;
+
+}
+
+/* ==========================================
+   STATUS
+========================================== */
+
+.game-status{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    padding:8px 18px;
+
+    border-radius:999px;
+
+    font-size:14px;
+
+    font-weight:600;
+
+}
+
+.game-status.released{
+
+    background:#16a34a22;
+
+    color:#4ade80;
+
+}
+
+.game-status.development{
+
+    background:#f59e0b22;
+
+    color:#fbbf24;
+
+}
+
+.game-status.coming{
+
+    background:#2563eb22;
+
+    color:#60a5fa;
+
+}
+
+/* ==========================================
+   STATS
+========================================== */
+
+.game-stats{
+
+    display:flex;
+
+    gap:25px;
+
+    margin:18px 0;
+
+    flex-wrap:wrap;
+
+}
+
+.game-stats span{
+
+    background:#1e293b;
+
+    padding:10px 18px;
+
+    border-radius:12px;
+
+    color:#e2e8f0;
+
+}
+
+/* ==========================================
+   DETAILS
+========================================== */
+
+.game-details{
+
+    margin-top:40px;
+
+}
+
+.game-details h3{
+
+    margin-bottom:25px;
+
+    color:white;
+
+}
+
+.details-grid{
+
+    display:grid;
+
+    grid-template-columns:
+
+        repeat(auto-fit,minmax(220px,1fr));
+
+    gap:18px;
+
+}
+
+.detail-card{
+
+    background:#1e293b;
+
+    border-radius:16px;
+
+    padding:20px;
+
+    transition:.3s;
+
+}
+
+.detail-card:hover{
+
+    transform:translateY(-5px);
+
+    box-shadow:
+
+    0 10px 25px rgba(37,99,235,.25);
+
+}
+
+.detail-card span{
+
+    display:block;
+
+    color:#94a3b8;
+
+    font-size:14px;
+
+    margin-bottom:10px;
+
+}
+
+.detail-card strong{
+
+    color:white;
+
+    font-size:17px;
+
+}
+
+/* ==========================================
+   GALLERY
+========================================== */
+
+.game-gallery{
+
+    margin-top:45px;
+
+}
+
+.game-gallery h3{
+
+    margin-bottom:20px;
+
+}
+
+.gallery-grid{
+
+    display:grid;
+
+    grid-template-columns:
+
+        repeat(auto-fit,minmax(260px,1fr));
+
+    gap:20px;
+
+}
+
+.gallery-grid img{
+
+    width:100%;
+
+    border-radius:18px;
+
+    transition:.35s;
+
+    cursor:pointer;
+
+}
+
+.gallery-grid img:hover{
+
+    transform:scale(1.04);
+
+}
+
+/* ==========================================
+   UPDATES
+========================================== */
+
+.game-updates{
+
+    margin-top:45px;
+
+}
+
+.game-updates h3{
+
+    margin-bottom:18px;
+
+}
+
+#game-update{
+
+    background:#1e293b;
+
+    border-radius:18px;
+
+    padding:25px;
+
+    color:#cbd5e1;
+
+}
+
+/* ==========================================
+   BUTTONS
+========================================== */
+
+.game-buttons{
+
+    display:flex;
+
+    gap:18px;
+
+    margin-top:40px;
+
+    flex-wrap:wrap;
+
+}
+
+.favorite-btn{
+
+    background:#334155;
+
+    color:white;
+
+    border:none;
+
+    padding:14px 22px;
+
+    border-radius:12px;
+
+    cursor:pointer;
+
+    font-size:15px;
+
+    transition:.3s;
+
+}
+
+.favorite-btn:hover{
+
+    background:#ef4444;
+
+}
+
+.btn-primary{
+
+    background:#2563eb;
+
+    color:white;
+
+    padding:14px 30px;
+
+    border-radius:12px;
+
+    text-decoration:none;
+
+    font-weight:600;
+
+    transition:.3s;
+
+}
+
+.btn-primary:hover{
+
+    transform:translateY(-3px);
+
+    box-shadow:
+
+        0 10px 30px rgba(37,99,235,.35);
+
+}
+
+/* ==========================================
+   MOBILE
+========================================== */
+
+@media(max-width:768px){
+
+    .game-banner img{
+
+        height:230px;
+
+    }
+
+    .game-information{
+
+        padding:25px;
+
+    }
+
+    .game-information h1{
+
+        font-size:30px;
+
+    }
+
+    .game-buttons{
+
+        flex-direction:column;
+
+    }
+
+    .btn-primary,
+
+    .favorite-btn{
+
+        width:100%;
+
+        text-align:center;
+
+    }
+
+}
