@@ -1,44 +1,110 @@
 [
-    {
-        "id": 90485309557694,
-        "name": "PLS DONATE 3",
-        "status": "In Development",
-        "image": "pd3.png",
-        "description": "The next generation donation experience with improved stands, modern effects and exciting new features."
-    },
-    {
-        "id": 85429358558858,
-        "name": "PLS DONATE 2",
-        "status": "Released",
-        "image": "pd2.png",
-        "description": "🎨 Fun, fast, and 100% free simulation. Start donating now!"
-    },
-    {
-        "id": 96375607261155,
-        "name": "PLS DONATE 1",
-        "status": "In Development",
-        "image": "pd1.png",
-        "description": "The next generation donation experience with improved stands. Start donating now!"
-    },
-    {
-        "id": 101466148396273,
-        "name": "Grow a Garden Modded 2.0",
-        "status": "Released",
-        "image": "growagarden.png",
-        "description": "Grow rare plants, discover exclusive seeds, collect pets and enjoy unique seasonal events."
-    },
-    {
-        "id": 89252171510608,
-        "name": "MG | Ranks Shopping Center",
-        "status": "Released",
-        "image": "rsc.png",
-        "description": "The official hub to purchase and claim your staff roles!"
-    },
-    {
-        "id": 91290129805346,
-        "name": "+1 Speed Escape",
-        "status": "In Development",
-        "image": "speedescape.png",
-        "description": "You get faster every second, but the obstacles get harder! Control your extreme velocity, jump across giant gaps, and prove you have the skills to escape the ultimate speed challenge. 🏁"
-    }
+  {
+    "id": 90485309557694,
+    "name": "PLS DONATE 3",
+    "status": "In Development",
+    "genre": "Donation",
+    "maxPlayers": 20,
+    "players": "Coming Soon",
+    "visits": "Coming Soon",
+    "featured": true,
+    "new": true,
+    "hot": true,
+    "image": "pd3.png",
+    "screenshots": [
+      "pd3.png"
+    ],
+    "update": "PLS DONATE 3 is currently under active development. New stands, UI improvements and exciting features are coming soon.",
+    "description": "The next generation donation experience with improved stands, modern effects and exciting new features."
+  },
+  {
+    "id": 85429358558858,
+    "name": "PLS DONATE 2",
+    "status": "Released",
+    "genre": "Donation",
+    "maxPlayers": 20,
+    "players": "Coming Soon",
+    "visits": "Coming Soon",
+    "featured": true,
+    "new": false,
+    "hot": true,
+    "image": "pd2.png",
+    "screenshots": [
+      "pd2.png"
+    ],
+    "update": "Bug fixes and performance improvements.",
+    "description": "Fun, fast and completely free. Create your donation stand, interact with players and enjoy the classic donation experience."
+  },
+  {
+    "id": 96375607261155,
+    "name": "PLS DONATE 1",
+    "status": "In Development",
+    "genre": "Donation",
+    "maxPlayers": 20,
+    "players": "Coming Soon",
+    "visits": "Coming Soon",
+    "featured": false,
+    "new": false,
+    "hot": false,
+    "image": "pd1.png",
+    "screenshots": [
+      "pd1.png"
+    ],
+    "update": "Preparing for future improvements.",
+    "description": "The original donation experience created by Manaton Games."
+  },
+  {
+    "id": 101466148396273,
+    "name": "Grow a Garden Modded 2.0",
+    "status": "Released",
+    "genre": "Simulation",
+    "maxPlayers": 12,
+    "players": "Coming Soon",
+    "visits": "Coming Soon",
+    "featured": true,
+    "new": true,
+    "hot": true,
+    "image": "growagarden.png",
+    "screenshots": [
+      "growagarden.png"
+    ],
+    "update": "Added exclusive plants, new seeds and seasonal events.",
+    "description": "Grow rare plants, discover exclusive seeds, collect unique pets and become the richest gardener."
+  },
+  {
+    "id": 89252171510608,
+    "name": "MG | Ranks Shopping Center",
+    "status": "Released",
+    "genre": "Roleplay",
+    "maxPlayers": 25,
+    "players": "Coming Soon",
+    "visits": "Coming Soon",
+    "featured": false,
+    "new": false,
+    "hot": false,
+    "image": "rsc.png",
+    "screenshots": [
+      "rsc.png"
+    ],
+    "update": "Improved purchasing system and rank claiming.",
+    "description": "The official hub where players can purchase and claim Manaton Games staff ranks."
+  },
+  {
+    "id": 91290129805346,
+    "name": "+1 Speed Escape",
+    "status": "In Development",
+    "genre": "Obby",
+    "maxPlayers": 15,
+    "players": "Coming Soon",
+    "visits": "Coming Soon",
+    "featured": true,
+    "new": true,
+    "hot": true,
+    "image": "speedescape.png",
+    "screenshots": [
+      "speedescape.png"
+    ],
+    "update": "New obstacle zones and improved speed effects are being developed.",
+    "description": "Gain speed every second, overcome increasingly difficult obstacles and prove you can escape the ultimate speed challenge."
+  }
 ]
