@@ -1968,3 +1968,79 @@ footer{
     font-size:17px;
 
 }
+
+/* ==========================
+   GAMES TOOLBAR
+========================== */
+
+.games-toolbar{
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    gap:15px;
+
+    margin-top:35px;
+
+    flex-wrap:wrap;
+
+}
+
+#game-search{
+
+    width:350px;
+
+    max-width:100%;
+
+    padding:14px 18px;
+
+    border:none;
+
+    outline:none;
+
+    border-radius:12px;
+
+    background:#1e293b;
+
+    color:white;
+
+    font-size:15px;
+
+}
+
+#game-search::placeholder{
+
+    color:#94a3b8;
+
+}
+
+#game-filter{
+
+    padding:14px 18px;
+
+    border:none;
+
+    border-radius:12px;
+
+    background:#1e293b;
+
+    color:white;
+
+    cursor:pointer;
+
+}
+
+.no-games{
+
+    margin-top:40px;
+
+    text-align:center;
+
+    font-size:20px;
+
+    color:#94a3b8;
+
+}
