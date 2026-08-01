@@ -1,12 +1,14 @@
 {
-    "version": "1.0.3",
-    "title": "Version 1.0.3",
-    "released": "2026-07-27",
+    "version": "1.0.4",
+    "title": "Version 1.0.4",
+    "released": "2026-08-01",
     "message": "Performance improvements and bug fixes.",
     "changes": [
-        "Improved loading speed",
-        "Updated PWA",
-        "Better mobile compatibility",
-        "General bug fixes"
+        "Fixed Loading Screen",
+        "Fixed Live status bar",
+        "Added New 1 game in the Our Games section: PLS DONATE 1",
+        "Added new profile system, for now: Guest",
+        "Working on the login and sign in system",
+        "Continue with google and discord is not available for now, only the continue as guest is working"
     ]
 }
