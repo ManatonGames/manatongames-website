@@ -8,9 +8,13 @@
 
     <title>Game | Manaton Games</title>
 
+    <!-- Styles -->
+
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="../css/responsive.css">
     <link rel="stylesheet" href="../css/game.css">
+
+    <!-- Google Fonts -->
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
 
@@ -22,15 +26,23 @@
 
 <body>
 
+<!-- =========================
+     GAME PAGE
+========================= -->
+
 <section class="game-page">
 
     <div class="container">
+
+        <!-- Back Button -->
 
         <a href="../index.html" class="play-btn">
 
             ← Back to Home
 
         </a>
+
+        <!-- Banner -->
 
         <div class="game-banner">
 
@@ -42,38 +54,48 @@
 
         </div>
 
+        <!-- Information -->
+
         <div class="game-information">
 
+            <!-- Status -->
+
             <span
-    id="game-status"
-    class="game-status released"
->
+                id="game-status"
+                class="game-status released"
+            >
 
-    🟢 Released
+                🟢 Released
 
-</span>
+            </span>
 
-<div class="game-stats">
+            <!-- Stats -->
 
-    <span id="game-players">
+            <div class="game-stats">
 
-        👥 Coming Soon
+                <span id="game-players">
 
-    </span>
+                    👥 Coming Soon
 
-    <span id="game-visits">
+                </span>
 
-        👁️ Coming Soon
+                <span id="game-visits">
 
-    </span>
+                    👁️ Coming Soon
 
-</div>
+                </span>
 
-<h1 id="game-title">
+            </div>
 
-    Loading...
+            <!-- Title -->
 
-</h1>
+            <h1 id="game-title">
+
+                Loading...
+
+            </h1>
+
+            <!-- Description -->
 
             <p id="game-description">
 
@@ -81,106 +103,142 @@
 
             </p>
 
+            <!-- Game Information -->
+
             <div class="game-details">
 
-    <h3>Game Information</h3>
+                <h3>Game Information</h3>
 
-    <div class="details-grid">
+                <div class="details-grid">
 
-        <div class="detail-card">
+                    <div class="detail-card">
 
-            <span>🎮 Genre</span>
+                        <span>🎮 Genre</span>
 
-            <strong id="game-genre">
+                        <strong id="game-genre">
 
-                Loading...
+                            Loading...
 
-            </strong>
+                        </strong>
 
-        </div>
+                    </div>
 
-        <div class="detail-card">
+                    <div class="detail-card">
 
-            <span>👨‍💻 Developer</span>
+                        <span>👨‍💻 Developer</span>
 
-            <strong>
+                        <strong>
 
-                Manaton Games
+                            Manaton Games
 
-            </strong>
+                        </strong>
 
-        </div>
+                    </div>
 
-        <div class="detail-card">
+                    <div class="detail-card">
 
-            <span>👥 Max Players</span>
+                        <span>👥 Max Players</span>
 
-            <strong id="game-maxplayers">
+                        <strong id="game-maxplayers">
 
-                Loading...
+                            Loading...
 
-            </strong>
+                        </strong>
 
-        </div>
+                    </div>
 
-        <div class="detail-card">
+                    <div class="detail-card">
 
-            <span>📅 Status</span>
+                        <span>📅 Status</span>
 
-            <strong id="game-status-text">
+                        <strong id="game-status-text">
 
-                Loading...
+                            Loading...
 
-            </strong>
+                        </strong>
 
-        </div>
+                    </div>
 
-        <div class="detail-card">
+                    <div class="detail-card">
 
-            <span>🆔 Game ID</span>
+                        <span>🆔 Game ID</span>
 
-            <strong id="game-id">
+                        <strong id="game-id">
 
-                Loading...
+                            Loading...
 
-            </strong>
+                        </strong>
 
-        </div>
+                    </div>
 
-    </div>
+                </div>
 
-</div>
+            </div>
 
-            <button
-    id="favorite-button"
-    class="favorite-btn"
->
+            <!-- Screenshots -->
 
-    ❤️ Add to Favorites
+            <div class="game-gallery">
 
-</button>
+                <h3>Screenshots</h3>
 
-<a
+                <div
+                    id="game-screenshots"
+                    class="gallery-grid"
+                >
 
-    id="play-button"
+                    <!-- Images generated automatically -->
 
-    href="#"
+                </div>
 
-    target="_blank"
+            </div>
 
-    class="btn-primary"
+            <!-- Latest Update -->
 
->
+            <div class="game-updates">
 
-    🎮 Play on Roblox
+                <h3>Latest Update</h3>
 
-</a>
+                <div id="game-update">
+
+                    Loading...
+
+                </div>
+
+            </div>
+
+            <!-- Buttons -->
+
+            <div class="game-buttons">
+
+                <button
+                    id="favorite-button"
+                    class="favorite-btn"
+                >
+
+                    ❤️ Add to Favorites
+
+                </button>
+
+                <a
+                    id="play-button"
+                    href="#"
+                    target="_blank"
+                    class="btn-primary"
+                >
+
+                    🎮 Play on Roblox
+
+                </a>
+
+            </div>
 
         </div>
 
     </div>
 
 </section>
+
+<!-- Scripts -->
 
 <script src="../js/config.js"></script>
 <script src="../js/api.js"></script>
