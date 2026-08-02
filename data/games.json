@@ -10,9 +10,9 @@
     "featured": true,
     "new": true,
     "hot": false,
-    "image": ".png",
+    "image": "ru.png",
     "screenshots": [
-      ".png"
+      "rus.png"
     ],
     "update": "Developing a new game coming to Manaton Games.",
     "description": "Your World. Your Story. Your Universe."
