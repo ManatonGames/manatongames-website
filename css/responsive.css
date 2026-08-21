@@ -380,3 +380,20 @@
     }
 
 }
+
+@media (max-width:768px){
+
+    .game-card > img{
+
+        height:200px;
+        min-height:200px;
+
+    }
+
+    .game-card .game-info{
+
+        padding:22px;
+
+    }
+
+}
