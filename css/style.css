@@ -2390,28 +2390,23 @@ footer{
    GAME IMAGE
 ========================= */
 
-.game-modal-image{
+.game-card img{
 
     width:100%;
 
-    height:350px;
-
-    overflow:hidden;
-
-    background:#0f172a;
-
-}
-
-
-.game-modal-image img{
-
-    width:100%;
-
-    height:100%;
+    height:220px;
 
     object-fit:cover;
 
     display:block;
+
+    position:relative;
+
+    z-index:0;
+
+    transition:
+        transform .5s ease,
+        filter .5s ease;
 
 }
 
@@ -2854,4 +2849,51 @@ footer{
 
     transform: translateY(-3px);
 
+}
+
+/* ==========================================
+   FINAL FIX - OUR GAMES
+========================================== */
+
+.game-card{
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+}
+
+.game-card > img{
+    width:100%;
+    height:220px;
+    min-height:220px;
+    object-fit:cover;
+    display:block;
+    flex-shrink:0;
+}
+
+.game-card .game-info{
+    display:block;
+    width:100%;
+    height:auto;
+    padding:25px;
+    background:#182235;
+    position:relative;
+    z-index:5;
+}
+
+.game-card .game-info h3{
+    display:block;
+    color:#fff;
+}
+
+.game-card .game-info p{
+    display:block;
+    color:#cbd5e1;
+}
+
+.game-card .game-stats{
+    display:flex;
+}
+
+.game-card .play-btn{
+    display:inline-flex;
 }
