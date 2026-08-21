@@ -2897,3 +2897,60 @@ footer{
 .game-card .play-btn{
     display:inline-flex;
 }
+
+/* ==========================================
+   GAME MODAL - PLAY BUTTON FIX
+========================================== */
+
+.game-modal-buttons .play-btn{
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    width:100%;
+
+    padding:15px 25px;
+
+    background:#2563eb;
+
+    color:white;
+
+    border:none;
+
+    border-radius:12px;
+
+    text-decoration:none;
+
+    font-size:16px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:
+        background .3s ease,
+        transform .3s ease,
+        box-shadow .3s ease;
+
+}
+
+.game-modal-buttons .play-btn::before{
+
+    content:"▶";
+
+    font-size:13px;
+
+}
+
+.game-modal-buttons .play-btn:hover{
+
+    background:#3b82f6;
+
+    transform:translateY(-3px);
+
+    box-shadow:
+        0 10px 25px rgba(37,99,235,.35);
+
+}
