@@ -114,33 +114,122 @@ async function loadGames(){
     const games = await RobloxAPI.getGames();
 
     const container = document.getElementById("games-container");
-    const noGames = document.getElementById("no-games");
 
-    if(!container){
-
+    if(!container || games.length === 0){
         return;
-
     }
 
-    if(!games || games.length === 0){
+    container.innerHTML = "";
 
-        container.innerHTML = "";
+    games.forEach((game, index) => {
 
-        if(noGames){
+        const card = document.createElement("div");
 
-            noGames.style.display = "block";
+        card.className = "game-card";
 
-        }
+        card.dataset.gameIndex = index;
 
-        return;
+        card.innerHTML = `
 
-    }
+            <div class="game-image-wrapper">
 
-    // Guardar todos los juegos
-    allGames = games;
+                <img
+                    src="assets/games/${game.image}"
+                    alt="${game.name}"
+                >
 
-    // Mostrar todos inicialmente
-    renderGames(allGames);
+                <div class="game-badges">
+
+                    ${
+                        game.featured
+                        ? `<span class="game-badge featured">
+                                ⭐ Featured
+                           </span>`
+                        : ""
+                    }
+
+                    ${
+                        game.new
+                        ? `<span class="game-badge new">
+                                🆕 New
+                           </span>`
+                        : ""
+                    }
+
+                    ${
+                        game.hot
+                        ? `<span class="game-badge hot">
+                                🔥 Hot
+                           </span>`
+                        : ""
+                    }
+
+                </div>
+
+            </div>
+
+            <div class="game-info">
+
+                <span class="game-status ${
+                    game.status === "Released"
+                    ? "released"
+                    : "development"
+                }">
+
+                    ${
+                        game.status === "Released"
+                        ? "🟢"
+                        : "🟠"
+                    }
+
+                    ${game.status}
+
+                </span>
+
+                <h3>
+                    ${game.name}
+                </h3>
+
+                <p>
+                    ${game.description}
+                </p>
+
+                <div class="game-stats">
+
+                    <span>
+                        👥 ${game.players}
+                    </span>
+
+                    <span>
+                        👁️ ${game.visits}
+                    </span>
+
+                </div>
+
+                <button
+                    class="play-btn game-details-btn"
+                    type="button"
+                >
+                    🔎 View Details
+                </button>
+
+            </div>
+
+        `;
+
+        container.appendChild(card);
+
+        card.addEventListener("click", (event) => {
+
+            if(event.target.closest(".play-btn")){
+                event.preventDefault();
+            }
+
+            openGameModal(game);
+
+        });
+
+    });
 
 }
 
