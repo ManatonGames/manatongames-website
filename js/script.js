@@ -1,24 +1,19 @@
 document.addEventListener("DOMContentLoaded", async () => {
 
-    // ==========================
-    // INICIALIZAR FUNCIONES
-    // ==========================
-
+    // Inicializar funciones
     initializeMenu();
     initializeGameSearch();
 
-    // ==========================
-    // CARGAR DATOS
-    // ==========================
-
+    // Cargar datos
     await loadStats();
 
+    // Cargar juegos
     await loadGames();
 
+    // Cargar noticias
     await loadNews();
 
 });
-
 
 // ==========================
 // MENÚ HAMBURGUESA
@@ -51,7 +46,6 @@ function initializeMenu(){
 
 }
 
-
 // ==========================
 // ESTADÍSTICAS
 // ==========================
@@ -73,41 +67,26 @@ async function loadStats(){
     const visitsCount = document.getElementById("visits-count");
     const favoritesCount = document.getElementById("favorites-count");
 
-    if(gamesCount){
-
+    if(gamesCount)
         gamesCount.textContent = data.stats.totalGames;
 
-    }
-
-    if(membersCount){
-
+    if(membersCount)
         membersCount.textContent =
             Number(data.group.members).toLocaleString();
 
-    }
-
-    if(visitsCount){
-
+    if(visitsCount)
         visitsCount.textContent =
             Number(data.stats.totalVisits).toLocaleString();
 
-    }
-
-    if(favoritesCount){
-
+    if(favoritesCount)
         favoritesCount.textContent =
             Number(data.stats.totalFavorites).toLocaleString();
 
-    }
-
 }
-
 
 // ==========================
 // JUEGOS
 // ==========================
-
-let allGames = [];
 
 async function loadGames(){
 
@@ -116,401 +95,66 @@ async function loadGames(){
     const container = document.getElementById("games-container");
 
     if(!container || games.length === 0){
+
         return;
+
     }
 
     container.innerHTML = "";
 
-    games.forEach((game, index) => {
+    games.forEach(game => {
 
-        const card = document.createElement("div");
+        container.innerHTML += `
 
-        card.className = "game-card";
+        <div class="game-card">
 
-        card.dataset.gameIndex = index;
-
-        card.innerHTML = `
-
-            <div class="game-image-wrapper">
-
-                <img
-                    src="assets/games/${game.image}"
-                    alt="${game.name}"
-                >
-
-                <div class="game-badges">
-
-                    ${
-                        game.featured
-                        ? `<span class="game-badge featured">
-                                ⭐ Featured
-                           </span>`
-                        : ""
-                    }
-
-                    ${
-                        game.new
-                        ? `<span class="game-badge new">
-                                🆕 New
-                           </span>`
-                        : ""
-                    }
-
-                    ${
-                        game.hot
-                        ? `<span class="game-badge hot">
-                                🔥 Hot
-                           </span>`
-                        : ""
-                    }
-
-                </div>
-
-            </div>
+            <img
+                src="assets/games/${game.image}"
+                alt="${game.name}"
+            >
 
             <div class="game-info">
 
-                <span class="game-status ${
-                    game.status === "Released"
-                    ? "released"
-                    : "development"
-                }">
+                <span class="game-status ${game.status === "Released" ? "released" : "development"}">
 
-                    ${
-                        game.status === "Released"
-                        ? "🟢"
-                        : "🟠"
-                    }
+                    ${game.status === "Released" ? "🟢" : "🟡"}
 
                     ${game.status}
 
                 </span>
 
-                <h3>
-                    ${game.name}
-                </h3>
+                <h3>${game.name}</h3>
 
-                <p>
-                    ${game.description}
-                </p>
+                <p>${game.description}</p>
 
                 <div class="game-stats">
 
-                    <span>
-                        👥 ${game.players}
-                    </span>
+                    <span>👥 ${game.players || "Coming Soon"}</span>
 
-                    <span>
-                        👁️ ${game.visits}
-                    </span>
+                    <span>👁️ ${game.visits || "Coming Soon"}</span>
 
                 </div>
 
-                <button
-                    class="play-btn game-details-btn"
-                    type="button"
+                <a
+                    href="https://www.roblox.com/games/${game.id}"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="play-btn"
                 >
-                    🔎 View Details
-                </button>
+
+                    Play Now
+
+                </a>
 
             </div>
 
-        `;
-
-        container.appendChild(card);
-
-        card.addEventListener("click", (event) => {
-
-            if(event.target.closest(".play-btn")){
-                event.preventDefault();
-            }
-
-            openGameModal(game);
-
-        });
-
-    });
-
-}
-
-
-// ==========================
-// RENDERIZAR JUEGOS
-// ==========================
-
-function renderGames(games){
-
-    const container = document.getElementById("games-container");
-    const noGames = document.getElementById("no-games");
-
-    if(!container){
-
-        return;
-
-    }
-
-    container.innerHTML = "";
-
-    // ==========================
-    // SIN RESULTADOS
-    // ==========================
-
-    if(games.length === 0){
-
-        if(noGames){
-
-            noGames.style.display = "block";
-
-        }
-
-        return;
-
-    }
-
-    if(noGames){
-
-        noGames.style.display = "none";
-
-    }
-
-
-    // ==========================
-    // CREAR TARJETAS
-    // ==========================
-
-    games.forEach(game => {
-
-        // Determinar clase del estado
-        let statusClass = "released";
-        let statusIcon = "🟢";
-
-        if(game.status === "In Development"){
-
-            statusClass = "development";
-            statusIcon = "🟠";
-
-        }
-
-        // ==========================
-        // CREAR BADGES
-        // ==========================
-
-        let badges = "";
-
-        if(game.featured){
-
-            badges += `
-                <span class="game-badge featured">
-                    ⭐ Featured
-                </span>
-            `;
-
-        }
-
-        if(game.new){
-
-            badges += `
-                <span class="game-badge new">
-                    🆕 New
-                </span>
-            `;
-
-        }
-
-        if(game.hot){
-
-            badges += `
-                <span class="game-badge hot">
-                    🔥 Hot
-                </span>
-            `;
-
-        }
-
-
-        // ==========================
-        // CREAR TARJETA
-        // ==========================
-
-        container.innerHTML += `
-
-            <div class="game-card">
-
-                <div class="game-image-wrapper">
-
-                    <img
-                        src="assets/games/${game.image}"
-                        alt="${game.name}"
-                    >
-
-                    <div class="game-badges">
-
-                        ${badges}
-
-                    </div>
-
-                </div>
-
-                <div class="game-info">
-
-                    <span class="game-status ${statusClass}">
-
-                        ${statusIcon} ${game.status}
-
-                    </span>
-
-                    <h3>
-                        ${game.name}
-                    </h3>
-
-                    <p>
-                        ${game.description}
-                    </p>
-
-                    <div class="game-stats">
-
-                        <span>
-                            👥 ${game.players}
-                        </span>
-
-                        <span>
-                            👁️ ${game.visits}
-                        </span>
-
-                    </div>
-
-                    <a
-                        href="https://www.roblox.com/games/${game.id}"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        class="play-btn"
-                    >
-
-                        Play Now
-
-                    </a>
-
-                </div>
-
-            </div>
+        </div>
 
         `;
 
     });
 
 }
-
-
-// ==========================
-// BUSCADOR + FILTRO DE JUEGOS
-// ==========================
-
-function initializeGameSearch(){
-
-    const searchInput =
-        document.getElementById("game-search");
-
-    const filter =
-        document.getElementById("game-filter");
-
-    if(!searchInput && !filter){
-
-        return;
-
-    }
-
-
-    // ==========================
-    // APLICAR FILTROS
-    // ==========================
-
-    function applyFilters(){
-
-        const search =
-            searchInput
-                ? searchInput.value.trim().toLowerCase()
-                : "";
-
-        const selectedFilter =
-            filter
-                ? filter.value
-                : "all";
-
-
-        const filteredGames = allGames.filter(game => {
-
-            // ==========================
-            // BUSCAR
-            // ==========================
-
-            const matchesSearch =
-
-                game.name
-                    .toLowerCase()
-                    .includes(search)
-
-                ||
-
-                game.description
-                    .toLowerCase()
-                    .includes(search);
-
-
-            // ==========================
-            // FILTRAR ESTADO
-            // ==========================
-
-            const matchesFilter =
-
-                selectedFilter === "all"
-
-                ||
-
-                game.status === selectedFilter;
-
-
-            return matchesSearch && matchesFilter;
-
-        });
-
-
-        // Mostrar resultados
-        renderGames(filteredGames);
-
-    }
-
-
-    // ==========================
-    // EVENTO BUSCADOR
-    // ==========================
-
-    if(searchInput){
-
-        searchInput.addEventListener("input", () => {
-
-            applyFilters();
-
-        });
-
-    }
-
-
-    // ==========================
-    // EVENTO FILTRO
-    // ==========================
-
-    if(filter){
-
-        filter.addEventListener("change", () => {
-
-            applyFilters();
-
-        });
-
-    }
-
-}
-
 
 // ==========================
 // STUDIO NEWS
@@ -520,8 +164,7 @@ async function loadNews(){
 
     const news = await RobloxAPI.getNews();
 
-    const newsContainer =
-        document.getElementById("news-container");
+    const newsContainer = document.getElementById("news-container");
 
     if(!newsContainer || news.length === 0){
 
@@ -540,29 +183,21 @@ async function loadNews(){
                 <div class="news-header">
 
                     <span class="news-category">
-
                         ${item.category}
-
                     </span>
 
                     <span class="news-date">
-
                         ${item.date}
-
                     </span>
 
                 </div>
 
                 <h3>
-
                     ${item.icon} ${item.title}
-
                 </h3>
 
                 <p>
-
                     ${item.description}
-
                 </p>
 
             </div>
@@ -573,12 +208,122 @@ async function loadNews(){
 
 }
 
+// ==========================
+// BUSCADOR + FILTRO DE JUEGOS
+// ==========================
+
+function initializeGameSearch(){
+
+    const searchInput = document.getElementById("game-search");
+    const filterSelect = document.getElementById("game-filter");
+    const noGames = document.getElementById("no-games");
+
+    if(!searchInput || !filterSelect){
+
+        return;
+
+    }
+
+    function filterGames(){
+
+        const search =
+            searchInput.value.toLowerCase().trim();
+
+        const filter =
+            filterSelect.value;
+
+        const cards =
+            document.querySelectorAll(".game-card");
+
+        let visibleGames = 0;
+
+        cards.forEach(card => {
+
+            const title =
+                card.querySelector("h3")?.textContent
+                    .toLowerCase() || "";
+
+            const description =
+                card.querySelector("p")?.textContent
+                    .toLowerCase() || "";
+
+            const status =
+                card.querySelector(".game-status")?.textContent
+                    .trim() || "";
+
+            // ==========================
+            // BUSCADOR
+            // ==========================
+
+            const matchesSearch =
+                title.includes(search) ||
+                description.includes(search);
+
+            // ==========================
+            // FILTRO
+            // ==========================
+
+            const matchesFilter =
+                filter === "all" ||
+                status.includes(filter);
+
+            // ==========================
+            // RESULTADO
+            // ==========================
+
+            if(matchesSearch && matchesFilter){
+
+                card.style.display = "";
+
+                visibleGames++;
+
+            }else{
+
+                card.style.display = "none";
+
+            }
+
+        });
+
+        // ==========================
+        // NO GAMES FOUND
+        // ==========================
+
+        if(noGames){
+
+            if(visibleGames === 0){
+
+                noGames.style.display = "block";
+
+            }else{
+
+                noGames.style.display = "none";
+
+            }
+
+        }
+
+    }
+
+    // Buscar mientras escribe
+    searchInput.addEventListener(
+        "input",
+        filterGames
+    );
+
+    // Filtrar al cambiar selección
+    filterSelect.addEventListener(
+        "change",
+        filterGames
+    );
+
+}
 
 // ==============================
 // SERVICE WORKER (PWA)
 // ==============================
 
-if ("serviceWorker" in navigator){
+if("serviceWorker" in navigator){
 
     window.addEventListener("load", () => {
 
@@ -605,7 +350,6 @@ if ("serviceWorker" in navigator){
 
 }
 
-
 // ==========================================
 // LOADING SCREEN
 // ==========================================
@@ -615,15 +359,15 @@ window.addEventListener("load", () => {
     const loader =
         document.getElementById("loader");
 
-    if(!loader){
+    if(!loader) return;
 
-        return;
-
-    }
+    // Esperar para mostrar la animación
 
     setTimeout(() => {
 
         loader.classList.add("hidden");
+
+        // Eliminar después de la animación
 
         setTimeout(() => {
 
@@ -634,7 +378,6 @@ window.addEventListener("load", () => {
     }, 1200);
 
 });
-
 
 // ==========================================
 // WEBSITE VERSION
@@ -650,32 +393,34 @@ if(versionElement){
 
 }
 
-
 // ==========================================
 // SCROLL REVEAL
 // ==========================================
 
 const observer =
-    new IntersectionObserver((entries) => {
+    new IntersectionObserver(
 
-        entries.forEach((entry) => {
+        (entries) => {
 
-            if(entry.isIntersecting){
+            entries.forEach((entry) => {
 
-                entry.target.classList.add("active");
+                if(entry.isIntersecting){
 
-                observer.unobserve(entry.target);
+                    entry.target.classList.add("active");
 
-            }
+                    observer.unobserve(entry.target);
 
-        });
+                }
 
-    }, {
+            });
 
-        threshold:0.15
+        },
 
-    });
+        {
+            threshold: 0.15
+        }
 
+    );
 
 document.querySelectorAll(
     ".reveal, .reveal-left, .reveal-right, .reveal-zoom, .stagger"
@@ -684,7 +429,6 @@ document.querySelectorAll(
     observer.observe(element);
 
 });
-
 
 // ==========================================
 // STAGGER DELAY
@@ -698,7 +442,6 @@ document.querySelectorAll(".stagger").forEach(
 
     }
 );
-
 
 // ==========================================
 // SYSTEM STATUS
@@ -720,16 +463,12 @@ async function loadSystemStatus(){
         const statusBar =
             document.getElementById("status-bar");
 
-        if(!status){
-
-            return;
-
-        }
-
+        if(!status) return;
 
         status.textContent =
             `${data.icon} ${data.title}`;
 
+        // Eliminar clases anteriores
 
         status.classList.remove(
             "status-operational",
@@ -737,7 +476,6 @@ async function loadSystemStatus(){
             "status-maintenance",
             "status-outage"
         );
-
 
         if(statusBar){
 
@@ -750,6 +488,7 @@ async function loadSystemStatus(){
 
         }
 
+        // Agregar clase correspondiente
 
         switch(data.status){
 
@@ -759,16 +498,12 @@ async function loadSystemStatus(){
                     "status-operational"
                 );
 
-                if(statusBar){
-
+                if(statusBar)
                     statusBar.classList.add(
                         "statusbar-operational"
                     );
 
-                }
-
                 break;
-
 
             case "minor":
 
@@ -776,16 +511,12 @@ async function loadSystemStatus(){
                     "status-minor"
                 );
 
-                if(statusBar){
-
+                if(statusBar)
                     statusBar.classList.add(
                         "statusbar-minor"
                     );
 
-                }
-
                 break;
-
 
             case "maintenance":
 
@@ -793,16 +524,12 @@ async function loadSystemStatus(){
                     "status-maintenance"
                 );
 
-                if(statusBar){
-
+                if(statusBar)
                     statusBar.classList.add(
                         "statusbar-maintenance"
                     );
 
-                }
-
                 break;
-
 
             case "outage":
 
@@ -810,16 +537,12 @@ async function loadSystemStatus(){
                     "status-outage"
                 );
 
-                if(statusBar){
-
+                if(statusBar)
                     statusBar.classList.add(
                         "statusbar-outage"
                     );
 
-                }
-
                 break;
-
 
             default:
 
@@ -827,13 +550,10 @@ async function loadSystemStatus(){
                     "status-operational"
                 );
 
-                if(statusBar){
-
+                if(statusBar)
                     statusBar.classList.add(
                         "statusbar-operational"
                     );
-
-                }
 
         }
 
@@ -851,7 +571,6 @@ async function loadSystemStatus(){
 }
 
 loadSystemStatus();
-
 
 // ==========================================
 // STATUS BAR LIVE STATS
@@ -871,7 +590,6 @@ async function loadStatusStats(){
     const visitsStatus =
         document.getElementById("visits-status");
 
-
     if(!data || !data.success){
 
         if(gamesStatus)
@@ -890,42 +608,28 @@ async function loadStatusStats(){
 
     }
 
-
     const games =
         await RobloxAPI.getGames();
 
-
-    if(gamesStatus){
-
+    if(gamesStatus)
         gamesStatus.textContent =
             `🎮 ${games.length} Games`;
 
-    }
-
-
-    if(membersStatus){
-
+    if(membersStatus)
         membersStatus.textContent =
             `👥 ${Number(
                 data.group.members
             ).toLocaleString()} Members`;
 
-    }
-
-
-    if(visitsStatus){
-
+    if(visitsStatus)
         visitsStatus.textContent =
             `🔥 ${Number(
                 data.stats.totalVisits
             ).toLocaleString()} Visits`;
 
-    }
-
 }
 
 loadStatusStats();
-
 
 // ==========================================
 // UPDATE MANAGER
@@ -936,11 +640,7 @@ async function checkWebsiteUpdate(){
     const versionData =
         await RobloxAPI.getVersion();
 
-    if(!versionData){
-
-        return;
-
-    }
+    if(!versionData) return;
 
     const currentVersion =
         versionData.version;
@@ -949,7 +649,6 @@ async function checkWebsiteUpdate(){
         localStorage.getItem(
             "website-version"
         );
-
 
     // Primera visita
 
@@ -964,8 +663,7 @@ async function checkWebsiteUpdate(){
 
     }
 
-
-    // Nueva versión
+    // ¿Existe una nueva versión?
 
     if(savedVersion !== currentVersion){
 
@@ -975,15 +673,16 @@ async function checkWebsiteUpdate(){
 
 }
 
+// ==========================================
+// UPDATE BANNER
+// ==========================================
 
 function showUpdateBanner(versionData){
 
     const popup =
         document.createElement("div");
 
-    popup.id =
-        "update-center";
-
+    popup.id = "update-center";
 
     popup.innerHTML = `
 
@@ -999,14 +698,13 @@ function showUpdateBanner(versionData){
 
             <ul>
 
-                ${versionData.changes
-                    .map(change => `
-                        <li>
-                            ✅ ${change}
-                        </li>
-                    `)
-                    .join("")
-                }
+                ${versionData.changes.map(change => `
+
+                    <li>
+                        ✅ ${change}
+                    </li>
+
+                `).join("")}
 
             </ul>
 
@@ -1026,11 +724,11 @@ function showUpdateBanner(versionData){
 
     `;
 
-
     document.body.appendChild(popup);
 
-
-    // Later
+    // ==========================
+    // BOTÓN LATER
+    // ==========================
 
     document
         .getElementById("later-update")
@@ -1040,17 +738,22 @@ function showUpdateBanner(versionData){
 
         });
 
-
-    // Update Now
+    // ==========================
+    // BOTÓN UPDATE NOW
+    // ==========================
 
     document
         .getElementById("update-now")
         .addEventListener("click", () => {
 
+            // Guardar nueva versión
+
             localStorage.setItem(
                 "website-version",
                 versionData.version
             );
+
+            // Recargar página
 
             location.reload();
 
@@ -1058,5 +761,6 @@ function showUpdateBanner(versionData){
 
 }
 
+// Ejecutar Update Manager
 
 checkWebsiteUpdate();
