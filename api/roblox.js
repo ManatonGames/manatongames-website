@@ -184,29 +184,34 @@ async function getGameData(game){
 
         return {
 
-            ...game,
+    ...game,
 
-            universeId,
+    universeId,
 
-            players:
-                formatNumber(
-                    robloxGame.playing
-                ),
+    players:
+        formatNumber(
+            robloxGame.playing
+        ),
 
-            visits:
-                formatNumber(
-                    robloxGame.visits
-                ),
+    maxPlayers:
+        formatNumber(
+            robloxGame.maxPlayers
+        ),
 
-            favorites:
-                formatNumber(
-                    robloxGame.favoritedCount
-                ),
+    visits:
+        formatNumber(
+            robloxGame.visits
+        ),
 
-            maxPlayers:
-                robloxGame.maxPlayers || 0
+    favorites:
+        formatNumber(
+            robloxGame.favoritedCount
+        ),
 
-        };
+    genre:
+        robloxGame.genre || "Unknown"
+
+};
 
     }catch(error){
 
