@@ -161,193 +161,89 @@ async function loadStats(){
 
 async function loadGames(){
 
-    try{
+    const games = await RobloxAPI.getGames();
 
-        const games =
-            await RobloxAPI.getGames();
+    const container = document.getElementById("games-container");
 
-        const container =
-            document.getElementById("games-container");
+    if(!container || !games || games.length === 0){
 
-        if(!container){
+        return;
 
-            return;
+    }
 
-        }
+    container.innerHTML = "";
 
-        if(!games || games.length === 0){
+    games.forEach((game, index) => {
 
-            container.innerHTML = "";
+        const card = document.createElement("div");
 
-            const noGames =
-                document.getElementById("no-games");
+        card.className = "game-card";
 
-            if(noGames){
-                noGames.style.display = "block";
-            }
+        card.dataset.gameIndex = index;
 
-            return;
+        card.innerHTML = `
 
-        }
+            <img
+                src="assets/games/${game.image}"
+                alt="${game.name}"
+            >
 
-        container.innerHTML = "";
+            <div class="game-info">
 
-        games.forEach(game => {
+                <span class="game-status ${game.status === "Released" ? "released" : "development"}">
 
-            // ==========================
-            // ESTADO DEL JUEGO
-            // ==========================
+                    ${game.status === "Released" ? "🟢" : "🟡"}
 
-            const isReleased =
-                game.status === "Released";
+                    ${game.status}
 
-            const statusClass =
-                isReleased
-                    ? "released"
-                    : "development";
+                </span>
 
-            const statusIcon =
-                isReleased
-                    ? "🟢"
-                    : "🟡";
+                <h3>${game.name}</h3>
 
+                <p>${game.description}</p>
 
-            // ==========================
-            // CREAR TARJETA
-            // ==========================
+                <div class="game-stats">
 
-            const card =
-                document.createElement("div");
+                    <span>👥 ${game.players || "Coming Soon"}</span>
 
-            card.className =
-                "game-card";
-
-
-            // ==========================
-            // CONTENIDO
-            // ==========================
-
-            card.innerHTML = `
-
-                <img
-                    src="assets/games/${game.image}"
-                    alt="${game.name}"
-                    loading="lazy"
-                >
-
-                <div class="game-info">
-
-                    <span class="game-status ${statusClass}">
-
-                        ${statusIcon}
-                        ${game.status}
-
-                    </span>
-
-                    <h3>
-                        ${game.name}
-                    </h3>
-
-                    <p>
-                        ${game.description}
-                    </p>
-
-                    <div class="game-stats">
-
-                        <span>
-                            👥 ${game.players || "Coming Soon"}
-                        </span>
-
-                        <span>
-                            👁️ ${game.visits || "Coming Soon"}
-                        </span>
-
-                    </div>
-
-                    <a
-                        href="https://www.roblox.com/games/${game.id}"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        class="play-btn"
-                    >
-
-                        ▶ Play Now
-
-                    </a>
+                    <span>👁️ ${game.visits || "Coming Soon"}</span>
 
                 </div>
 
-            `;
+                <a
+                    href="https://www.roblox.com/games/${game.id}"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="play-btn"
+                >
+                    Play Now
+                </a>
 
+            </div>
 
-            // ==========================
-            // AGREGAR TARJETA
-            // ==========================
+        `;
 
-            container.appendChild(card);
+        // Abrir modal al hacer click en la tarjeta
+        card.addEventListener("click", (event) => {
+
+            // Si hizo click directamente en Play Now,
+            // dejamos que el enlace funcione normalmente.
+            if(event.target.closest(".play-btn")){
+
+                return;
+
+            }
+
+            openGameModal(game);
 
         });
 
-
-        // ==========================
-        // OCULTAR NO GAMES
-        // ==========================
-
-        const noGames =
-            document.getElementById("no-games");
-
-        if(noGames){
-
-            noGames.style.display = "none";
-
-        }
-
-        // ==========================
-        // APLICAR REVEAL A LAS TARJETAS
-        // ==========================
-
-        initializeGameCardAnimations();
-
-    }
-
-    catch(error){
-
-        console.error(
-            "❌ Games Error:",
-            error
-        );
-
-    }
-
-}
-
-
-// =====================================================
-// ANIMACIÓN DE TARJETAS DE JUEGOS
-// =====================================================
-
-function initializeGameCardAnimations(){
-
-    const cards =
-        document.querySelectorAll(".game-card");
-
-    cards.forEach((card, index) => {
-
-        card.classList.add("stagger");
-
-        card.style.transitionDelay =
-            `${index * 0.08}s`;
-
-        if(
-            typeof revealObserver !== "undefined" &&
-            revealObserver
-        ){
-
-            revealObserver.observe(card);
-
-        }
+        container.appendChild(card);
 
     });
+
+    // Guardar juegos para el buscador/modal
+    window.manatonGames = games;
 
 }
 
@@ -1206,5 +1102,394 @@ function showUpdateBanner(versionData){
 
 
 // Ejecutar Update Manager
+
+// ==========================================
+// GAME DETAILS MODAL
+// ==========================================
+
+function openGameModal(game){
+
+    let modal = document.getElementById("game-details-modal");
+
+    // Crear modal si todavía no existe
+    if(!modal){
+
+        modal = document.createElement("div");
+
+        modal.id = "game-details-modal";
+
+        modal.className = "game-modal";
+
+        modal.innerHTML = `
+
+            <div class="game-modal-overlay"></div>
+
+            <div class="game-modal-box">
+
+                <button
+                    class="close-game-modal"
+                    aria-label="Close"
+                >
+                    ✕
+                </button>
+
+                <div class="game-modal-image">
+
+                    <img
+                        id="modal-game-image"
+                        src=""
+                        alt=""
+                    >
+
+                </div>
+
+                <div class="game-modal-content">
+
+                    <div class="game-modal-header">
+
+                        <span
+                            id="modal-game-status"
+                            class="game-status"
+                        >
+                        </span>
+
+                        <h2 id="modal-game-title"></h2>
+
+                    </div>
+
+                    <p
+                        id="modal-game-description"
+                        class="game-modal-description"
+                    >
+                    </p>
+
+                    <div class="game-modal-stats">
+
+                        <div class="modal-stat">
+
+                            <span class="modal-stat-icon">
+                                👥
+                            </span>
+
+                            <div>
+
+                                <small>
+                                    Players
+                                </small>
+
+                                <strong id="modal-game-players">
+                                    -
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+                        <div class="modal-stat">
+
+                            <span class="modal-stat-icon">
+                                👁️
+                            </span>
+
+                            <div>
+
+                                <small>
+                                    Visits
+                                </small>
+
+                                <strong id="modal-game-visits">
+                                    -
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+                        <div class="modal-stat">
+
+                            <span class="modal-stat-icon">
+                                ⭐
+                            </span>
+
+                            <div>
+
+                                <small>
+                                    Favorites
+                                </small>
+
+                                <strong id="modal-game-favorites">
+                                    -
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="game-modal-update">
+
+                        <h3>
+                            📢 Latest Update
+                        </h3>
+
+                        <p id="modal-game-update">
+                            More information coming soon.
+                        </p>
+
+                    </div>
+
+                    <div class="game-modal-buttons">
+
+                        <a
+                            id="modal-play-btn"
+                            class="play-btn"
+                            href="#"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            Play Now
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        `;
+
+        document.body.appendChild(modal);
+
+        // ==========================
+        // CERRAR MODAL
+        // ==========================
+
+        const closeButton =
+            modal.querySelector(".close-game-modal");
+
+        const overlay =
+            modal.querySelector(".game-modal-overlay");
+
+        closeButton.addEventListener(
+            "click",
+            closeGameModal
+        );
+
+        overlay.addEventListener(
+            "click",
+            closeGameModal
+        );
+
+    }
+
+    // ==========================
+    // IMAGEN
+    // ==========================
+
+    const image =
+        document.getElementById("modal-game-image");
+
+    if(image){
+
+        image.src =
+            `assets/games/${game.image}`;
+
+        image.alt =
+            game.name;
+
+    }
+
+    // ==========================
+    // TÍTULO
+    // ==========================
+
+    const title =
+        document.getElementById("modal-game-title");
+
+    if(title){
+
+        title.textContent =
+            game.name;
+
+    }
+
+    // ==========================
+    // DESCRIPCIÓN
+    // ==========================
+
+    const description =
+        document.getElementById(
+            "modal-game-description"
+        );
+
+    if(description){
+
+        description.textContent =
+            game.description ||
+            "No description available.";
+
+    }
+
+    // ==========================
+    // STATUS
+    // ==========================
+
+    const status =
+        document.getElementById(
+            "modal-game-status"
+        );
+
+    if(status){
+
+        const released =
+            game.status === "Released";
+
+        status.textContent =
+            released
+                ? "🟢 Released"
+                : "🟡 In Development";
+
+        status.className =
+            `game-status ${
+                released
+                    ? "released"
+                    : "development"
+            }`;
+
+    }
+
+    // ==========================
+    // PLAYERS
+    // ==========================
+
+    const players =
+        document.getElementById(
+            "modal-game-players"
+        );
+
+    if(players){
+
+        players.textContent =
+            game.players || "Coming Soon";
+
+    }
+
+    // ==========================
+    // VISITS
+    // ==========================
+
+    const visits =
+        document.getElementById(
+            "modal-game-visits"
+        );
+
+    if(visits){
+
+        visits.textContent =
+            game.visits || "Coming Soon";
+
+    }
+
+    // ==========================
+    // FAVORITES
+    // ==========================
+
+    const favorites =
+        document.getElementById(
+            "modal-game-favorites"
+        );
+
+    if(favorites){
+
+        favorites.textContent =
+            game.favorites || "Coming Soon";
+
+    }
+
+    // ==========================
+    // UPDATE
+    // ==========================
+
+    const update =
+        document.getElementById(
+            "modal-game-update"
+        );
+
+    if(update){
+
+        update.textContent =
+            game.update ||
+            "More information coming soon.";
+
+    }
+
+    // ==========================
+    // PLAY BUTTON
+    // ==========================
+
+    const playButton =
+        document.getElementById(
+            "modal-play-btn"
+        );
+
+    if(playButton){
+
+        playButton.href =
+            `https://www.roblox.com/games/${game.id}`;
+
+    }
+
+    // ==========================
+    // MOSTRAR MODAL
+    // ==========================
+
+    modal.classList.add("active");
+
+    document.body.style.overflow = "hidden";
+
+}
+
+
+// ==========================================
+// CLOSE GAME MODAL
+// ==========================================
+
+function closeGameModal(){
+
+    const modal =
+        document.getElementById(
+            "game-details-modal"
+        );
+
+    if(!modal){
+
+        return;
+
+    }
+
+    modal.classList.remove("active");
+
+    document.body.style.overflow = "";
+
+}
+
+
+// ==========================================
+// ESC PARA CERRAR
+// ==========================================
+
+document.addEventListener(
+    "keydown",
+    (event) => {
+
+        if(event.key === "Escape"){
+
+            closeGameModal();
+
+        }
+
+    }
+);
 
 checkWebsiteUpdate();
