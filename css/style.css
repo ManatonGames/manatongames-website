@@ -2656,6 +2656,235 @@ footer{
 }
 
 /* ==========================================
+   GAME MODAL - EXTRA STATS
+========================================== */
+
+.game-modal-extra{
+
+    margin-top:20px;
+
+    padding-top:18px;
+
+    border-top:1px solid rgba(255,255,255,0.08);
+
+}
+
+
+.game-extra-item{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    gap:20px;
+
+    padding:12px 0;
+
+}
+
+
+.game-extra-item span{
+
+    color:#94a3b8;
+
+    font-size:14px;
+
+}
+
+
+.game-extra-item strong{
+
+    color:#ffffff;
+
+    font-size:15px;
+
+    font-weight:600;
+
+}
+
+
+/* ==========================================
+   GAME MODAL - BUTTONS
+========================================== */
+
+.game-modal-buttons{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    margin-top:24px;
+
+    flex-wrap:wrap;
+
+}
+
+
+.game-modal-buttons .play-btn{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:8px;
+
+}
+
+
+/* ==========================================
+   COPY GAME BUTTON
+========================================== */
+
+.copy-game-btn{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:8px;
+
+    padding:12px 18px;
+
+    border:none;
+
+    border-radius:10px;
+
+    background:#1e293b;
+
+    color:#ffffff;
+
+    font-family:inherit;
+
+    font-size:14px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:
+
+        background 0.2s ease,
+
+        transform 0.2s ease,
+
+        opacity 0.2s ease;
+
+}
+
+
+.copy-game-btn:hover{
+
+    background:#334155;
+
+    transform:translateY(-1px);
+
+}
+
+
+.copy-game-btn:active{
+
+    transform:translateY(0);
+
+}
+
+
+.copy-game-btn:focus-visible{
+
+    outline:2px solid #60a5fa;
+
+    outline-offset:2px;
+
+}
+
+
+/* ==========================================
+   MODAL STATS - 4 ITEMS
+========================================== */
+
+.game-modal-stats{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+
+    gap:12px;
+
+    margin-top:24px;
+
+}
+
+
+.modal-stat{
+
+    min-width:0;
+
+}
+
+
+/* ==========================================
+   MODAL RESPONSIVE
+========================================== */
+
+@media(max-width:768px){
+
+    .game-modal-stats{
+
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
+    }
+
+
+    .game-modal-buttons{
+
+        flex-direction:column;
+
+        align-items:stretch;
+
+    }
+
+
+    .game-modal-buttons .play-btn,
+    .copy-game-btn{
+
+        width:100%;
+
+    }
+
+}
+
+
+@media(max-width:480px){
+
+    .game-modal-stats{
+
+        grid-template-columns:1fr;
+
+    }
+
+
+    .game-extra-item{
+
+        align-items:flex-start;
+
+        flex-direction:column;
+
+        gap:5px;
+
+    }
+
+}
+
+/* ==========================================
    FEATURED GAME BUTTONS FIX
 ========================================== */
 
