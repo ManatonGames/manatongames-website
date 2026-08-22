@@ -1837,6 +1837,8 @@ const genre =
     const playButton =
         modal.querySelector(
             "#modal-play-btn"
+        };   
+
 
             const copyButton =
     modal.querySelector("#modal-copy-btn");
