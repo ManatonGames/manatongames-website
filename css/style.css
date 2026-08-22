@@ -3183,3 +3183,298 @@ footer{
         0 10px 25px rgba(37,99,235,.35);
 
 }
+
+/* ==========================================
+   GAME MODAL - PROFESSIONAL ANIMATION
+========================================== */
+
+/* ==========================
+   MODAL CONTAINER
+========================== */
+
+.game-modal{
+
+    opacity:0;
+
+    visibility:hidden;
+
+    pointer-events:none;
+
+    transition:
+        opacity 0.3s ease,
+        visibility 0.3s ease;
+
+}
+
+
+/* ==========================
+   MODAL ACTIVE
+========================== */
+
+.game-modal.active{
+
+    opacity:1;
+
+    visibility:visible;
+
+    pointer-events:auto;
+
+}
+
+
+/* ==========================
+   OVERLAY
+========================== */
+
+.game-modal-overlay{
+
+    opacity:0;
+
+    transition:
+        opacity 0.35s ease;
+
+}
+
+
+.game-modal.active .game-modal-overlay{
+
+    opacity:1;
+
+}
+
+
+/* ==========================
+   MODAL BOX
+========================== */
+
+.game-modal-box{
+
+    opacity:0;
+
+    transform:
+        translateY(30px)
+        scale(0.96);
+
+    transition:
+        opacity 0.35s ease,
+        transform 0.4s cubic-bezier(
+            0.16,
+            1,
+            0.3,
+            1
+        );
+
+}
+
+
+/* ==========================
+   MODAL BOX ACTIVE
+========================== */
+
+.game-modal.active .game-modal-box{
+
+    opacity:1;
+
+    transform:
+        translateY(0)
+        scale(1);
+
+}
+
+
+/* ==========================
+   IMAGE ANIMATION
+========================== */
+
+.game-modal-image{
+
+    overflow:hidden;
+
+}
+
+
+.game-modal-image img{
+
+    transform:scale(1.04);
+
+    opacity:0;
+
+    transition:
+        transform 0.6s ease,
+        opacity 0.4s ease;
+
+}
+
+
+.game-modal.active .game-modal-image img{
+
+    transform:scale(1);
+
+    opacity:1;
+
+}
+
+
+/* ==========================
+   CONTENT ANIMATION
+========================== */
+
+.game-modal-content{
+
+    opacity:0;
+
+    transform:
+        translateY(12px);
+
+    transition:
+        opacity 0.35s ease 0.12s,
+        transform 0.4s ease 0.12s;
+
+}
+
+
+.game-modal.active .game-modal-content{
+
+    opacity:1;
+
+    transform:
+        translateY(0);
+
+}
+
+
+/* ==========================
+   STATS ANIMATION
+========================== */
+
+.game-modal.active .modal-stat{
+
+    animation:
+        modalStatIn
+        0.4s ease both;
+
+}
+
+
+.game-modal.active .modal-stat:nth-child(1){
+
+    animation-delay:0.15s;
+
+}
+
+
+.game-modal.active .modal-stat:nth-child(2){
+
+    animation-delay:0.20s;
+
+}
+
+
+.game-modal.active .modal-stat:nth-child(3){
+
+    animation-delay:0.25s;
+
+}
+
+
+.game-modal.active .modal-stat:nth-child(4){
+
+    animation-delay:0.30s;
+
+}
+
+
+@keyframes modalStatIn{
+
+    from{
+
+        opacity:0;
+
+        transform:
+            translateY(8px);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:
+            translateY(0);
+
+    }
+
+}
+
+
+/* ==========================
+   BUTTON ANIMATION
+========================== */
+
+.game-modal-buttons{
+
+    opacity:0;
+
+    transform:
+        translateY(8px);
+
+    transition:
+        opacity 0.35s ease 0.25s,
+        transform 0.35s ease 0.25s;
+
+}
+
+
+.game-modal.active .game-modal-buttons{
+
+    opacity:1;
+
+    transform:
+        translateY(0);
+
+}
+
+
+/* ==========================
+   CLOSE BUTTON
+========================== */
+
+.close-game-modal{
+
+    transition:
+        transform 0.2s ease,
+        opacity 0.2s ease;
+
+}
+
+
+.close-game-modal:hover{
+
+    transform:
+        rotate(90deg)
+        scale(1.08);
+
+}
+
+
+/* ==========================
+   REDUCED MOTION
+========================== */
+
+@media(prefers-reduced-motion:reduce){
+
+    .game-modal,
+    .game-modal-overlay,
+    .game-modal-box,
+    .game-modal-image img,
+    .game-modal-content,
+    .game-modal-buttons,
+    .close-game-modal{
+
+        transition:none !important;
+
+        animation:none !important;
+
+    }
+
+}
