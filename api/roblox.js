@@ -91,6 +91,47 @@ async function getUniverseId(placeId){
 
 }
 
+// ==========================================
+// GET GAME THUMBNAIL
+// ==========================================
+
+async function getGameThumbnail(placeId){
+
+    try{
+
+        const response = await fetch(
+            `https://thumbnails.roblox.com/v1/places/gameicons?placeIds=${placeId}&size=512x512&format=Png&isCircular=false`
+        );
+
+        if(!response.ok){
+
+            console.error(
+                `Thumbnail API error for ${placeId}:`,
+                response.status
+            );
+
+            return null;
+
+        }
+
+        const data = await response.json();
+
+        return data.data?.[0]?.imageUrl || null;
+
+    }
+
+    catch(error){
+
+        console.error(
+            `Thumbnail lookup failed for ${placeId}:`,
+            error
+        );
+
+        return null;
+
+    }
+
+}
 
 // ==========================================
 // GET GAME DATA
@@ -102,6 +143,9 @@ async function getGameData(game){
 
         const universeId =
             await getUniverseId(game.id);
+
+        const thumbnail =
+    await getGameThumbnail(game.id);
 
         if(!universeId){
 
@@ -177,11 +221,13 @@ async function getGameData(game){
 
         }
 
-        return {
+      return {
 
     ...game,
 
     universeId,
+
+    thumbnail,
 
     players:
         formatNumber(
