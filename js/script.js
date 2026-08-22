@@ -191,19 +191,69 @@ async function loadGames(){
     try{
 
         // ==========================
-        // OBTENER JUEGOS LOCALES
+        // OBTENER DATOS
         // ==========================
 
         const localGames =
             await RobloxAPI.getGames();
 
-
-        // ==========================
-        // OBTENER DATOS DE ROBLOX
-        // ==========================
-
         const robloxData =
             await RobloxAPI.getStats();
+
+
+        // ==========================
+        // VALIDAR DATOS
+        // ==========================
+
+        if(
+            !localGames ||
+            localGames.length === 0
+        ){
+
+            console.warn(
+                "⚠️ No se encontraron juegos en games.json."
+            );
+
+            return;
+
+        }
+
+
+        const robloxGames =
+            robloxData?.games || [];
+
+
+        // ==========================
+        // COMBINAR DATOS
+        // ==========================
+
+        const games =
+            localGames.map(localGame => {
+
+                // Buscar el juego correspondiente
+                // por ID de Roblox
+
+                const robloxGame =
+                    robloxGames.find(
+                        game =>
+                            String(game.id) ===
+                            String(localGame.id)
+                    );
+
+
+                // ==========================
+                // COMBINAR
+                // ==========================
+
+                return {
+
+                    ...localGame,
+
+                    ...(robloxGame || {})
+
+                };
+
+            });
 
 
         // ==========================
@@ -218,118 +268,10 @@ async function loadGames(){
 
         if(!container){
 
-            console.warn(
-                "⚠️ No se encontró #games-container"
-            );
-
             return;
 
         }
 
-
-        // ==========================
-        // VALIDAR JUEGOS
-        // ==========================
-
-        if(
-            !localGames ||
-            localGames.length === 0
-        ){
-
-            container.innerHTML = "";
-
-            return;
-
-        }
-
-
-        // ==========================
-        // JUEGOS DE LA API
-        // ==========================
-
-        const apiGames =
-            robloxData?.games || [];
-
-
-        // ==========================
-        // COMBINAR INFORMACIÓN
-        // ==========================
-
-        const games =
-            localGames.map(localGame => {
-
-                const apiGame =
-                    apiGames.find(
-                        game =>
-                            String(game.id) ===
-                            String(localGame.id)
-                    );
-
-
-                // ==========================
-                // SI EXISTE EN ROBLOX API
-                // ==========================
-
-                if(apiGame){
-
-                    return {
-
-                        ...localGame,
-
-                        universeId:
-                            apiGame.universeId,
-
-                        players:
-                            apiGame.players,
-
-                        maxPlayers:
-                            apiGame.maxPlayers,
-
-                        visits:
-                            apiGame.visits,
-
-                        favorites:
-                            apiGame.favorites,
-
-                        genre:
-                            apiGame.genre
-
-                    };
-
-                }
-
-
-                // ==========================
-                // SI NO EXISTE
-                // ==========================
-
-                return {
-
-                    ...localGame,
-
-                    universeId:
-                        null,
-
-                    players:
-                        "Coming Soon",
-
-                    visits:
-                        "Coming Soon",
-
-                    favorites:
-                        "Coming Soon",
-
-                    maxPlayers:
-                        0
-
-                };
-
-            });
-
-
-        // ==========================
-        // LIMPIAR CONTENEDOR
-        // ==========================
 
         container.innerHTML = "";
 
@@ -338,139 +280,203 @@ async function loadGames(){
         // CREAR TARJETAS
         // ==========================
 
-        games.forEach((game, index) => {
+        games.forEach(
+            (game, index) => {
 
-            const card =
-                document.createElement("div");
-
-
-            card.className =
-                "game-card";
+                const card =
+                    document.createElement("div");
 
 
-            card.dataset.gameIndex =
-                index;
+                card.className =
+                    "game-card";
 
 
-            card.innerHTML = `
-
-                <img
-                    src="assets/games/${game.image || "placeholder.png"}"
-                    alt="${game.name || "Game"}"
-                >
+                card.dataset.gameIndex =
+                    index;
 
 
-                <div class="game-info">
+                // ==========================
+                // IMAGEN
+                // ==========================
+
+                let gameImage =
+                    "assets/images/game-placeholder.png";
 
 
-                    <span
-                        class="game-status ${
-                            game.status === "Released"
-                                ? "released"
-                                : "development"
-                        }"
-                    >
+                if(game.thumbnail){
 
-                        ${
-                            game.status === "Released"
-                                ? "🟢"
-                                : "🟡"
-                        }
+                    gameImage =
+                        game.thumbnail;
 
-                        ${
-                            game.status ||
-                            "In Development"
-                        }
+                }
 
-                    </span>
-
-
-                    <h3>
-                        ${
-                            game.name ||
-                            "Unknown Game"
-                        }
-                    </h3>
-
-
-                    <p>
-                        ${
-                            game.description ||
-                            "No description available."
-                        }
-                    </p>
-
-
-                    <div class="game-stats">
-
-
-                        <span>
-                            👥 ${
-                                formatGameNumber(
-                                    game.players
-                                )
-                            }
-                        </span>
-
-
-                        <span>
-                            👁️ ${
-                                formatGameNumber(
-                                    game.visits
-                                )
-                            }
-                        </span>
-
-
-                    </div>
-
-
-                    <a
-                        href="https://www.roblox.com/games/${game.id}"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        class="play-btn"
-                    >
-                        Play Now
-                    </a>
-
-
-                </div>
-
-            `;
-
-
-            // ==========================
-            // ABRIR MODAL
-            // ==========================
-
-            card.addEventListener(
-                "click",
-                (event) => {
-
-                    // Si se pulsa Play Now,
-                    // dejamos funcionar el enlace.
+                else if(game.image){
 
                     if(
-                        event.target.closest(
-                            ".play-btn"
-                        )
+                        game.image.startsWith("http://") ||
+                        game.image.startsWith("https://")
                     ){
 
-                        return;
+                        gameImage =
+                            game.image;
 
                     }
 
+                    else{
 
-                    openGameModal(game);
+                        gameImage =
+                            `assets/games/${game.image}`;
+
+                    }
 
                 }
-            );
 
 
-            container.appendChild(card);
+                // ==========================
+                // STATUS
+                // ==========================
 
-        });
+                const released =
+                    game.status === "Released";
+
+
+                // ==========================
+                // TARJETA
+                // ==========================
+
+                card.innerHTML = `
+
+                    <img
+                        src="${gameImage}"
+                        alt="${game.name || "Game"}"
+                        loading="lazy"
+                    >
+
+                    <div class="game-info">
+
+                        <span
+                            class="game-status ${
+                                released
+                                    ? "released"
+                                    : "development"
+                            }"
+                        >
+
+                            ${
+                                released
+                                    ? "🟢"
+                                    : "🟡"
+                            }
+
+                            ${game.status || "Unknown"}
+
+                        </span>
+
+
+                        <h3>
+                            ${game.name || "Unknown Game"}
+                        </h3>
+
+
+                        <p>
+                            ${
+                                game.description ||
+                                "No description available."
+                            }
+                        </p>
+
+
+                        <div class="game-stats">
+
+                            <span>
+                                👥
+                                ${
+                                    game.players ||
+                                    "Coming Soon"
+                                }
+                            </span>
+
+
+                            <span>
+                                👁️
+                                ${
+                                    game.visits ||
+                                    "Coming Soon"
+                                }
+                            </span>
+
+                        </div>
+
+
+                        <a
+                            href="https://www.roblox.com/games/${game.id}"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="play-btn"
+                        >
+                            Play Now
+                        </a>
+
+                    </div>
+
+                `;
+
+
+                // ==========================
+                // ERROR DE IMAGEN
+                // ==========================
+
+                const cardImage =
+                    card.querySelector("img");
+
+
+                if(cardImage){
+
+                    cardImage.addEventListener(
+                        "error",
+                        () => {
+
+                            cardImage.src =
+                                "assets/images/game-placeholder.png";
+
+                        }
+                    );
+
+                }
+
+
+                // ==========================
+                // ABRIR MODAL
+                // ==========================
+
+                card.addEventListener(
+                    "click",
+                    event => {
+
+                        // No abrir modal si
+                        // hicieron click en Play Now
+
+                        if(
+                            event.target.closest(
+                                ".play-btn"
+                            )
+                        ){
+
+                            return;
+
+                        }
+
+
+                        openGameModal(game);
+
+                    }
+                );
+
+
+                container.appendChild(card);
+
+            }
+        );
 
 
         // ==========================
@@ -482,7 +488,7 @@ async function loadGames(){
 
 
         console.log(
-            "✅ Juegos cargados con estadísticas:",
+            "✅ Games loaded:",
             games
         );
 
@@ -491,7 +497,7 @@ async function loadGames(){
     catch(error){
 
         console.error(
-            "❌ Error al cargar los juegos:",
+            "❌ Games Error:",
             error
         );
 
