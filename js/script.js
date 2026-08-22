@@ -31,18 +31,26 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 function initializeMenu(){
 
-    const menuToggle = document.getElementById("menu-toggle");
-    const navbar = document.getElementById("navbar");
+    const menuToggle =
+        document.getElementById("menu-toggle");
+
+    const navbar =
+        document.getElementById("navbar");
+
 
     if(!menuToggle || !navbar){
+
         return;
+
     }
+
 
     menuToggle.addEventListener("click", () => {
 
         navbar.classList.toggle("active");
 
     });
+
 
     document.querySelectorAll("#navbar a").forEach(link => {
 
@@ -65,27 +73,44 @@ async function loadStats(){
 
     try{
 
-        const data = await RobloxAPI.getStats();
+        const data =
+            await RobloxAPI.getStats();
 
-        if(!data || !data.stats || !data.group){
 
-            console.warn("⚠️ No se pudieron cargar las estadísticas.");
+        if(
+            !data ||
+            !data.stats ||
+            !data.group
+        ){
+
+            console.warn(
+                "⚠️ No se pudieron cargar las estadísticas."
+            );
 
             return;
 
         }
 
+
         const gamesCount =
-            document.getElementById("games-count");
+            document.getElementById(
+                "games-count"
+            );
 
         const membersCount =
-            document.getElementById("members-count");
+            document.getElementById(
+                "members-count"
+            );
 
         const visitsCount =
-            document.getElementById("visits-count");
+            document.getElementById(
+                "visits-count"
+            );
 
         const favoritesCount =
-            document.getElementById("favorites-count");
+            document.getElementById(
+                "favorites-count"
+            );
 
 
         // ==========================
@@ -95,7 +120,9 @@ async function loadStats(){
         if(gamesCount){
 
             gamesCount.textContent =
-                Number(data.stats.totalGames || 0);
+                Number(
+                    data.stats.totalGames || 0
+                );
 
         }
 
@@ -161,89 +188,314 @@ async function loadStats(){
 
 async function loadGames(){
 
-    const games = await RobloxAPI.getGames();
+    try{
 
-    const container = document.getElementById("games-container");
+        // ==========================
+        // OBTENER JUEGOS LOCALES
+        // ==========================
 
-    if(!container || !games || games.length === 0){
+        const localGames =
+            await RobloxAPI.getGames();
 
-        return;
 
-    }
+        // ==========================
+        // OBTENER DATOS DE ROBLOX
+        // ==========================
 
-    container.innerHTML = "";
+        const robloxData =
+            await RobloxAPI.getStats();
 
-    games.forEach((game, index) => {
 
-        const card = document.createElement("div");
+        // ==========================
+        // CONTENEDOR
+        // ==========================
 
-        card.className = "game-card";
+        const container =
+            document.getElementById(
+                "games-container"
+            );
 
-        card.dataset.gameIndex = index;
 
-        card.innerHTML = `
+        if(!container){
 
-            <img
-                src="assets/games/${game.image}"
-                alt="${game.name}"
-            >
+            console.warn(
+                "⚠️ No se encontró #games-container"
+            );
 
-            <div class="game-info">
+            return;
 
-                <span class="game-status ${game.status === "Released" ? "released" : "development"}">
+        }
 
-                    ${game.status === "Released" ? "🟢" : "🟡"}
 
-                    ${game.status}
+        // ==========================
+        // VALIDAR JUEGOS
+        // ==========================
 
-                </span>
+        if(
+            !localGames ||
+            localGames.length === 0
+        ){
 
-                <h3>${game.name}</h3>
+            container.innerHTML = "";
 
-                <p>${game.description}</p>
+            return;
 
-                <div class="game-stats">
+        }
 
-                    <span>👥 ${game.players || "Coming Soon"}</span>
 
-                    <span>👁️ ${game.visits || "Coming Soon"}</span>
+        // ==========================
+        // JUEGOS DE LA API
+        // ==========================
+
+        const apiGames =
+            robloxData?.games || [];
+
+
+        // ==========================
+        // COMBINAR INFORMACIÓN
+        // ==========================
+
+        const games =
+            localGames.map(localGame => {
+
+                const apiGame =
+                    apiGames.find(
+                        game =>
+                            String(game.id) ===
+                            String(localGame.id)
+                    );
+
+
+                // ==========================
+                // SI EXISTE EN ROBLOX API
+                // ==========================
+
+                if(apiGame){
+
+                    return {
+
+                        ...localGame,
+
+                        universeId:
+                            apiGame.universeId,
+
+                        players:
+                            apiGame.players,
+
+                        maxPlayers:
+                            apiGame.maxPlayers,
+
+                        visits:
+                            apiGame.visits,
+
+                        favorites:
+                            apiGame.favorites,
+
+                        genre:
+                            apiGame.genre
+
+                    };
+
+                }
+
+
+                // ==========================
+                // SI NO EXISTE
+                // ==========================
+
+                return {
+
+                    ...localGame,
+
+                    universeId:
+                        null,
+
+                    players:
+                        "Coming Soon",
+
+                    visits:
+                        "Coming Soon",
+
+                    favorites:
+                        "Coming Soon",
+
+                    maxPlayers:
+                        0
+
+                };
+
+            });
+
+
+        // ==========================
+        // LIMPIAR CONTENEDOR
+        // ==========================
+
+        container.innerHTML = "";
+
+
+        // ==========================
+        // CREAR TARJETAS
+        // ==========================
+
+        games.forEach((game, index) => {
+
+            const card =
+                document.createElement("div");
+
+
+            card.className =
+                "game-card";
+
+
+            card.dataset.gameIndex =
+                index;
+
+
+            card.innerHTML = `
+
+                <img
+                    src="assets/games/${game.image || "placeholder.png"}"
+                    alt="${game.name || "Game"}"
+                >
+
+
+                <div class="game-info">
+
+
+                    <span
+                        class="game-status ${
+                            game.status === "Released"
+                                ? "released"
+                                : "development"
+                        }"
+                    >
+
+                        ${
+                            game.status === "Released"
+                                ? "🟢"
+                                : "🟡"
+                        }
+
+                        ${
+                            game.status ||
+                            "In Development"
+                        }
+
+                    </span>
+
+
+                    <h3>
+                        ${
+                            game.name ||
+                            "Unknown Game"
+                        }
+                    </h3>
+
+
+                    <p>
+                        ${
+                            game.description ||
+                            "No description available."
+                        }
+                    </p>
+
+
+                    <div class="game-stats">
+
+
+                        <span>
+                            👥 ${
+                                formatGameNumber(
+                                    game.players
+                                )
+                            }
+                        </span>
+
+
+                        <span>
+                            👁️ ${
+                                formatGameNumber(
+                                    game.visits
+                                )
+                            }
+                        </span>
+
+
+                    </div>
+
+
+                    <a
+                        href="https://www.roblox.com/games/${game.id}"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="play-btn"
+                    >
+                        Play Now
+                    </a>
+
 
                 </div>
 
-                <a
-                    href="https://www.roblox.com/games/${game.id}"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="play-btn"
-                >
-                    Play Now
-                </a>
+            `;
 
-            </div>
 
-        `;
+            // ==========================
+            // ABRIR MODAL
+            // ==========================
 
-        // Abrir modal al hacer click en la tarjeta
-        card.addEventListener("click", (event) => {
+            card.addEventListener(
+                "click",
+                (event) => {
 
-            // Si hizo click directamente en Play Now,
-            // dejamos que el enlace funcione normalmente.
-            if(event.target.closest(".play-btn")){
+                    // Si se pulsa Play Now,
+                    // dejamos funcionar el enlace.
 
-                return;
+                    if(
+                        event.target.closest(
+                            ".play-btn"
+                        )
+                    ){
 
-            }
+                        return;
 
-            openGameModal(game);
+                    }
+
+
+                    openGameModal(game);
+
+                }
+            );
+
+
+            container.appendChild(card);
 
         });
 
-        container.appendChild(card);
 
-    });
+        // ==========================
+        // GUARDAR JUEGOS
+        // ==========================
 
-    // Guardar juegos para el buscador/modal
-    window.manatonGames = games;
+        window.manatonGames =
+            games;
+
+
+        console.log(
+            "✅ Juegos cargados con estadísticas:",
+            games
+        );
+
+    }
+
+    catch(error){
+
+        console.error(
+            "❌ Error al cargar los juegos:",
+            error
+        );
+
+    }
 
 }
 
@@ -259,8 +511,12 @@ async function loadNews(){
         const news =
             await RobloxAPI.getNews();
 
+
         const newsContainer =
-            document.getElementById("news-container");
+            document.getElementById(
+                "news-container"
+            );
+
 
         if(!newsContainer){
 
@@ -268,7 +524,11 @@ async function loadNews(){
 
         }
 
-        if(!news || news.length === 0){
+
+        if(
+            !news ||
+            news.length === 0
+        ){
 
             newsContainer.innerHTML = "";
 
@@ -276,15 +536,19 @@ async function loadNews(){
 
         }
 
+
         newsContainer.innerHTML = "";
+
 
         news.forEach(item => {
 
             const card =
                 document.createElement("div");
 
+
             card.className =
                 "news-card";
+
 
             card.innerHTML = `
 
@@ -296,6 +560,7 @@ async function loadNews(){
 
                     </span>
 
+
                     <span class="news-date">
 
                         ${item.date}
@@ -304,12 +569,15 @@ async function loadNews(){
 
                 </div>
 
+
                 <h3>
 
                     ${item.icon || "📰"}
+
                     ${item.title}
 
                 </h3>
+
 
                 <p>
 
@@ -318,6 +586,7 @@ async function loadNews(){
                 </p>
 
             `;
+
 
             newsContainer.appendChild(card);
 
@@ -344,15 +613,25 @@ async function loadNews(){
 function initializeGameSearch(){
 
     const searchInput =
-        document.getElementById("game-search");
+        document.getElementById(
+            "game-search"
+        );
 
     const filterSelect =
-        document.getElementById("game-filter");
+        document.getElementById(
+            "game-filter"
+        );
 
     const noGames =
-        document.getElementById("no-games");
+        document.getElementById(
+            "no-games"
+        );
 
-    if(!searchInput || !filterSelect){
+
+    if(
+        !searchInput ||
+        !filterSelect
+    ){
 
         return;
 
@@ -366,11 +645,16 @@ function initializeGameSearch(){
                 .toLowerCase()
                 .trim();
 
+
         const filter =
             filterSelect.value;
 
+
         const cards =
-            document.querySelectorAll(".game-card");
+            document.querySelectorAll(
+                ".game-card"
+            );
+
 
         let visibleGames = 0;
 
@@ -382,10 +666,12 @@ function initializeGameSearch(){
                     ?.textContent
                     .toLowerCase() || "";
 
+
             const description =
                 card.querySelector("p")
                     ?.textContent
                     .toLowerCase() || "";
+
 
             const status =
                 card.querySelector(".game-status")
@@ -460,6 +746,7 @@ function initializeGameSearch(){
         filterGames
     );
 
+
     filterSelect.addEventListener(
         "change",
         filterGames
@@ -508,7 +795,10 @@ if("serviceWorker" in navigator){
 window.addEventListener("load", () => {
 
     const loader =
-        document.getElementById("loader");
+        document.getElementById(
+            "loader"
+        );
+
 
     if(!loader){
 
@@ -516,9 +806,13 @@ window.addEventListener("load", () => {
 
     }
 
+
     setTimeout(() => {
 
-        loader.classList.add("hidden");
+        loader.classList.add(
+            "hidden"
+        );
+
 
         setTimeout(() => {
 
@@ -546,6 +840,7 @@ function initializeWebsiteVersion(){
             "website-version"
         );
 
+
     if(
         versionElement &&
         typeof APP_VERSION !== "undefined"
@@ -557,6 +852,7 @@ function initializeWebsiteVersion(){
     }
 
 }
+
 
 initializeWebsiteVersion();
 
@@ -570,13 +866,17 @@ let revealObserver = null;
 
 function initializeScrollReveal(){
 
-    if(!("IntersectionObserver" in window)){
+    if(
+        !("IntersectionObserver" in window)
+    ){
 
         document.querySelectorAll(
             ".reveal, .reveal-left, .reveal-right, .reveal-zoom, .stagger"
         ).forEach(element => {
 
-            element.classList.add("active");
+            element.classList.add(
+                "active"
+            );
 
         });
 
@@ -592,11 +892,14 @@ function initializeScrollReveal(){
 
                 entries.forEach(entry => {
 
-                    if(entry.isIntersecting){
+                    if(
+                        entry.isIntersecting
+                    ){
 
                         entry.target.classList.add(
                             "active"
                         );
+
 
                         revealObserver.unobserve(
                             entry.target
@@ -609,7 +912,7 @@ function initializeScrollReveal(){
             },
 
             {
-                threshold:0.15
+                threshold: 0.15
             }
 
         );
@@ -619,7 +922,9 @@ function initializeScrollReveal(){
         ".reveal, .reveal-left, .reveal-right, .reveal-zoom, .stagger"
     ).forEach(element => {
 
-        revealObserver.observe(element);
+        revealObserver.observe(
+            element
+        );
 
     });
 
@@ -653,7 +958,10 @@ async function loadSystemStatus(){
     try{
 
         const response =
-            await fetch("/data/status.json");
+            await fetch(
+                "/data/status.json"
+            );
+
 
         if(!response.ok){
 
@@ -663,18 +971,22 @@ async function loadSystemStatus(){
 
         }
 
+
         const data =
             await response.json();
+
 
         const status =
             document.getElementById(
                 "system-status"
             );
 
+
         const statusBar =
             document.getElementById(
                 "status-bar"
             );
+
 
         if(!status){
 
@@ -798,6 +1110,7 @@ async function loadSystemStatus(){
 
 }
 
+
 loadSystemStatus();
 
 
@@ -812,15 +1125,18 @@ async function loadStatusStats(){
         const data =
             await RobloxAPI.getStats();
 
+
         const gamesStatus =
             document.getElementById(
                 "games-status"
             );
 
+
         const membersStatus =
             document.getElementById(
                 "members-status"
             );
+
 
         const visitsStatus =
             document.getElementById(
@@ -833,25 +1149,40 @@ async function loadStatusStats(){
             !data.success
         ){
 
-            if(gamesStatus)
+            if(gamesStatus){
+
                 gamesStatus.textContent =
                     "🎮 Unavailable";
 
-            if(membersStatus)
+            }
+
+
+            if(membersStatus){
+
                 membersStatus.textContent =
                     "👥 Unavailable";
 
-            if(visitsStatus)
+            }
+
+
+            if(visitsStatus){
+
                 visitsStatus.textContent =
                     "🔥 Unavailable";
+
+            }
 
             return;
 
         }
 
 
+        // ==========================
+        // GAMES
+        // ==========================
+
         const games =
-            await RobloxAPI.getGames();
+            data.games || [];
 
 
         if(gamesStatus){
@@ -861,6 +1192,10 @@ async function loadStatusStats(){
 
         }
 
+
+        // ==========================
+        // MEMBERS
+        // ==========================
 
         if(membersStatus){
 
@@ -873,6 +1208,10 @@ async function loadStatusStats(){
 
         }
 
+
+        // ==========================
+        // VISITS
+        // ==========================
 
         if(visitsStatus){
 
@@ -898,6 +1237,7 @@ async function loadStatusStats(){
 
 }
 
+
 loadStatusStats();
 
 
@@ -912,6 +1252,7 @@ async function checkWebsiteUpdate(){
         const versionData =
             await RobloxAPI.getVersion();
 
+
         if(!versionData){
 
             return;
@@ -921,6 +1262,7 @@ async function checkWebsiteUpdate(){
 
         const currentVersion =
             versionData.version;
+
 
         const savedVersion =
             localStorage.getItem(
@@ -949,7 +1291,8 @@ async function checkWebsiteUpdate(){
         // ==========================
 
         if(
-            savedVersion !== currentVersion
+            savedVersion !==
+            currentVersion
         ){
 
             showUpdateBanner(
@@ -978,7 +1321,9 @@ async function checkWebsiteUpdate(){
 
 function showUpdateBanner(versionData){
 
-    // Evitar duplicados
+    // ==========================
+    // EVITAR DUPLICADOS
+    // ==========================
 
     if(
         document.getElementById(
@@ -992,7 +1337,10 @@ function showUpdateBanner(versionData){
 
 
     const popup =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
+
 
     popup.id =
         "update-center";
@@ -1006,9 +1354,11 @@ function showUpdateBanner(versionData){
                 🚀 ${versionData.title}
             </h2>
 
+
             <p>
                 ${versionData.message}
             </p>
+
 
             <ul>
 
@@ -1026,11 +1376,13 @@ function showUpdateBanner(versionData){
 
             </ul>
 
+
             <div class="update-buttons">
 
                 <button id="later-update">
                     Later
                 </button>
+
 
                 <button id="update-now">
                     Update Now
@@ -1057,6 +1409,7 @@ function showUpdateBanner(versionData){
             "later-update"
         );
 
+
     if(laterButton){
 
         laterButton.addEventListener(
@@ -1080,6 +1433,7 @@ function showUpdateBanner(versionData){
             "update-now"
         );
 
+
     if(updateButton){
 
         updateButton.addEventListener(
@@ -1091,6 +1445,7 @@ function showUpdateBanner(versionData){
                     versionData.version
                 );
 
+
                 location.reload();
 
             }
@@ -1101,40 +1456,58 @@ function showUpdateBanner(versionData){
 }
 
 
-// Ejecutar Update Manager
-
-// ==========================================
+// =====================================================
 // GAME DETAILS MODAL
-// ==========================================
+// =====================================================
 
-function openGameModal(game) {
+function openGameModal(game){
 
-    // Verificar que exista información del juego
-    if (!game) {
-        console.error("❌ No game data was provided.");
+    if(!game){
+
+        console.error(
+            "❌ No game data was provided."
+        );
+
         return;
+
     }
 
-    let modal = document.getElementById("game-details-modal");
 
-    // ==========================================
-    // CREAR MODAL SI NO EXISTE
-    // ==========================================
+    let modal =
+        document.getElementById(
+            "game-details-modal"
+        );
 
-    if (!modal) {
 
-        modal = document.createElement("div");
+    // ==========================
+    // CREAR MODAL
+    // ==========================
 
-        modal.id = "game-details-modal";
-        modal.className = "game-modal";
+    if(!modal){
+
+        modal =
+            document.createElement(
+                "div"
+            );
+
+
+        modal.id =
+            "game-details-modal";
+
+
+        modal.className =
+            "game-modal";
+
 
         modal.innerHTML = `
 
             <div class="game-modal-overlay"></div>
 
+
             <div class="game-modal-box">
 
-                <!-- CLOSE BUTTON -->
+
+                <!-- CLOSE -->
 
                 <button
                     class="close-game-modal"
@@ -1145,7 +1518,7 @@ function openGameModal(game) {
                 </button>
 
 
-                <!-- GAME IMAGE -->
+                <!-- IMAGE -->
 
                 <div class="game-modal-image">
 
@@ -1172,6 +1545,7 @@ function openGameModal(game) {
                             class="game-status"
                         >
                         </span>
+
 
                         <h2 id="modal-game-title"></h2>
 
@@ -1203,13 +1577,17 @@ function openGameModal(game) {
                                 👥
                             </span>
 
+
                             <div>
 
                                 <small>
                                     Players
                                 </small>
 
-                                <strong id="modal-game-players">
+
+                                <strong
+                                    id="modal-game-players"
+                                >
                                     -
                                 </strong>
 
@@ -1229,13 +1607,17 @@ function openGameModal(game) {
                                 👁️
                             </span>
 
+
                             <div>
 
                                 <small>
                                     Visits
                                 </small>
 
-                                <strong id="modal-game-visits">
+
+                                <strong
+                                    id="modal-game-visits"
+                                >
                                     -
                                 </strong>
 
@@ -1255,13 +1637,17 @@ function openGameModal(game) {
                                 ⭐
                             </span>
 
+
                             <div>
 
                                 <small>
                                     Favorites
                                 </small>
 
-                                <strong id="modal-game-favorites">
+
+                                <strong
+                                    id="modal-game-favorites"
+                                >
                                     -
                                 </strong>
 
@@ -1273,13 +1659,14 @@ function openGameModal(game) {
                     </div>
 
 
-                    <!-- LATEST UPDATE -->
+                    <!-- UPDATE -->
 
                     <div class="game-modal-update">
 
                         <h3>
                             📢 Latest Update
                         </h3>
+
 
                         <p id="modal-game-update">
                             More information coming soon.
@@ -1288,7 +1675,7 @@ function openGameModal(game) {
                     </div>
 
 
-                    <!-- BUTTONS -->
+                    <!-- BUTTON -->
 
                     <div class="game-modal-buttons">
 
@@ -1311,21 +1698,29 @@ function openGameModal(game) {
 
         `;
 
-        document.body.appendChild(modal);
+
+        document.body.appendChild(
+            modal
+        );
 
 
-        // ==========================================
-        // EVENTOS DEL MODAL
-        // ==========================================
+        // ==========================
+        // CERRAR
+        // ==========================
 
         const closeButton =
-            modal.querySelector(".close-game-modal");
+            modal.querySelector(
+                ".close-game-modal"
+            );
+
 
         const overlay =
-            modal.querySelector(".game-modal-overlay");
+            modal.querySelector(
+                ".game-modal-overlay"
+            );
 
 
-        if (closeButton) {
+        if(closeButton){
 
             closeButton.addEventListener(
                 "click",
@@ -1335,7 +1730,7 @@ function openGameModal(game) {
         }
 
 
-        if (overlay) {
+        if(overlay){
 
             overlay.addEventListener(
                 "click",
@@ -1347,58 +1742,87 @@ function openGameModal(game) {
     }
 
 
-    // ==========================================
-    // ELEMENTOS DEL MODAL
-    // ==========================================
+    // ==========================
+    // ELEMENTOS
+    // ==========================
 
     const image =
-        modal.querySelector("#modal-game-image");
+        modal.querySelector(
+            "#modal-game-image"
+        );
+
 
     const title =
-        modal.querySelector("#modal-game-title");
+        modal.querySelector(
+            "#modal-game-title"
+        );
+
 
     const description =
-        modal.querySelector("#modal-game-description");
+        modal.querySelector(
+            "#modal-game-description"
+        );
+
 
     const status =
-        modal.querySelector("#modal-game-status");
+        modal.querySelector(
+            "#modal-game-status"
+        );
+
 
     const players =
-        modal.querySelector("#modal-game-players");
+        modal.querySelector(
+            "#modal-game-players"
+        );
+
 
     const visits =
-        modal.querySelector("#modal-game-visits");
+        modal.querySelector(
+            "#modal-game-visits"
+        );
+
 
     const favorites =
-        modal.querySelector("#modal-game-favorites");
+        modal.querySelector(
+            "#modal-game-favorites"
+        );
+
 
     const update =
-        modal.querySelector("#modal-game-update");
+        modal.querySelector(
+            "#modal-game-update"
+        );
+
 
     const playButton =
-        modal.querySelector("#modal-play-btn");
+        modal.querySelector(
+            "#modal-play-btn"
+        );
 
 
-    // ==========================================
-    // IMAGEN
-    // ==========================================
+    // ==========================
+    // IMAGE
+    // ==========================
 
-    if (image) {
+    if(image){
 
-        if (game.image) {
+        if(game.image){
 
-            // Si ya es una URL completa
-            if (
-                game.image.startsWith("http://") ||
-                game.image.startsWith("https://")
-            ) {
+            if(
+                game.image.startsWith(
+                    "http://"
+                ) ||
+                game.image.startsWith(
+                    "https://"
+                )
+            ){
 
-                image.src = game.image;
+                image.src =
+                    game.image;
 
             }
 
-            // Si es una imagen local
-            else {
+            else{
 
                 image.src =
                     `assets/games/${game.image}`;
@@ -1407,7 +1831,7 @@ function openGameModal(game) {
 
         }
 
-        else {
+        else{
 
             image.src =
                 "assets/images/game-placeholder.png";
@@ -1416,16 +1840,17 @@ function openGameModal(game) {
 
 
         image.alt =
-            game.name || "Game";
+            game.name ||
+            "Game";
 
     }
 
 
-    // ==========================================
-    // TÍTULO
-    // ==========================================
+    // ==========================
+    // TITLE
+    // ==========================
 
-    if (title) {
+    if(title){
 
         title.textContent =
             game.name ||
@@ -1434,11 +1859,11 @@ function openGameModal(game) {
     }
 
 
-    // ==========================================
-    // DESCRIPCIÓN
-    // ==========================================
+    // ==========================
+    // DESCRIPTION
+    // ==========================
 
-    if (description) {
+    if(description){
 
         description.textContent =
             game.description ||
@@ -1447,80 +1872,77 @@ function openGameModal(game) {
     }
 
 
-    // ==========================================
+    // ==========================
     // STATUS
-    // ==========================================
+    // ==========================
 
-    if (status) {
+    if(status){
 
         const released =
             game.status === "Released";
 
 
-        if (released) {
+        status.textContent =
+            released
+                ? "🟢 Released"
+                : "🟡 In Development";
 
-            status.textContent =
-                "🟢 Released";
 
-            status.className =
-                "game-status released";
-
-        }
-
-        else {
-
-            status.textContent =
-                "🟡 In Development";
-
-            status.className =
-                "game-status development";
-
-        }
+        status.className =
+            released
+                ? "game-status released"
+                : "game-status development";
 
     }
 
 
-    // ==========================================
+    // ==========================
     // PLAYERS
-    // ==========================================
+    // ==========================
 
-    if (players) {
+    if(players){
 
         players.textContent =
-            formatGameNumber(game.players);
+            formatGameNumber(
+                game.players
+            );
 
     }
 
 
-    // ==========================================
+    // ==========================
     // VISITS
-    // ==========================================
+    // ==========================
 
-    if (visits) {
+    if(visits){
 
         visits.textContent =
-            formatGameNumber(game.visits);
+            formatGameNumber(
+                game.visits
+            );
 
     }
 
 
-    // ==========================================
+    // ==========================
     // FAVORITES
-    // ==========================================
+    // ==========================
 
-    if (favorites) {
+    if(favorites){
 
         favorites.textContent =
-            formatGameNumber(game.favorites);
+            formatGameNumber(
+                game.favorites
+            );
 
     }
 
 
-    // ==========================================
+    // ==========================
     // LATEST UPDATE
-    // ==========================================
+    // ==========================
 
-    if (update) {
+    if(update){
 
         update.textContent =
             game.update ||
@@ -1529,25 +1951,28 @@ function openGameModal(game) {
     }
 
 
-    // ==========================================
+    // ==========================
     // PLAY BUTTON
-    // ==========================================
+    // ==========================
 
-    if (playButton) {
+    if(playButton){
 
-        if (game.id) {
+        if(game.id){
 
             playButton.href =
                 `https://www.roblox.com/games/${game.id}`;
+
 
             playButton.style.display =
                 "inline-flex";
 
         }
 
-        else {
+        else{
 
-            playButton.href = "#";
+            playButton.href =
+                "#";
+
 
             playButton.style.display =
                 "none";
@@ -1557,11 +1982,14 @@ function openGameModal(game) {
     }
 
 
-    // ==========================================
-    // MOSTRAR MODAL
-    // ==========================================
+    // ==========================
+    // MOSTRAR
+    // ==========================
 
-    modal.classList.add("active");
+    modal.classList.add(
+        "active"
+    );
+
 
     document.body.style.overflow =
         "hidden";
@@ -1569,36 +1997,39 @@ function openGameModal(game) {
 }
 
 
-// ==========================================
+// =====================================================
 // FORMATEAR NÚMEROS
-// ==========================================
+// =====================================================
 
-function formatGameNumber(value) {
+function formatGameNumber(value){
 
-    // Si no existe información
-    if (
+    if(
         value === undefined ||
         value === null ||
         value === ""
-    ) {
+    ){
 
         return "Coming Soon";
 
     }
 
 
-    // Si ya es texto
-    if (typeof value === "string") {
+    if(
+        typeof value === "string"
+    ){
 
         return value;
 
     }
 
 
-    // Si es número
-    if (typeof value === "number") {
+    if(
+        typeof value === "number"
+    ){
 
-        return value.toLocaleString("en-US");
+        return value.toLocaleString(
+            "en-US"
+        );
 
     }
 
@@ -1608,11 +2039,11 @@ function formatGameNumber(value) {
 }
 
 
-// ==========================================
+// =====================================================
 // CLOSE GAME MODAL
-// ==========================================
+// =====================================================
 
-function closeGameModal() {
+function closeGameModal(){
 
     const modal =
         document.getElementById(
@@ -1620,31 +2051,35 @@ function closeGameModal() {
         );
 
 
-    if (!modal) {
+    if(!modal){
 
         return;
 
     }
 
 
-    modal.classList.remove("active");
+    modal.classList.remove(
+        "active"
+    );
 
 
-    // Restaurar scroll
-    document.body.style.overflow = "";
+    document.body.style.overflow =
+        "";
 
 }
 
 
-// ==========================================
+// =====================================================
 // ESC PARA CERRAR
-// ==========================================
+// =====================================================
 
 document.addEventListener(
     "keydown",
     (event) => {
 
-        if (event.key === "Escape") {
+        if(
+            event.key === "Escape"
+        ){
 
             const modal =
                 document.getElementById(
@@ -1652,10 +2087,12 @@ document.addEventListener(
                 );
 
 
-            if (
+            if(
                 modal &&
-                modal.classList.contains("active")
-            ) {
+                modal.classList.contains(
+                    "active"
+                )
+            ){
 
                 closeGameModal();
 
@@ -1665,5 +2102,10 @@ document.addEventListener(
 
     }
 );
+
+
+// =====================================================
+// CHECK WEBSITE UPDATE
+// =====================================================
 
 checkWebsiteUpdate();
