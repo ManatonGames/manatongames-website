@@ -2034,43 +2034,44 @@ if (genre) {
     }
 
 
-    // ==========================
-    // PLAY BUTTON
-    // ==========================
+// ==========================
+// PLAY BUTTON
+// ==========================
 
-    if(playButton){
+if(playButton){
 
-        if(game.id){
+    if(game.id){
 
-            playButton.href =
-                `https://www.roblox.com/games/${game.id}`;
+        playButton.href =
+            `https://www.roblox.com/games/${game.id}`;
+
+        playButton.style.display =
+            "inline-flex";
+
+    }
+
+    else{
+
+        playButton.href =
+            "#";
+
+        playButton.style.display =
+            "none";
+
+    }
+
+}
 
 
-            playButton.style.display =
-                "inline-flex";
-
-        }
-
-        else{
-
-            playButton.href =
-                "#";
-
-
-            playButton.style.display =
-                "none";
-
-        }
-
-        // ==========================================
+// ==========================================
 // COPY GAME LINK
 // ==========================================
 
-if (copyButton) {
+if(copyButton){
 
     copyButton.onclick = async () => {
 
-        if (!game.id) {
+        if(!game.id){
 
             return;
 
@@ -2080,12 +2081,11 @@ if (copyButton) {
             `https://www.roblox.com/games/${game.id}`;
 
 
-        try {
+        try{
 
             await navigator.clipboard.writeText(
                 gameUrl
             );
-
 
             copyButton.textContent =
                 "✅ Copied!";
@@ -2100,7 +2100,7 @@ if (copyButton) {
 
         }
 
-        catch(error) {
+        catch(error){
 
             console.error(
                 "❌ Could not copy game link:",
@@ -2114,17 +2114,17 @@ if (copyButton) {
 }
 
 
-    // ==========================
-    // MOSTRAR
-    // ==========================
+// ==========================
+// MOSTRAR MODAL
+// ==========================
 
-    modal.classList.add(
-        "active"
-    );
+modal.classList.add(
+    "active"
+);
 
 
-    document.body.style.overflow =
-        "hidden";
+document.body.style.overflow =
+    "hidden";
 
 }
 
