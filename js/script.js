@@ -1840,9 +1840,10 @@ const genre =
         );   
 
 
-            const copyButton =
-    modal.querySelector("#modal-copy-btn");
-        );
+       const copyButton =
+    modal.querySelector(
+        "#modal-copy-btn"
+    );
 
 
     // ==========================================
