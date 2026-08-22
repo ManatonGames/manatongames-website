@@ -20,11 +20,6 @@ const GAMES = [
         status: "In Development"
     },
     {
-        id: 101466148396273,
-        name: "Grow a Garden Modded 2.0",
-        status: "Released"
-    },
-    {
         id: 89252171510608,
         name: "MG | Ranks Shopping Center",
         status: "Released"
