@@ -1,6 +1,6 @@
 {
-    "status": "Not working",
-    "icon": "🟠",
-    "title": "Partial Service Disruption",
-    "message": "Some services are temporarily unavailable."
+    "status": "Operational",
+    "icon": "🟢",
+    "title": "All Systems Operational",
+    "message": "All Manaton Games services are running normally"
 }
