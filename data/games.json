@@ -72,24 +72,6 @@
     "description": "The original donation experience created by Manaton Games."
   },
   {
-    "id": 101466148396273,
-    "name": "Grow a Garden Modded 2.0",
-    "status": "Released",
-    "genre": "Simulation",
-    "maxPlayers": 12,
-    "players": "Coming Soon",
-    "visits": "Coming Soon",
-    "featured": true,
-    "new": true,
-    "hot": true,
-    "image": "growagarden.png",
-    "screenshots": [
-      "growagarden.png"
-    ],
-    "update": "Added exclusive plants, new seeds and seasonal events.",
-    "description": "Grow rare plants, discover exclusive seeds, collect unique pets and become the richest gardener."
-  },
-  {
     "id": 89252171510608,
     "name": "MG | Ranks Shopping Center",
     "status": "Released",
