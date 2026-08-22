@@ -1571,98 +1571,126 @@ function openGameModal(game){
 
                     <div class="game-modal-stats">
 
+    <!-- PLAYERS -->
 
-                        <!-- PLAYERS -->
+    <div class="modal-stat">
 
-                        <div class="modal-stat">
+        <span
+            class="modal-stat-icon"
+            aria-hidden="true"
+        >
+            👥
+        </span>
 
-                            <span
-                                class="modal-stat-icon"
-                                aria-hidden="true"
-                            >
-                                👥
-                            </span>
+        <div>
 
+            <small>
+                Players
+            </small>
 
-                            <div>
+            <strong id="modal-game-players">
+                -
+            </strong>
 
-                                <small>
-                                    Players
-                                </small>
+        </div>
 
-
-                                <strong
-                                    id="modal-game-players"
-                                >
-                                    -
-                                </strong>
-
-                            </div>
-
-                        </div>
+    </div>
 
 
-                        <!-- VISITS -->
+    <!-- MAX PLAYERS -->
 
-                        <div class="modal-stat">
+    <div class="modal-stat">
 
-                            <span
-                                class="modal-stat-icon"
-                                aria-hidden="true"
-                            >
-                                👁️
-                            </span>
+        <span
+            class="modal-stat-icon"
+            aria-hidden="true"
+        >
+            🖥️
+        </span>
 
+        <div>
 
-                            <div>
+            <small>
+                Max Players
+            </small>
 
-                                <small>
-                                    Visits
-                                </small>
+            <strong id="modal-game-max-players">
+                -
+            </strong>
 
+        </div>
 
-                                <strong
-                                    id="modal-game-visits"
-                                >
-                                    -
-                                </strong>
-
-                            </div>
-
-                        </div>
+    </div>
 
 
-                        <!-- FAVORITES -->
+    <!-- VISITS -->
 
-                        <div class="modal-stat">
+    <div class="modal-stat">
 
-                            <span
-                                class="modal-stat-icon"
-                                aria-hidden="true"
-                            >
-                                ⭐
-                            </span>
+        <span
+            class="modal-stat-icon"
+            aria-hidden="true"
+        >
+            👁️
+        </span>
 
+        <div>
 
-                            <div>
+            <small>
+                Visits
+            </small>
 
-                                <small>
-                                    Favorites
-                                </small>
+            <strong id="modal-game-visits">
+                -
+            </strong>
 
+        </div>
 
-                                <strong
-                                    id="modal-game-favorites"
-                                >
-                                    -
-                                </strong>
-
-                            </div>
-
-                        </div>
+    </div>
 
 
-                    </div>
+    <!-- FAVORITES -->
+
+    <div class="modal-stat">
+
+        <span
+            class="modal-stat-icon"
+            aria-hidden="true"
+        >
+            ⭐
+        </span>
+
+        <div>
+
+            <small>
+                Favorites
+            </small>
+
+            <strong id="modal-game-favorites">
+                -
+            </strong>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div class="game-modal-extra">
+
+    <div class="game-extra-item">
+
+        <span>
+            🎮 Genre
+        </span>
+
+        <strong id="modal-game-genre">
+            -
+        </strong>
+
+    </div>
+
+</div>
 
 
                     <!-- UPDATE -->
@@ -1685,17 +1713,25 @@ function openGameModal(game){
 
                     <div class="game-modal-buttons">
 
-                        <a
-                            id="modal-play-btn"
-                            class="play-btn"
-                            href="#"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                        >
-                            Play Now
-                        </a>
+    <a
+        id="modal-play-btn"
+        class="play-btn"
+        href="#"
+        target="_blank"
+        rel="noopener noreferrer"
+    >
+        🎮 Play Now
+    </a>
 
-                    </div>
+    <button
+        id="modal-copy-btn"
+        class="copy-game-btn"
+        type="button"
+    >
+        📋 Copy Link
+    </button>
+
+</div>
 
 
                 </div>
@@ -1777,21 +1813,19 @@ function openGameModal(game){
 
 
     const players =
-        modal.querySelector(
-            "#modal-game-players"
-        );
+    modal.querySelector("#modal-game-players");
 
+const maxPlayers =
+    modal.querySelector("#modal-game-max-players");
 
-    const visits =
-        modal.querySelector(
-            "#modal-game-visits"
-        );
+const visits =
+    modal.querySelector("#modal-game-visits");
 
+const favorites =
+    modal.querySelector("#modal-game-favorites");
 
-    const favorites =
-        modal.querySelector(
-            "#modal-game-favorites"
-        );
+const genre =
+    modal.querySelector("#modal-game-genre");
 
 
     const update =
@@ -1803,6 +1837,9 @@ function openGameModal(game){
     const playButton =
         modal.querySelector(
             "#modal-play-btn"
+
+            const copyButton =
+    modal.querySelector("#modal-copy-btn");
         );
 
 
@@ -1929,6 +1966,17 @@ if (image) {
 
     }
 
+    // ==========================================
+// MAX PLAYERS
+// ==========================================
+
+if (maxPlayers) {
+
+    maxPlayers.textContent =
+        formatGameNumber(game.maxPlayers);
+
+}
+
 
     // ==========================
     // VISITS
@@ -1956,6 +2004,18 @@ if (image) {
             );
 
     }
+
+    // ==========================================
+// GENRE
+// ==========================================
+
+if (genre) {
+
+    genre.textContent =
+        game.genre ||
+        "Unknown";
+
+}
 
 
     // ==========================
@@ -1999,7 +2059,56 @@ if (image) {
 
         }
 
-    }
+        // ==========================================
+// COPY GAME LINK
+// ==========================================
+
+if (copyButton) {
+
+    copyButton.onclick = async () => {
+
+        if (!game.id) {
+
+            return;
+
+        }
+
+        const gameUrl =
+            `https://www.roblox.com/games/${game.id}`;
+
+
+        try {
+
+            await navigator.clipboard.writeText(
+                gameUrl
+            );
+
+
+            copyButton.textContent =
+                "✅ Copied!";
+
+
+            setTimeout(() => {
+
+                copyButton.textContent =
+                    "📋 Copy Link";
+
+            }, 2000);
+
+        }
+
+        catch(error) {
+
+            console.error(
+                "❌ Could not copy game link:",
+                error
+            );
+
+        }
+
+    };
+
+}
 
 
     // ==========================
