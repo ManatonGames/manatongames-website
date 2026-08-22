@@ -1800,50 +1800,64 @@ function openGameModal(game){
         );
 
 
-    // ==========================
-    // IMAGE
-    // ==========================
+    // ==========================================
+// GAME THUMBNAIL
+// ==========================================
 
-    if(image){
+if (image) {
 
-        if(game.image){
+    // ==========================================
+    // PRIORIDAD 1 — ROBLOX THUMBNAIL
+    // ==========================================
 
-            if(
-                game.image.startsWith(
-                    "http://"
-                ) ||
-                game.image.startsWith(
-                    "https://"
-                )
-            ){
+    if (game.thumbnail) {
 
-                image.src =
-                    game.image;
-
-            }
-
-            else{
-
-                image.src =
-                    `assets/games/${game.image}`;
-
-            }
-
-        }
-
-        else{
-
-            image.src =
-                "assets/images/game-placeholder.png";
-
-        }
-
-
-        image.alt =
-            game.name ||
-            "Game";
+        image.src =
+            game.thumbnail;
 
     }
+
+    // ==========================================
+    // PRIORIDAD 2 — IMAGEN CONFIGURADA
+    // ==========================================
+
+    else if (game.image) {
+
+        if (
+            game.image.startsWith("http://") ||
+            game.image.startsWith("https://")
+        ) {
+
+            image.src =
+                game.image;
+
+        }
+
+        else {
+
+            image.src =
+                `assets/games/${game.image}`;
+
+        }
+
+    }
+
+    // ==========================================
+    // PRIORIDAD 3 — PLACEHOLDER
+    // ==========================================
+
+    else {
+
+        image.src =
+            "assets/images/game-placeholder.png";
+
+    }
+
+
+    image.alt =
+        game.name || "Game";
+
+}
 
 
     // ==========================
