@@ -3478,3 +3478,30 @@ footer{
     }
 
 }
+
+/* ==========================================
+   MODAL ACCESSIBILITY
+========================================== */
+
+.close-game-modal:focus-visible{
+
+    outline:2px solid #60a5fa;
+
+    outline-offset:3px;
+
+}
+
+
+/* ==========================================
+   TOUCH DEVICES
+========================================== */
+
+@media(hover:none){
+
+    .close-game-modal:hover{
+
+        transform:none;
+
+    }
+
+}
