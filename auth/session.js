@@ -86,6 +86,47 @@ function saveSession(session) {
 
 
 // ==========================================
+// UPDATE SESSION
+// ==========================================
+
+function updateSession(data) {
+
+    if (!data || typeof data !== "object") {
+
+        console.error(
+            "❌ Invalid session update data."
+        );
+
+        return null;
+
+    }
+
+    const currentSession =
+        getSession() || {};
+
+    const newSession = {
+
+        ...currentSession,
+
+        ...data
+
+    };
+
+    const saved =
+        saveSession(newSession);
+
+    if (!saved) {
+
+        return null;
+
+    }
+
+    return newSession;
+
+}
+
+
+// ==========================================
 // DELETE SESSION
 // ==========================================
 
