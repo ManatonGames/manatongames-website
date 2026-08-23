@@ -19,73 +19,44 @@ document.addEventListener("DOMContentLoaded", () => {
 // OPEN PROFILE
 // ==========================================
 
-function openProfile(){
+async function openProfile(){
 
     if(document.getElementById("profile-modal")) return;
 
-    const session =
-        getSession();
+    const session = getSession();
 
-    const modal =
-        document.createElement("div");
+    if(!session) return;
 
-    modal.id =
-        "profile-modal";
+
+    // ==========================================
+    // CREATE MODAL
+    // ==========================================
+
+    const modal = document.createElement("div");
+
+    modal.id = "profile-modal";
 
     modal.innerHTML = `
 
         <div class="profile-card">
 
-            <button
-                id="close-profile"
-                class="close-profile"
-            >
+            <button id="close-profile">
                 ✕
             </button>
 
-
-            <!-- ========================= -->
-            <!-- AVATAR -->
-            <!-- ========================= -->
-
             <img
-                src="${
-                    session?.avatar ||
-                    "assets/logo/logo.png"
-                }"
+                src="${session.avatar || "assets/logo/logo.png"}"
                 class="profile-avatar"
-                id="profile-avatar"
+                alt="Profile"
             >
 
-
-            <!-- ========================= -->
-            <!-- USERNAME -->
-            <!-- ========================= -->
-
-            <h2 id="profile-username">
-
-                ${
-                    session?.username ||
-                    "Guest"
-                }
-
+            <h2>
+                ${session.username || "Guest"}
             </h2>
 
-
-            <p id="profile-account-type">
-
-                ${
-                    session?.loginType ||
-                    "Guest"
-                }
-                Account
-
+            <p>
+                ${session.loginType || "Guest"} Account
             </p>
-
-
-            <!-- ========================= -->
-            <!-- PROFILE INFO -->
-            <!-- ========================= -->
 
             <div class="profile-info">
 
@@ -93,13 +64,8 @@ function openProfile(){
 
                     <span>Username</span>
 
-                    <strong id="profile-username-info">
-
-                        ${
-                            session?.username ||
-                            "Guest"
-                        }
-
+                    <strong>
+                        ${session.username || "Guest"}
                     </strong>
 
                 </div>
@@ -110,12 +76,7 @@ function openProfile(){
                     <span>Account Type</span>
 
                     <strong>
-
-                        ${
-                            session?.loginType ||
-                            "Guest"
-                        }
-
+                        ${session.loginType || "Guest"}
                     </strong>
 
                 </div>
@@ -126,9 +87,29 @@ function openProfile(){
                     <span>Status</span>
 
                     <strong>
-
                         🟢 Online
+                    </strong>
 
+                </div>
+
+
+                <div>
+
+                    <span>Manaton Games Role</span>
+
+                    <strong id="roblox-role">
+                        🔄 Loading...
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>Roblox Rank</span>
+
+                    <strong id="roblox-rank">
+                        🔄 Loading...
                     </strong>
 
                 </div>
@@ -139,67 +120,8 @@ function openProfile(){
                     <span>Website</span>
 
                     <strong>
-
                         v1.0.2
-
                     </strong>
-
-                </div>
-
-            </div>
-
-
-            <!-- ========================= -->
-            <!-- ROBLOX -->
-            <!-- ========================= -->
-
-            <div
-                class="profile-roblox"
-                id="profile-roblox"
-            >
-
-                <div class="roblox-header">
-
-                    <h3>
-
-                        🎮 Roblox
-
-                    </h3>
-
-                </div>
-
-
-                <div
-                    id="roblox-profile-content"
-                    class="roblox-profile-content"
-                >
-
-                    ${
-                        session?.robloxUserId
-
-                        ?
-
-                        `
-                        <p>
-                            🔄 Loading Roblox profile...
-                        </p>
-                        `
-
-                        :
-
-                        `
-                        <p>
-                            Roblox account not connected.
-                        </p>
-
-                        <button
-                            id="connect-roblox-btn"
-                            class="connect-roblox-btn"
-                        >
-                            🔗 Connect Roblox Account
-                        </button>
-                        `
-                    }
 
                 </div>
 
@@ -209,14 +131,11 @@ function openProfile(){
 
     `;
 
-
-    document.body.appendChild(
-        modal
-    );
+    document.body.appendChild(modal);
 
 
     // ==========================================
-    // CLOSE
+    // CLOSE BUTTON
     // ==========================================
 
     document
@@ -229,201 +148,49 @@ function openProfile(){
 
 
     // ==========================================
-    // CONNECT ROBLOX
+    // CHECK ROBLOX ACCOUNT
     // ==========================================
 
-    const connectButton =
-        document.getElementById(
-            "connect-roblox-btn"
-        );
+    const roleElement =
+        document.getElementById("roblox-role");
 
-    if(connectButton){
-
-        connectButton.onclick =
-            connectRobloxAccount;
-
-    }
+    const rankElement =
+        document.getElementById("roblox-rank");
 
 
-    // ==========================================
-    // LOAD ROBLOX PROFILE
-    // ==========================================
+    // Guest = no Roblox account
 
-    if(session?.robloxUserId){
+    if(
+        !session.robloxUserId
+    ){
 
-        loadRobloxProfile(
-            session.robloxUserId
-        );
+        roleElement.textContent =
+            "Not linked";
 
-    }
-
-}
-
-
-// ==========================================
-// CONNECT ROBLOX ACCOUNT
-// ==========================================
-
-async function connectRobloxAccount(){
-
-    const username =
-        prompt(
-            "Enter your Roblox username:"
-        );
-
-    if(!username){
+        rankElement.textContent =
+            "—";
 
         return;
 
     }
 
 
-    const button =
-        document.getElementById(
-            "connect-roblox-btn"
-        );
-
-    if(button){
-
-        button.disabled = true;
-
-        button.textContent =
-            "🔄 Connecting...";
-
-    }
-
-
-    try{
-
-        // ==========================================
-        // FIND ROBLOX USER
-        // ==========================================
-
-        const response =
-            await fetch(
-    "/api/roblox?username=" +
-    encodeURIComponent(username)
-)
-
-
-        if(!response.ok){
-
-            throw new Error(
-                "Roblox user not found."
-            );
-
-        }
-
-
-        const data =
-            await response.json();
-
-
-        if(!data.success){
-
-            throw new Error(
-                data.error ||
-                "Unable to find Roblox user."
-            );
-
-        }
-
-
-        // ==========================================
-        // SAVE ROBLOX DATA
-        // ==========================================
-
-        updateSession({
-
-            robloxUserId:
-                data.user.id,
-
-            robloxUsername:
-                data.user.username,
-
-            robloxDisplayName:
-                data.user.displayName
-
-        });
-
-
-        // ==========================================
-        // LOAD PROFILE
-        // ==========================================
-
-        loadRobloxProfile(
-            data.user.id
-        );
-
-
-    }
-
-    catch(error){
-
-        console.error(
-            "Roblox connection error:",
-            error
-        );
-
-        alert(
-            "❌ Could not connect this Roblox account."
-        );
-
-
-        if(button){
-
-            button.disabled = false;
-
-            button.textContent =
-                "🔗 Connect Roblox Account";
-
-        }
-
-    }
-
-}
-
-
-// ==========================================
-// LOAD ROBLOX PROFILE
-// ==========================================
-
-async function loadRobloxProfile(userId){
-
-    const content =
-        document.getElementById(
-            "roblox-profile-content"
-        );
-
-    if(!content){
-
-        return;
-
-    }
-
-
-    content.innerHTML = `
-
-        <p>
-            🔄 Loading Roblox information...
-        </p>
-
-    `;
-
+    // ==========================================
+    // GET ROBLOX PROFILE
+    // ==========================================
 
     try{
 
         const response =
             await fetch(
-                "/api/roblox?userId=" +
-                encodeURIComponent(userId)
+                `/api/roblox?userId=${session.robloxUserId}`
             );
 
 
         if(!response.ok){
 
             throw new Error(
-                "Roblox API error"
+                "Roblox API request failed"
             );
 
         }
@@ -439,183 +206,39 @@ async function loadRobloxProfile(userId){
         ){
 
             throw new Error(
-                data.error ||
-                "Roblox user unavailable."
+                "Invalid Roblox profile"
             );
 
         }
 
 
-        const user =
-            data.user;
-
-
         // ==========================================
-        // UPDATE SESSION WITH ROLE
+        // DISPLAY ROLE
         // ==========================================
 
-        updateSession({
-
-            robloxUserId:
-                user.id,
-
-            robloxUsername:
-                user.username,
-
-            robloxDisplayName:
-                user.displayName,
-
-            groupRole:
-                user.groupRole,
-
-            groupRank:
-                user.groupRank
-
-        });
+        roleElement.textContent =
+            data.user.groupRole || "Not in group";
 
 
-        // ==========================================
-        // GROUP STATUS
-        // ==========================================
+        rankElement.textContent =
+            data.user.groupRank || "0";
 
-        const isMember =
-            user.groupRole !==
-            "Not in group";
-
-
-        // ==========================================
-        // DISPLAY
-        // ==========================================
-
-        content.innerHTML = `
-
-            <div class="roblox-user">
-
-                <div class="roblox-user-name">
-
-                    <strong>
-
-                        ${escapeHTML(
-                            user.displayName
-                        )}
-
-                    </strong>
-
-                    <span>
-
-                        @${escapeHTML(
-                            user.username
-                        )}
-
-                    </span>
-
-                </div>
-
-
-                <div class="roblox-info">
-
-                    <div>
-
-                        <span>Manaton Games Role</span>
-
-                        <strong>
-
-                            ${
-                                isMember
-                                ? "🛡️ " +
-                                    escapeHTML(
-                                        user.groupRole
-                                    )
-                                : "⚪ Not in group"
-                            }
-
-                        </strong>
-
-                    </div>
-
-
-                    <div>
-
-                        <span>Group Rank</span>
-
-                        <strong>
-
-                            ${
-                                isMember
-                                ? user.groupRank
-                                : "—"
-                            }
-
-                        </strong>
-
-                    </div>
-
-
-                    <div>
-
-                        <span>Group Status</span>
-
-                        <strong>
-
-                            ${
-                                isMember
-                                ? "🟢 Member"
-                                : "⚪ Not a member"
-                            }
-
-                        </strong>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        `;
 
     }
 
     catch(error){
 
         console.error(
-            "Roblox profile error:",
+            "❌ Failed to load Roblox role:",
             error
         );
 
+        roleElement.textContent =
+            "Unavailable";
 
-        content.innerHTML = `
-
-            <p>
-
-                ❌ Unable to load Roblox profile.
-
-            </p>
-
-        `;
+        rankElement.textContent =
+            "Unavailable";
 
     }
-
-}
-
-
-// ==========================================
-// HTML ESCAPE
-// ==========================================
-
-function escapeHTML(value){
-
-    if(value === null ||
-       value === undefined){
-
-        return "";
-
-    }
-
-    return String(value)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
 
 }
