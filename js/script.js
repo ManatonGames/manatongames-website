@@ -1846,6 +1846,12 @@ const genre =
     );
 
 
+    const closeButton =
+    modal.querySelector(
+        ".close-game-modal"
+    );
+
+
     // ==========================================
 // GAME THUMBNAIL
 // ==========================================
@@ -2122,9 +2128,21 @@ modal.classList.add(
     "active"
 );
 
-
 document.body.style.overflow =
     "hidden";
+
+
+// ==========================================
+// ACCESSIBILITY - FOCUS
+// ==========================================
+
+if(closeButton){
+
+    setTimeout(() => {
+
+        closeButton.focus();
+
+    }, 50);
 
 }
 
