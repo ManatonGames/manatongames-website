@@ -301,9 +301,9 @@ async function connectRobloxAccount(){
 
         const response =
             await fetch(
-                "/api/roblox-user?username=" +
-                encodeURIComponent(username)
-            );
+    "/api/roblox?username=" +
+    encodeURIComponent(username)
+)
 
 
         if(!response.ok){
