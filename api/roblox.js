@@ -281,6 +281,103 @@ async function getGameData(game){
 
 }
 
+// ==========================================
+// GET ROBLOX USER + MANATON GAMES ROLE
+// ==========================================
+
+async function getRobloxUserProfile(userId){
+
+    try{
+
+        // ==========================
+        // USER INFORMATION
+        // ==========================
+
+        const userResponse =
+            await fetch(
+                `https://users.roblox.com/v1/users/${userId}`
+            );
+
+        if(!userResponse.ok){
+
+            return null;
+
+        }
+
+        const userData =
+            await userResponse.json();
+
+
+        // ==========================
+        // GROUP ROLES
+        // ==========================
+
+        const groupsResponse =
+            await fetch(
+                `https://groups.roblox.com/v2/users/${userId}/groups/roles`
+            );
+
+        if(!groupsResponse.ok){
+
+            return null;
+
+        }
+
+        const groupsData =
+            await groupsResponse.json();
+
+
+        // ==========================
+        // FIND MANATON GAMES
+        // ==========================
+
+        const group =
+            (groupsData.data || []).find(
+                item =>
+                    Number(item.group?.id) ===
+                    Number(GROUP_ID)
+            );
+
+
+        // ==========================
+        // RETURN DATA
+        // ==========================
+
+        return {
+
+            id:
+                userData.id,
+
+            username:
+                userData.name,
+
+            displayName:
+                userData.displayName,
+
+            groupRole:
+                group?.role?.name ||
+                "Not in group",
+
+            groupRank:
+                group?.role?.rank ||
+                0
+
+        };
+
+    }
+
+    catch(error){
+
+        console.error(
+            "Roblox user profile error:",
+            error
+        );
+
+        return null;
+
+    }
+
+}
 
 // ==========================================
 // HANDLER
@@ -297,6 +394,65 @@ export default async function handler(req, res){
         "Cache-Control",
         "s-maxage=60, stale-while-revalidate=120"
     );
+
+
+    // ==========================================
+    // ROBLOX USER PROFILE
+    // ==========================================
+
+    if(req.query.userId){
+
+        const userId =
+            Number(req.query.userId);
+
+
+        if(
+            !Number.isInteger(userId) ||
+            userId <= 0
+        ){
+
+            return res.status(400).json({
+
+                success:false,
+
+                error:
+                    "Invalid Roblox User ID."
+
+            });
+
+        }
+
+
+        const user =
+            await getRobloxUserProfile(
+                userId
+            );
+
+
+        if(!user){
+
+            return res.status(404).json({
+
+                success:false,
+
+                error:
+                    "Roblox user could not be found."
+
+            });
+
+        }
+
+
+        return res.status(200).json({
+
+            success:true,
+
+            user
+
+        });
+
+    }
+
 
     try{
 
