@@ -7,24 +7,24 @@ document.addEventListener("DOMContentLoaded", () => {
     const loginButton =
         document.getElementById("login-btn");
 
-
     if(!loginButton) return;
-
 
     const session =
         getSession();
 
-
     if(!session) return;
 
+    loginButton.innerHTML = `
+        <span class="user-panel-icon">👤</span>
+        <span class="user-panel-name">
+            ${session.username || "Guest"}
+        </span>
+        <span class="user-panel-arrow">▼</span>
+    `;
 
-    // ==========================================
-    // LOGIN BUTTON
-    // ==========================================
-
-    loginButton.innerHTML =
-        `👤 ${session.username} ▼`;
-
+    loginButton.classList.add(
+        "mg-user-panel-button"
+    );
 
     loginButton.addEventListener(
         "click",
@@ -43,11 +43,6 @@ function toggleUserMenu(){
     let menu =
         document.getElementById("user-menu");
 
-
-    // ==========================================
-    // CLOSE
-    // ==========================================
-
     if(menu){
 
         menu.remove();
@@ -62,20 +57,11 @@ function toggleUserMenu(){
     }
 
 
-    // ==========================================
-    // SESSION
-    // ==========================================
-
     const session =
         getSession();
 
-
     if(!session) return;
 
-
-    // ==========================================
-    // USER DATA
-    // ==========================================
 
     const username =
         session.username || "Guest";
@@ -84,51 +70,38 @@ function toggleUserMenu(){
         session.avatar ||
         "assets/logo/logo.png";
 
-    const loginType =
-        session.loginType ||
-        "Guest";
-
-    const robloxUsername =
-        session.robloxUsername ||
-        null;
-
-    const robloxRole =
-        session.robloxRole ||
-        null;
-
 
     // ==========================================
-    // ROLE DISPLAY
+    // ROBLOX INFORMATION
     // ==========================================
 
-    let robloxRoleHTML = "";
+    let robloxHTML = "";
 
-    if(robloxUsername){
 
-        robloxRoleHTML = `
+    if(session.robloxUserId){
 
-            <div class="user-roblox-role">
+        robloxHTML = `
 
-                🎮 ${robloxUsername}
+            <div class="user-roblox-info">
 
-                ${
-                    robloxRole
-                    ? `<span>${robloxRole}</span>`
-                    : ""
-                }
+                <div class="user-roblox-icon">
+                    🎮
+                </div>
 
-            </div>
+                <div class="user-roblox-data">
 
-        `;
+                    <strong>
+                        ${session.robloxUsername || "Roblox Account"}
+                    </strong>
 
-    }
-    else{
+                    <span>
+                        ${
+                            session.robloxRole ||
+                            "Roblox account linked"
+                        }
+                    </span>
 
-        robloxRoleHTML = `
-
-            <div class="user-roblox-role">
-
-                🔗 Roblox not linked
+                </div>
 
             </div>
 
@@ -158,58 +131,102 @@ function toggleUserMenu(){
                 alt="User Avatar"
             >
 
-            <div>
+            <div class="user-header-info">
 
                 <strong>
                     ${username}
                 </strong>
 
-                <p>
-                    Logged in as ${loginType}
-                </p>
+                <span>
+                    ${
+                        session.loginType === "guest"
+                        ? "Guest Account"
+                        : `${session.loginType || "Account"}`
+                    }
+                </span>
 
             </div>
 
         </div>
 
 
-        ${robloxRoleHTML}
+        ${
+            robloxHTML
+        }
 
 
-        <hr>
+        <div class="user-menu-divider"></div>
 
 
-        <button id="profile-btn">
+        <button
+            id="profile-btn"
+            class="user-menu-item"
+        >
 
-            👤 My Profile
+            <span>👤</span>
 
-        </button>
-
-
-        <button id="favorites-btn">
-
-            ⭐ Favorites
-
-        </button>
-
-
-        <button id="settings-btn">
-
-            ⚙️ Settings
+            <span>
+                My Profile
+            </span>
 
         </button>
 
 
-        <button id="updates-btn">
+        <button
+            id="favorites-btn"
+            class="user-menu-item"
+        >
 
-            📢 Updates
+            <span>⭐</span>
+
+            <span>
+                Favorites
+            </span>
 
         </button>
 
 
-        <button id="logout-btn">
+        <button
+            id="settings-btn"
+            class="user-menu-item"
+        >
 
-            🚪 Logout
+            <span>⚙️</span>
+
+            <span>
+                Settings
+            </span>
+
+        </button>
+
+
+        <button
+            id="updates-btn"
+            class="user-menu-item"
+        >
+
+            <span>📢</span>
+
+            <span>
+                Updates
+            </span>
+
+        </button>
+
+
+        <div class="user-menu-divider"></div>
+
+
+        <button
+            id="logout-btn"
+            class="user-menu-item logout-item"
+        >
+
+            <span>🚪</span>
+
+            <span>
+                Logout
+            </span>
 
         </button>
 
@@ -220,23 +237,25 @@ function toggleUserMenu(){
 
 
     // ==========================================
-    // POSITION
+    // POSITION MENU
     // ==========================================
 
     const loginButton =
         document.getElementById("login-btn");
-
 
     const rect =
         loginButton.getBoundingClientRect();
 
 
     menu.style.top =
-        rect.bottom + 10 + "px";
+        `${rect.bottom + 10}px`;
 
 
     menu.style.left =
-        rect.right - 220 + "px";
+        `${Math.max(
+            10,
+            rect.right - 250
+        )}px`;
 
 
     // ==========================================
@@ -280,7 +299,6 @@ function closeUserMenu(event){
     const button =
         document.getElementById("login-btn");
 
-
     if(!menu) return;
 
 
@@ -295,7 +313,6 @@ function closeUserMenu(event){
 
 
     menu.remove();
-
 
     document.removeEventListener(
         "click",
