@@ -1,35 +1,52 @@
+// ==========================================
+// MANATON GAMES - ROBLOX API
+// ==========================================
+
+
+// ==========================================
+// GAMES
+// ==========================================
+
 const GAMES = [
+
     {
         id: 119931726939482,
         name: "Roblox Universe",
         status: "In Development"
     },
+
     {
         id: 90485309557694,
         name: "PLS DONATE 3",
         status: "In Development"
     },
+
     {
         id: 85429358558858,
         name: "PLS DONATE 2",
         status: "Released"
     },
+
     {
         id: 96375607261155,
         name: "PLS DONATE 1",
         status: "In Development"
     },
+
     {
         id: 89252171510608,
         name: "MG | Ranks Shopping Center",
         status: "Released"
     },
+
     {
         id: 91290129805346,
         name: "+1 Speed Escape",
         status: "In Development"
     }
+
 ];
+
 
 const GROUP_ID = 15973191;
 
@@ -49,7 +66,8 @@ function formatNumber(number) {
 
     }
 
-    return Number(number).toLocaleString("en-US");
+    return Number(number)
+        .toLocaleString("en-US");
 
 }
 
@@ -62,9 +80,11 @@ async function getUniverseId(placeId) {
 
     try {
 
-        const response = await fetch(
-            `https://apis.roblox.com/universes/v1/places/${placeId}/universe`
-        );
+        const response =
+            await fetch(
+                `https://apis.roblox.com/universes/v1/places/${placeId}/universe`
+            );
+
 
         if (!response.ok) {
 
@@ -77,8 +97,10 @@ async function getUniverseId(placeId) {
 
         }
 
+
         const data =
             await response.json();
+
 
         return data.universeId || null;
 
@@ -106,9 +128,11 @@ async function getGameThumbnail(placeId) {
 
     try {
 
-        const response = await fetch(
-            `https://thumbnails.roblox.com/v1/places/gameicons?placeIds=${placeId}&size=512x512&format=Png&isCircular=false`
-        );
+        const response =
+            await fetch(
+                `https://thumbnails.roblox.com/v1/places/gameicons?placeIds=${placeId}&size=512x512&format=Png&isCircular=false`
+            );
+
 
         if (!response.ok) {
 
@@ -121,10 +145,15 @@ async function getGameThumbnail(placeId) {
 
         }
 
+
         const data =
             await response.json();
 
-        return data.data?.[0]?.imageUrl || null;
+
+        return (
+            data.data?.[0]?.imageUrl ||
+            null
+        );
 
     }
 
@@ -153,9 +182,14 @@ async function getGameData(game) {
         const universeId =
             await getUniverseId(game.id);
 
+
         const thumbnail =
             await getGameThumbnail(game.id);
 
+
+        // ==========================================
+        // UNIVERSE NOT FOUND
+        // ==========================================
 
         if (!universeId) {
 
@@ -165,20 +199,24 @@ async function getGameData(game) {
 
                 universeId: null,
 
-                thumbnail,
-
                 players: "Coming Soon",
 
                 visits: "Coming Soon",
 
                 favorites: "Coming Soon",
 
-                maxPlayers: 0
+                maxPlayers: 0,
+
+                thumbnail
 
             };
 
         }
 
+
+        // ==========================================
+        // GAME INFORMATION
+        // ==========================================
 
         const response =
             await fetch(
@@ -192,6 +230,7 @@ async function getGameData(game) {
                 `Game API error for ${game.name}:`,
                 response.status
             );
+
 
             return {
 
@@ -245,6 +284,10 @@ async function getGameData(game) {
         }
 
 
+        // ==========================================
+        // RETURN GAME
+        // ==========================================
+
         return {
 
             ...game,
@@ -288,13 +331,12 @@ async function getGameData(game) {
             error
         );
 
+
         return {
 
             ...game,
 
             universeId: null,
-
-            thumbnail: null,
 
             players: "Unavailable",
 
@@ -384,7 +426,7 @@ async function getRobloxUserByUsername(username) {
                 user.name,
 
             displayName:
-                user.displayName
+                user.displayName || user.name
 
         };
 
@@ -393,7 +435,7 @@ async function getRobloxUserByUsername(username) {
     catch (error) {
 
         console.error(
-            "Roblox username lookup error:",
+            "Roblox username lookup failed:",
             error
         );
 
@@ -405,7 +447,7 @@ async function getRobloxUserByUsername(username) {
 
 
 // ==========================================
-// GET ROBLOX USER + MANATON GAMES ROLE
+// GET ROBLOX USER PROFILE
 // ==========================================
 
 async function getRobloxUserProfile(userId) {
@@ -477,7 +519,7 @@ async function getRobloxUserProfile(userId) {
 
 
         // ==========================================
-        // RETURN DATA
+        // RETURN USER
         // ==========================================
 
         return {
@@ -601,7 +643,7 @@ export default async function handler(req, res) {
 
 
     // ==========================================
-    // ROBLOX USER PROFILE
+    // ROBLOX USER BY ID
     // ==========================================
 
     if (req.query.userId) {
@@ -661,7 +703,7 @@ export default async function handler(req, res) {
 
 
     // ==========================================
-    // MAIN API
+    // DEFAULT API
     // ==========================================
 
     try {
@@ -688,7 +730,8 @@ export default async function handler(req, res) {
 
 
                 members =
-                    groupData.memberCount || 0;
+                    groupData.memberCount ||
+                    0;
 
             }
 
@@ -725,17 +768,20 @@ export default async function handler(req, res) {
             games.reduce(
                 (total, game) => {
 
-                    return total +
+                    return (
+                        total +
                         (
                             Number(
                                 String(
                                     game.visits
-                                ).replace(
+                                )
+                                .replace(
                                     /,/g,
                                     ""
                                 )
                             ) || 0
-                        );
+                        )
+                    );
 
                 },
                 0
@@ -750,17 +796,20 @@ export default async function handler(req, res) {
             games.reduce(
                 (total, game) => {
 
-                    return total +
+                    return (
+                        total +
                         (
                             Number(
                                 String(
                                     game.favorites
-                                ).replace(
+                                )
+                                .replace(
                                     /,/g,
                                     ""
                                 )
                             ) || 0
-                        );
+                        )
+                    );
 
                 },
                 0
@@ -775,17 +824,20 @@ export default async function handler(req, res) {
             games.reduce(
                 (total, game) => {
 
-                    return total +
+                    return (
+                        total +
                         (
                             Number(
                                 String(
                                     game.players
-                                ).replace(
+                                )
+                                .replace(
                                     /,/g,
                                     ""
                                 )
                             ) || 0
-                        );
+                        )
+                    );
 
                 },
                 0
@@ -804,7 +856,7 @@ export default async function handler(req, res) {
                 "Manaton Games",
 
             version:
-                "2.3.0",
+                "2.4.0",
 
             group: {
 
