@@ -2,38 +2,55 @@
 // MANATON GAMES - ROBLOX API
 // ==========================================
 
+
+// ==========================================
+// GAMES
+// ==========================================
+
 const GAMES = [
+
     {
         id: 119931726939482,
         name: "Roblox Universe",
         status: "In Development"
     },
+
     {
         id: 90485309557694,
         name: "PLS DONATE 3",
         status: "In Development"
     },
+
     {
         id: 85429358558858,
         name: "PLS DONATE 2",
         status: "Released"
     },
+
     {
         id: 96375607261155,
         name: "PLS DONATE 1",
         status: "In Development"
     },
+
     {
         id: 89252171510608,
         name: "MG | Ranks Shopping Center",
         status: "Released"
     },
+
     {
         id: 91290129805346,
         name: "+1 Speed Escape",
         status: "In Development"
     }
+
 ];
+
+
+// ==========================================
+// MANATON GAMES GROUP
+// ==========================================
 
 const GROUP_ID = 15973191;
 
@@ -48,10 +65,13 @@ function formatNumber(number) {
         number === null ||
         number === undefined
     ) {
+
         return "0";
+
     }
 
     return Number(number).toLocaleString("en-US");
+
 }
 
 
@@ -63,9 +83,11 @@ async function getUniverseId(placeId) {
 
     try {
 
-        const response = await fetch(
-            `https://apis.roblox.com/universes/v1/places/${placeId}/universe`
-        );
+        const response =
+            await fetch(
+                `https://apis.roblox.com/universes/v1/places/${placeId}/universe`
+            );
+
 
         if (!response.ok) {
 
@@ -75,13 +97,19 @@ async function getUniverseId(placeId) {
             );
 
             return null;
+
         }
 
-        const data = await response.json();
+
+        const data =
+            await response.json();
+
 
         return data.universeId || null;
 
-    } catch (error) {
+    }
+
+    catch (error) {
 
         console.error(
             `Universe lookup failed for ${placeId}:`,
@@ -89,7 +117,9 @@ async function getUniverseId(placeId) {
         );
 
         return null;
+
     }
+
 }
 
 
@@ -101,20 +131,36 @@ async function getGameThumbnail(placeId) {
 
     try {
 
-        const response = await fetch(
-            `https://thumbnails.roblox.com/v1/places/gameicons?placeIds=${placeId}&size=512x512&format=Png&isCircular=false`
-        );
+        const response =
+            await fetch(
+                `https://thumbnails.roblox.com/v1/places/gameicons?placeIds=${placeId}&size=512x512&format=Png&isCircular=false`
+            );
+
 
         if (!response.ok) {
 
+            console.error(
+                `Thumbnail API error for ${placeId}:`,
+                response.status
+            );
+
             return null;
+
         }
 
-        const data = await response.json();
 
-        return data.data?.[0]?.imageUrl || null;
+        const data =
+            await response.json();
 
-    } catch (error) {
+
+        return (
+            data.data?.[0]?.imageUrl ||
+            null
+        );
+
+    }
+
+    catch (error) {
 
         console.error(
             `Thumbnail lookup failed for ${placeId}:`,
@@ -122,7 +168,9 @@ async function getGameThumbnail(placeId) {
         );
 
         return null;
+
     }
+
 }
 
 
@@ -137,8 +185,10 @@ async function getGameData(game) {
         const universeId =
             await getUniverseId(game.id);
 
+
         const thumbnail =
             await getGameThumbnail(game.id);
+
 
         if (!universeId) {
 
@@ -157,15 +207,24 @@ async function getGameData(game) {
                 favorites: "Coming Soon",
 
                 maxPlayers: 0
+
             };
+
         }
 
 
-        const response = await fetch(
-            `https://games.roblox.com/v1/games?universeIds=${universeId}`
-        );
+        const response =
+            await fetch(
+                `https://games.roblox.com/v1/games?universeIds=${universeId}`
+            );
+
 
         if (!response.ok) {
+
+            console.error(
+                `Game API error for ${game.name}:`,
+                response.status
+            );
 
             return {
 
@@ -182,12 +241,15 @@ async function getGameData(game) {
                 favorites: "Unavailable",
 
                 maxPlayers: 0
+
             };
+
         }
 
 
         const data =
             await response.json();
+
 
         const robloxGame =
             data.data?.[0];
@@ -210,7 +272,9 @@ async function getGameData(game) {
                 favorites: "Unavailable",
 
                 maxPlayers: 0
+
             };
+
         }
 
 
@@ -245,22 +309,24 @@ async function getGameData(game) {
             genre:
                 robloxGame.genre ||
                 "Unknown"
+
         };
 
-    } catch (error) {
+    }
+
+    catch (error) {
 
         console.error(
             `Failed to load ${game.name}:`,
             error
         );
 
+
         return {
 
             ...game,
 
             universeId: null,
-
-            thumbnail: null,
 
             players: "Unavailable",
 
@@ -269,141 +335,133 @@ async function getGameData(game) {
             favorites: "Unavailable",
 
             maxPlayers: 0
+
         };
+
     }
+
 }
 
 
 // ==========================================
-// GET ROBLOX USER BY ID
+// GET ROBLOX USER PROFILE
 // ==========================================
 
-async function getRobloxUserById(userId) {
+async function getRobloxUserProfile(userId) {
 
     try {
 
-        const response = await fetch(
-            `https://users.roblox.com/v1/users/${userId}`
-        );
+        // ======================================
+        // USER INFORMATION
+        // ======================================
 
-        if (!response.ok) {
-
-            return null;
-        }
-
-        return await response.json();
-
-    } catch (error) {
-
-        console.error(
-            "Roblox user ID lookup error:",
-            error
-        );
-
-        return null;
-    }
-}
+        const userResponse =
+            await fetch(
+                `https://users.roblox.com/v1/users/${userId}`
+            );
 
 
-// ==========================================
-// GET ROBLOX USER BY USERNAME
-// ==========================================
-
-async function getRobloxUserByUsername(username) {
-
-    try {
-
-        const response = await fetch(
-            "https://users.roblox.com/v1/usernames/users",
-            {
-
-                method: "POST",
-
-                headers: {
-
-                    "Content-Type":
-                        "application/json"
-                },
-
-                body: JSON.stringify({
-
-                    usernames: [
-                        username
-                    ],
-
-                    excludeBannedUsers: false
-                })
-            }
-        );
-
-
-        if (!response.ok) {
+        if (!userResponse.ok) {
 
             console.error(
-                "Roblox username API error:",
-                response.status
+                "Roblox user API error:",
+                userResponse.status
             );
 
             return null;
+
         }
 
 
-        const data =
-            await response.json();
+        const userData =
+            await userResponse.json();
 
 
-        return data.data?.[0] || null;
+        // ======================================
+        // GROUP ROLES
+        // ======================================
 
-    } catch (error) {
-
-        console.error(
-            "Roblox username lookup error:",
-            error
-        );
-
-        return null;
-    }
-}
-
-
-// ==========================================
-// GET ROBLOX GROUP ROLE
-// ==========================================
-
-async function getRobloxGroupRole(userId) {
-
-    try {
-
-        const response = await fetch(
-            `https://groups.roblox.com/v2/users/${userId}/groups/roles`
-        );
-
-
-        if (!response.ok) {
-
-            return {
-
-                groupRole:
-                    "Not in group",
-
-                groupRank: 0
-            };
-        }
-
-
-        const data =
-            await response.json();
-
-
-        const group =
-            (data.data || []).find(
-                item =>
-                    Number(item.group?.id) ===
-                    Number(GROUP_ID)
+        const groupsResponse =
+            await fetch(
+                `https://groups.roblox.com/v2/users/${userId}/groups/roles`
             );
 
 
+        let group = null;
+
+
+        if (groupsResponse.ok) {
+
+            const groupsData =
+                await groupsResponse.json();
+
+
+            group =
+                (groupsData.data || []).find(
+                    item =>
+                        Number(
+                            item.group?.id
+                        ) === Number(GROUP_ID)
+                );
+
+        }
+
+
+        // ======================================
+        // ROBLOX AVATAR
+        // ======================================
+
+        let avatar = null;
+
+
+        try {
+
+            const avatarResponse =
+                await fetch(
+                    `https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=${userId}&size=420x420&format=Png&isCircular=false`
+                );
+
+
+            if (avatarResponse.ok) {
+
+                const avatarData =
+                    await avatarResponse.json();
+
+
+                avatar =
+                    avatarData.data?.[0]?.imageUrl ||
+                    null;
+
+            }
+
+        }
+
+        catch (avatarError) {
+
+            console.error(
+                "Roblox avatar error:",
+                avatarError
+            );
+
+        }
+
+
+        // ======================================
+        // RETURN USER
+        // ======================================
+
         return {
+
+            id:
+                userData.id,
+
+            username:
+                userData.name,
+
+            displayName:
+                userData.displayName,
+
+            avatar,
 
             groupRole:
                 group?.role?.name ||
@@ -412,65 +470,22 @@ async function getRobloxGroupRole(userId) {
             groupRank:
                 group?.role?.rank ||
                 0
+
         };
 
-    } catch (error) {
+    }
+
+    catch (error) {
 
         console.error(
-            "Roblox group role error:",
+            "Roblox user profile error:",
             error
         );
 
-        return {
-
-            groupRole:
-                "Unavailable",
-
-            groupRank: 0
-        };
-    }
-}
-
-
-// ==========================================
-// COMPLETE ROBLOX USER PROFILE
-// ==========================================
-
-async function getRobloxUserProfile(userId) {
-
-    const user =
-        await getRobloxUserById(userId);
-
-
-    if (!user) {
-
         return null;
+
     }
 
-
-    const role =
-        await getRobloxGroupRole(
-            user.id
-        );
-
-
-    return {
-
-        id:
-            user.id,
-
-        username:
-            user.name,
-
-        displayName:
-            user.displayName,
-
-        groupRole:
-            role.groupRole,
-
-        groupRank:
-            role.groupRank
-    };
 }
 
 
@@ -489,30 +504,6 @@ export default async function handler(req, res) {
         "*"
     );
 
-    res.setHeader(
-        "Access-Control-Allow-Methods",
-        "GET, OPTIONS"
-    );
-
-    res.setHeader(
-        "Access-Control-Allow-Headers",
-        "Content-Type"
-    );
-
-
-    // ==========================================
-    // OPTIONS
-    // ==========================================
-
-    if (req.method === "OPTIONS") {
-
-        return res.status(200).end();
-    }
-
-
-    // ==========================================
-    // CACHE
-    // ==========================================
 
     res.setHeader(
         "Cache-Control",
@@ -521,84 +512,13 @@ export default async function handler(req, res) {
 
 
     // ==========================================
-    // USERNAME SEARCH
-    // ==========================================
-
-    if (req.query.username) {
-
-        const username =
-            String(
-                req.query.username
-            ).trim();
-
-
-        if (!username) {
-
-            return res.status(400).json({
-
-                success: false,
-
-                error:
-                    "Username is required."
-            });
-        }
-
-
-        const user =
-            await getRobloxUserByUsername(
-                username
-            );
-
-
-        if (!user) {
-
-            return res.status(404).json({
-
-                success: false,
-
-                error:
-                    "Roblox user could not be found."
-            });
-        }
-
-
-        const profile =
-            await getRobloxUserProfile(
-                user.id
-            );
-
-
-        if (!profile) {
-
-            return res.status(404).json({
-
-                success: false,
-
-                error:
-                    "Roblox profile could not be loaded."
-            });
-        }
-
-
-        return res.status(200).json({
-
-            success: true,
-
-            user: profile
-        });
-    }
-
-
-    // ==========================================
-    // USER ID SEARCH
+    // USER PROFILE REQUEST
     // ==========================================
 
     if (req.query.userId) {
 
         const userId =
-            Number(
-                req.query.userId
-            );
+            Number(req.query.userId);
 
 
         if (
@@ -612,7 +532,9 @@ export default async function handler(req, res) {
 
                 error:
                     "Invalid Roblox User ID."
+
             });
+
         }
 
 
@@ -630,7 +552,9 @@ export default async function handler(req, res) {
 
                 error:
                     "Roblox user could not be found."
+
             });
+
         }
 
 
@@ -639,12 +563,14 @@ export default async function handler(req, res) {
             success: true,
 
             user
+
         });
+
     }
 
 
     // ==========================================
-    // NORMAL WEBSITE DATA
+    // MAIN API
     // ==========================================
 
     try {
@@ -671,15 +597,20 @@ export default async function handler(req, res) {
 
 
                 members =
-                    groupData.memberCount || 0;
+                    groupData.memberCount ||
+                    0;
+
             }
 
-        } catch (error) {
+        }
+
+        catch (error) {
 
             console.error(
                 "Group API error:",
                 error
             );
+
         }
 
 
@@ -704,7 +635,8 @@ export default async function handler(req, res) {
             games.reduce(
                 (total, game) => {
 
-                    return total +
+                    return (
+                        total +
                         (
                             Number(
                                 String(
@@ -714,7 +646,8 @@ export default async function handler(req, res) {
                                     ""
                                 )
                             ) || 0
-                        );
+                        )
+                    );
 
                 },
                 0
@@ -729,7 +662,8 @@ export default async function handler(req, res) {
             games.reduce(
                 (total, game) => {
 
-                    return total +
+                    return (
+                        total +
                         (
                             Number(
                                 String(
@@ -739,7 +673,8 @@ export default async function handler(req, res) {
                                     ""
                                 )
                             ) || 0
-                        );
+                        )
+                    );
 
                 },
                 0
@@ -754,7 +689,8 @@ export default async function handler(req, res) {
             games.reduce(
                 (total, game) => {
 
-                    return total +
+                    return (
+                        total +
                         (
                             Number(
                                 String(
@@ -764,7 +700,8 @@ export default async function handler(req, res) {
                                     ""
                                 )
                             ) || 0
-                        );
+                        )
+                    );
 
                 },
                 0
@@ -775,7 +712,7 @@ export default async function handler(req, res) {
         // RESPONSE
         // ======================================
 
-        return res.status(200).json({
+        const data = {
 
             success: true,
 
@@ -791,6 +728,7 @@ export default async function handler(req, res) {
                     GROUP_ID,
 
                 members
+
             },
 
             stats: {
@@ -803,13 +741,21 @@ export default async function handler(req, res) {
                 totalFavorites,
 
                 totalPlaying
+
             },
 
             games
-        });
+
+        };
 
 
-    } catch (error) {
+        return res.status(200).json(
+            data
+        );
+
+    }
+
+    catch (error) {
 
         console.error(
             "Roblox API Handler Error:",
@@ -823,6 +769,9 @@ export default async function handler(req, res) {
 
             error:
                 "Failed to fetch Roblox data."
+
         });
+
     }
+
 }
