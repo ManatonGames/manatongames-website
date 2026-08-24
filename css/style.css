@@ -4137,3 +4137,187 @@ footer{
     transform:translateY(-1px);
 
 }
+
+/* ==========================================
+   ROBLOX PROFILE SECTION
+========================================== */
+
+.roblox-profile-section {
+    width: 100%;
+    margin-top: 24px;
+    padding: 22px;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-sizing: border-box;
+    text-align: center;
+}
+
+
+/* ==========================================
+   TITLE
+========================================== */
+
+.roblox-profile-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    margin-bottom: 18px;
+
+    font-size: 17px;
+    font-weight: 700;
+}
+
+
+/* ==========================================
+   ACCOUNT STATUS
+========================================== */
+
+.roblox-account-status {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+/* ==========================================
+   LINKED USER
+========================================== */
+
+.roblox-linked-user {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    text-align: center;
+}
+
+
+/* ==========================================
+   ROBLOX AVATAR
+========================================== */
+
+.roblox-linked-avatar {
+    width: 96px;
+    height: 96px;
+
+    object-fit: cover;
+
+    border-radius: 50%;
+
+    display: block;
+
+    margin: 0 auto 14px;
+
+    border: 3px solid rgba(255, 255, 255, 0.12);
+
+    box-shadow:
+        0 8px 25px rgba(0, 0, 0, 0.35);
+
+    background: #111827;
+}
+
+
+/* ==========================================
+   USERNAME
+========================================== */
+
+.roblox-linked-user strong {
+    display: block;
+
+    font-size: 17px;
+    font-weight: 700;
+
+    line-height: 1.3;
+
+    margin-bottom: 5px;
+}
+
+
+/* ==========================================
+   USER ID
+========================================== */
+
+.roblox-linked-user span {
+    display: block;
+
+    font-size: 13px;
+
+    color: rgba(255, 255, 255, 0.55);
+
+    line-height: 1.4;
+}
+
+
+/* ==========================================
+   CHANGE / LINK BUTTON
+========================================== */
+
+.roblox-profile-section
+.profile-action-btn {
+    width: 100%;
+
+    margin-top: 20px;
+
+    min-height: 44px;
+
+    border: none;
+    border-radius: 12px;
+
+    cursor: pointer;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    transition:
+        transform 0.2s ease,
+        opacity 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+.roblox-profile-section
+.profile-action-btn:hover {
+    transform: translateY(-2px);
+}
+
+
+.roblox-profile-section
+.profile-action-btn:active {
+    transform: translateY(0);
+}
+
+
+/* ==========================================
+   MOBILE
+========================================== */
+
+@media (max-width: 600px) {
+
+    .roblox-profile-section {
+        padding: 18px;
+        margin-top: 20px;
+    }
+
+
+    .roblox-linked-avatar {
+        width: 84px;
+        height: 84px;
+    }
+
+
+    .roblox-linked-user strong {
+        font-size: 16px;
+    }
+
+
+    .roblox-linked-user span {
+        font-size: 12px;
+    }
+
+}
