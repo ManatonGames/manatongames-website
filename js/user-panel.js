@@ -24,7 +24,9 @@ document.addEventListener("DOMContentLoaded", () => {
     // ==========================================
 
     const username =
-        session.username || "Guest";
+    session.robloxUsername ||
+    session.username ||
+    "Guest";
 
     loginButton.innerHTML = `
         <span class="user-panel-icon">👤</span>
@@ -84,7 +86,9 @@ function toggleUserMenu() {
     // ==========================================
 
     const username =
-        session.username || "Guest";
+    session.robloxUsername ||
+    session.username ||
+    "Guest";
 
     const avatar =
         session.avatar ||
