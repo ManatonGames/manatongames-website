@@ -2,55 +2,38 @@
 // MANATON GAMES - ROBLOX API
 // ==========================================
 
-
-// ==========================================
-// GAMES
-// ==========================================
-
 const GAMES = [
-
     {
         id: 119931726939482,
         name: "Roblox Universe",
         status: "In Development"
     },
-
     {
         id: 90485309557694,
         name: "PLS DONATE 3",
         status: "In Development"
     },
-
     {
         id: 85429358558858,
         name: "PLS DONATE 2",
         status: "Released"
     },
-
     {
         id: 96375607261155,
         name: "PLS DONATE 1",
         status: "In Development"
     },
-
     {
         id: 89252171510608,
         name: "MG | Ranks Shopping Center",
         status: "Released"
     },
-
     {
         id: 91290129805346,
         name: "+1 Speed Escape",
         status: "In Development"
     }
-
 ];
-
-
-// ==========================================
-// MANATON GAMES GROUP
-// ==========================================
 
 const GROUP_ID = 15973191;
 
@@ -65,9 +48,7 @@ function formatNumber(number) {
         number === null ||
         number === undefined
     ) {
-
         return "0";
-
     }
 
     return Number(number).toLocaleString("en-US");
@@ -181,10 +162,6 @@ async function getGameData(game) {
             await getGameThumbnail(game.id);
 
 
-        // ==================================
-        // UNIVERSE NOT FOUND
-        // ==================================
-
         if (!universeId) {
 
             return {
@@ -208,13 +185,10 @@ async function getGameData(game) {
         }
 
 
-        // ==================================
-        // GET GAME INFORMATION
-        // ==================================
-
-        const response = await fetch(
-            `https://games.roblox.com/v1/games?universeIds=${universeId}`
-        );
+        const response =
+            await fetch(
+                `https://games.roblox.com/v1/games?universeIds=${universeId}`
+            );
 
 
         if (!response.ok) {
@@ -248,13 +222,10 @@ async function getGameData(game) {
         const data =
             await response.json();
 
+
         const robloxGame =
             data.data?.[0];
 
-
-        // ==================================
-        // GAME NOT FOUND
-        // ==================================
 
         if (!robloxGame) {
 
@@ -278,10 +249,6 @@ async function getGameData(game) {
 
         }
 
-
-        // ==================================
-        // RETURN GAME
-        // ==================================
 
         return {
 
@@ -357,15 +324,16 @@ async function getRobloxUserById(userId) {
 
     try {
 
-        const response = await fetch(
-            `https://users.roblox.com/v1/users/${userId}`
-        );
+        const response =
+            await fetch(
+                `https://users.roblox.com/v1/users/${userId}`
+            );
 
 
         if (!response.ok) {
 
             console.error(
-                "Roblox user API error:",
+                "Roblox user lookup error:",
                 response.status
             );
 
@@ -404,38 +372,36 @@ async function getRobloxUserByUsername(username) {
 
     try {
 
-        const response = await fetch(
-            "https://users.roblox.com/v1/usernames/users",
-            {
+        const response =
+            await fetch(
+                "https://users.roblox.com/v1/usernames/users",
+                {
 
-                method: "POST",
+                    method: "POST",
 
-                headers: {
+                    headers: {
 
-                    "Content-Type":
-                        "application/json"
+                        "Content-Type":
+                            "application/json"
 
-                },
+                    },
 
-                body: JSON.stringify({
+                    body: JSON.stringify({
 
-                    usernames: [
-                        username
-                    ],
+                        usernames: [username],
 
-                    excludeBannedUsers:
-                        false
+                        excludeBannedUsers: false
 
-                })
+                    })
 
-            }
-        );
+                }
+            );
 
 
         if (!response.ok) {
 
             console.error(
-                "Roblox username API error:",
+                "Roblox username lookup error:",
                 response.status
             );
 
@@ -478,92 +444,194 @@ async function getRobloxUserByUsername(username) {
 
 
 // ==========================================
-// GET ROBLOX USER PROFILE + MG ROLE
+// GET ROBLOX USER AVATAR
+// ==========================================
+
+async function getRobloxAvatar(userId) {
+
+    try {
+
+        const response =
+            await fetch(
+                `https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=${userId}&size=150x150&format=Png&isCircular=false`
+            );
+
+
+        if (!response.ok) {
+
+            return null;
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+        return (
+            data.data?.[0]?.imageUrl ||
+            null
+        );
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Roblox avatar lookup failed:",
+            error
+        );
+
+        return null;
+
+    }
+
+}
+
+
+// ==========================================
+// GET MANATON GAMES GROUP ROLE
+// ==========================================
+
+async function getManatonGamesRole(userId) {
+
+    try {
+
+        const response =
+            await fetch(
+                `https://groups.roblox.com/v2/users/${userId}/groups/roles`
+            );
+
+
+        if (!response.ok) {
+
+            console.error(
+                "Roblox group roles error:",
+                response.status
+            );
+
+            return {
+
+                role: "Not in group",
+
+                rank: 0
+
+            };
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+        const group =
+            (data.data || []).find(
+                item =>
+                    Number(item.group?.id) ===
+                    Number(GROUP_ID)
+            );
+
+
+        if (!group) {
+
+            return {
+
+                role: "Not in group",
+
+                rank: 0
+
+            };
+
+        }
+
+
+        return {
+
+            role:
+                group.role?.name ||
+                "Not in group",
+
+            rank:
+                group.role?.rank ||
+                0
+
+        };
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Manaton Games group role error:",
+            error
+        );
+
+        return {
+
+            role: "Unavailable",
+
+            rank: 0
+
+        };
+
+    }
+
+}
+
+
+// ==========================================
+// GET COMPLETE ROBLOX USER PROFILE
 // ==========================================
 
 async function getRobloxUserProfile(userId) {
 
     try {
 
-        // ==================================
-        // USER INFORMATION
-        // ==================================
-
-        const userData =
+        const user =
             await getRobloxUserById(
                 userId
             );
 
 
-        if (!userData) {
+        if (!user) {
 
             return null;
 
         }
 
-
-        // ==================================
-        // GROUP ROLES
-        // ==================================
-
-        const groupsResponse =
-            await fetch(
-                `https://groups.roblox.com/v2/users/${userId}/groups/roles`
-            );
-
-
-        if (!groupsResponse.ok) {
-
-            console.error(
-                "Roblox groups API error:",
-                groupsResponse.status
-            );
-
-            return null;
-
-        }
-
-
-        const groupsData =
-            await groupsResponse.json();
-
-
-        // ==================================
-        // FIND MANATON GAMES
-        // ==================================
 
         const group =
-            (groupsData.data || []).find(
-                item =>
-                    Number(
-                        item.group?.id
-                    ) ===
-                    Number(GROUP_ID)
+            await getManatonGamesRole(
+                userId
             );
 
 
-        // ==================================
-        // RETURN PROFILE
-        // ==================================
+        const avatar =
+            await getRobloxAvatar(
+                userId
+            );
+
 
         return {
 
             id:
-                userData.id,
+                user.id,
 
             username:
-                userData.name,
+                user.name,
 
             displayName:
-                userData.displayName,
+                user.displayName,
+
+            avatar:
+                avatar,
 
             groupRole:
-                group?.role?.name ||
-                "Not in group",
+                group.role,
 
             groupRank:
-                group?.role?.rank ||
-                0
+                group.rank
 
         };
 
@@ -584,24 +652,91 @@ async function getRobloxUserProfile(userId) {
 
 
 // ==========================================
+// GET ROBLOX USER PROFILE BY USERNAME
+// ==========================================
+
+async function getRobloxUserProfileByUsername(
+    username
+) {
+
+    try {
+
+        const user =
+            await getRobloxUserByUsername(
+                username
+            );
+
+
+        if (!user) {
+
+            return null;
+
+        }
+
+
+        return await getRobloxUserProfile(
+            user.id
+        );
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Roblox username profile error:",
+            error
+        );
+
+        return null;
+
+    }
+
+}
+
+
+// ==========================================
 // HANDLER
 // ==========================================
 
-export default async function handler(req, res) {
+export default async function handler(
+    req,
+    res
+) {
 
-    // ======================================
+    // ==========================================
     // CORS
-    // ======================================
+    // ==========================================
 
     res.setHeader(
         "Access-Control-Allow-Origin",
         "*"
     );
 
+    res.setHeader(
+        "Access-Control-Allow-Methods",
+        "GET, OPTIONS"
+    );
 
-    // ======================================
+    res.setHeader(
+        "Access-Control-Allow-Headers",
+        "Content-Type"
+    );
+
+
+    // ==========================================
+    // OPTIONS
+    // ==========================================
+
+    if (req.method === "OPTIONS") {
+
+        return res.status(200).end();
+
+    }
+
+
+    // ==========================================
     // CACHE
-    // ======================================
+    // ==========================================
 
     res.setHeader(
         "Cache-Control",
@@ -609,26 +744,8 @@ export default async function handler(req, res) {
     );
 
 
-    // ======================================
-    // METHOD
-    // ======================================
-
-    if (req.method !== "GET") {
-
-        return res.status(405).json({
-
-            success: false,
-
-            error:
-                "Method not allowed."
-
-        });
-
-    }
-
-
     // ==========================================
-    // ROBLOX USERNAME SEARCH
+    // ROBLOX USER BY USERNAME
     // ==========================================
 
     if (req.query.username) {
@@ -646,7 +763,7 @@ export default async function handler(req, res) {
                 success: false,
 
                 error:
-                    "Roblox username is required."
+                    "Invalid Roblox username."
 
             });
 
@@ -654,7 +771,7 @@ export default async function handler(req, res) {
 
 
         const user =
-            await getRobloxUserByUsername(
+            await getRobloxUserProfileByUsername(
                 username
             );
 
@@ -673,35 +790,11 @@ export default async function handler(req, res) {
         }
 
 
-        // ==================================
-        // GET COMPLETE PROFILE
-        // ==================================
-
-        const profile =
-            await getRobloxUserProfile(
-                user.id
-            );
-
-
-        if (!profile) {
-
-            return res.status(404).json({
-
-                success: false,
-
-                error:
-                    "Roblox profile could not be loaded."
-
-            });
-
-        }
-
-
         return res.status(200).json({
 
             success: true,
 
-            user: profile
+            user
 
         });
 
@@ -709,7 +802,7 @@ export default async function handler(req, res) {
 
 
     // ==========================================
-    // ROBLOX USER ID
+    // ROBLOX USER BY USER ID
     // ==========================================
 
     if (req.query.userId) {
@@ -769,7 +862,7 @@ export default async function handler(req, res) {
 
 
     // ==========================================
-    // NORMAL API
+    // NORMAL STUDIO API
     // ==========================================
 
     try {
@@ -796,8 +889,7 @@ export default async function handler(req, res) {
 
 
                 members =
-                    groupData.memberCount ||
-                    0;
+                    groupData.memberCount || 0;
 
             }
 
@@ -819,12 +911,10 @@ export default async function handler(req, res) {
 
         const games =
             await Promise.all(
-
                 GAMES.map(
                     game =>
                         getGameData(game)
                 )
-
             );
 
 
@@ -838,7 +928,6 @@ export default async function handler(req, res) {
                 (total, game) =>
 
                     total +
-
                     (
                         Number(
                             String(
@@ -866,7 +955,6 @@ export default async function handler(req, res) {
                 (total, game) =>
 
                     total +
-
                     (
                         Number(
                             String(
@@ -894,7 +982,6 @@ export default async function handler(req, res) {
                 (total, game) =>
 
                     total +
-
                     (
                         Number(
                             String(
@@ -931,7 +1018,8 @@ export default async function handler(req, res) {
                 id:
                     GROUP_ID,
 
-                members
+                members:
+                    members
 
             },
 
@@ -940,15 +1028,19 @@ export default async function handler(req, res) {
                 totalGames:
                     games.length,
 
-                totalVisits,
+                totalVisits:
+                    totalVisits,
 
-                totalFavorites,
+                totalFavorites:
+                    totalFavorites,
 
-                totalPlaying
+                totalPlaying:
+                    totalPlaying
 
             },
 
-            games
+            games:
+                games
 
         };
 
