@@ -48,6 +48,10 @@ const GAMES = [
 ];
 
 
+// ==========================================
+// MANATON GAMES GROUP
+// ==========================================
+
 const GROUP_ID = 15973191;
 
 
@@ -66,8 +70,7 @@ function formatNumber(number) {
 
     }
 
-    return Number(number)
-        .toLocaleString("en-US");
+    return Number(number).toLocaleString("en-US");
 
 }
 
@@ -80,11 +83,9 @@ async function getUniverseId(placeId) {
 
     try {
 
-        const response =
-            await fetch(
-                `https://apis.roblox.com/universes/v1/places/${placeId}/universe`
-            );
-
+        const response = await fetch(
+            `https://apis.roblox.com/universes/v1/places/${placeId}/universe`
+        );
 
         if (!response.ok) {
 
@@ -97,10 +98,8 @@ async function getUniverseId(placeId) {
 
         }
 
-
         const data =
             await response.json();
-
 
         return data.universeId || null;
 
@@ -128,11 +127,9 @@ async function getGameThumbnail(placeId) {
 
     try {
 
-        const response =
-            await fetch(
-                `https://thumbnails.roblox.com/v1/places/gameicons?placeIds=${placeId}&size=512x512&format=Png&isCircular=false`
-            );
-
+        const response = await fetch(
+            `https://thumbnails.roblox.com/v1/places/gameicons?placeIds=${placeId}&size=512x512&format=Png&isCircular=false`
+        );
 
         if (!response.ok) {
 
@@ -145,10 +142,8 @@ async function getGameThumbnail(placeId) {
 
         }
 
-
         const data =
             await response.json();
-
 
         return (
             data.data?.[0]?.imageUrl ||
@@ -182,14 +177,13 @@ async function getGameData(game) {
         const universeId =
             await getUniverseId(game.id);
 
-
         const thumbnail =
             await getGameThumbnail(game.id);
 
 
-        // ==========================================
+        // ==================================
         // UNIVERSE NOT FOUND
-        // ==========================================
+        // ==================================
 
         if (!universeId) {
 
@@ -199,29 +193,28 @@ async function getGameData(game) {
 
                 universeId: null,
 
+                thumbnail,
+
                 players: "Coming Soon",
 
                 visits: "Coming Soon",
 
                 favorites: "Coming Soon",
 
-                maxPlayers: 0,
-
-                thumbnail
+                maxPlayers: 0
 
             };
 
         }
 
 
-        // ==========================================
-        // GAME INFORMATION
-        // ==========================================
+        // ==================================
+        // GET GAME INFORMATION
+        // ==================================
 
-        const response =
-            await fetch(
-                `https://games.roblox.com/v1/games?universeIds=${universeId}`
-            );
+        const response = await fetch(
+            `https://games.roblox.com/v1/games?universeIds=${universeId}`
+        );
 
 
         if (!response.ok) {
@@ -230,7 +223,6 @@ async function getGameData(game) {
                 `Game API error for ${game.name}:`,
                 response.status
             );
-
 
             return {
 
@@ -256,10 +248,13 @@ async function getGameData(game) {
         const data =
             await response.json();
 
-
         const robloxGame =
             data.data?.[0];
 
+
+        // ==================================
+        // GAME NOT FOUND
+        // ==================================
 
         if (!robloxGame) {
 
@@ -284,9 +279,9 @@ async function getGameData(game) {
         }
 
 
-        // ==========================================
+        // ==================================
         // RETURN GAME
-        // ==========================================
+        // ==================================
 
         return {
 
@@ -331,12 +326,13 @@ async function getGameData(game) {
             error
         );
 
-
         return {
 
             ...game,
 
             universeId: null,
+
+            thumbnail: null,
 
             players: "Unavailable",
 
@@ -354,6 +350,53 @@ async function getGameData(game) {
 
 
 // ==========================================
+// GET ROBLOX USER BY ID
+// ==========================================
+
+async function getRobloxUserById(userId) {
+
+    try {
+
+        const response = await fetch(
+            `https://users.roblox.com/v1/users/${userId}`
+        );
+
+
+        if (!response.ok) {
+
+            console.error(
+                "Roblox user API error:",
+                response.status
+            );
+
+            return null;
+
+        }
+
+
+        const user =
+            await response.json();
+
+
+        return user;
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Roblox user lookup failed:",
+            error
+        );
+
+        return null;
+
+    }
+
+}
+
+
+// ==========================================
 // GET ROBLOX USER BY USERNAME
 // ==========================================
 
@@ -361,33 +404,32 @@ async function getRobloxUserByUsername(username) {
 
     try {
 
-        const response =
-            await fetch(
-                "https://users.roblox.com/v1/usernames/users",
-                {
+        const response = await fetch(
+            "https://users.roblox.com/v1/usernames/users",
+            {
 
-                    method: "POST",
+                method: "POST",
 
-                    headers: {
+                headers: {
 
-                        "Content-Type":
-                            "application/json"
+                    "Content-Type":
+                        "application/json"
 
-                    },
+                },
 
-                    body: JSON.stringify({
+                body: JSON.stringify({
 
-                        usernames: [
-                            username
-                        ],
+                    usernames: [
+                        username
+                    ],
 
-                        excludeBannedUsers:
-                            false
+                    excludeBannedUsers:
+                        false
 
-                    })
+                })
 
-                }
-            );
+            }
+        );
 
 
         if (!response.ok) {
@@ -417,18 +459,7 @@ async function getRobloxUserByUsername(username) {
         }
 
 
-        return {
-
-            id:
-                user.id,
-
-            username:
-                user.name,
-
-            displayName:
-                user.displayName || user.name
-
-        };
+        return user;
 
     }
 
@@ -447,42 +478,33 @@ async function getRobloxUserByUsername(username) {
 
 
 // ==========================================
-// GET ROBLOX USER PROFILE
+// GET ROBLOX USER PROFILE + MG ROLE
 // ==========================================
 
 async function getRobloxUserProfile(userId) {
 
     try {
 
-        // ==========================================
+        // ==================================
         // USER INFORMATION
-        // ==========================================
+        // ==================================
 
-        const userResponse =
-            await fetch(
-                `https://users.roblox.com/v1/users/${userId}`
+        const userData =
+            await getRobloxUserById(
+                userId
             );
 
 
-        if (!userResponse.ok) {
-
-            console.error(
-                "Roblox user API error:",
-                userResponse.status
-            );
+        if (!userData) {
 
             return null;
 
         }
 
 
-        const userData =
-            await userResponse.json();
-
-
-        // ==========================================
+        // ==================================
         // GROUP ROLES
-        // ==========================================
+        // ==================================
 
         const groupsResponse =
             await fetch(
@@ -506,21 +528,23 @@ async function getRobloxUserProfile(userId) {
             await groupsResponse.json();
 
 
-        // ==========================================
+        // ==================================
         // FIND MANATON GAMES
-        // ==========================================
+        // ==================================
 
         const group =
             (groupsData.data || []).find(
                 item =>
-                    Number(item.group?.id) ===
+                    Number(
+                        item.group?.id
+                    ) ===
                     Number(GROUP_ID)
             );
 
 
-        // ==========================================
-        // RETURN USER
-        // ==========================================
+        // ==================================
+        // RETURN PROFILE
+        // ==================================
 
         return {
 
@@ -565,9 +589,9 @@ async function getRobloxUserProfile(userId) {
 
 export default async function handler(req, res) {
 
-    // ==========================================
+    // ======================================
     // CORS
-    // ==========================================
+    // ======================================
 
     res.setHeader(
         "Access-Control-Allow-Origin",
@@ -575,9 +599,9 @@ export default async function handler(req, res) {
     );
 
 
-    // ==========================================
+    // ======================================
     // CACHE
-    // ==========================================
+    // ======================================
 
     res.setHeader(
         "Cache-Control",
@@ -585,8 +609,26 @@ export default async function handler(req, res) {
     );
 
 
+    // ======================================
+    // METHOD
+    // ======================================
+
+    if (req.method !== "GET") {
+
+        return res.status(405).json({
+
+            success: false,
+
+            error:
+                "Method not allowed."
+
+        });
+
+    }
+
+
     // ==========================================
-    // ROBLOX USER BY USERNAME
+    // ROBLOX USERNAME SEARCH
     // ==========================================
 
     if (req.query.username) {
@@ -631,11 +673,35 @@ export default async function handler(req, res) {
         }
 
 
+        // ==================================
+        // GET COMPLETE PROFILE
+        // ==================================
+
+        const profile =
+            await getRobloxUserProfile(
+                user.id
+            );
+
+
+        if (!profile) {
+
+            return res.status(404).json({
+
+                success: false,
+
+                error:
+                    "Roblox profile could not be loaded."
+
+            });
+
+        }
+
+
         return res.status(200).json({
 
             success: true,
 
-            user
+            user: profile
 
         });
 
@@ -643,7 +709,7 @@ export default async function handler(req, res) {
 
 
     // ==========================================
-    // ROBLOX USER BY ID
+    // ROBLOX USER ID
     // ==========================================
 
     if (req.query.userId) {
@@ -703,14 +769,14 @@ export default async function handler(req, res) {
 
 
     // ==========================================
-    // DEFAULT API
+    // NORMAL API
     // ==========================================
 
     try {
 
-        // ==========================================
+        // ======================================
         // GROUP
-        // ==========================================
+        // ======================================
 
         let members = 0;
 
@@ -747,106 +813,108 @@ export default async function handler(req, res) {
         }
 
 
-        // ==========================================
+        // ======================================
         // GAMES
-        // ==========================================
+        // ======================================
 
         const games =
             await Promise.all(
+
                 GAMES.map(
                     game =>
                         getGameData(game)
                 )
+
             );
 
 
-        // ==========================================
+        // ======================================
         // TOTAL VISITS
-        // ==========================================
+        // ======================================
 
         const totalVisits =
             games.reduce(
-                (total, game) => {
 
-                    return (
-                        total +
-                        (
-                            Number(
-                                String(
-                                    game.visits
-                                )
-                                .replace(
-                                    /,/g,
-                                    ""
-                                )
-                            ) || 0
-                        )
-                    );
+                (total, game) =>
 
-                },
+                    total +
+
+                    (
+                        Number(
+                            String(
+                                game.visits
+                            )
+                            .replace(
+                                /,/g,
+                                ""
+                            )
+                        ) || 0
+                    ),
+
                 0
+
             );
 
 
-        // ==========================================
+        // ======================================
         // TOTAL FAVORITES
-        // ==========================================
+        // ======================================
 
         const totalFavorites =
             games.reduce(
-                (total, game) => {
 
-                    return (
-                        total +
-                        (
-                            Number(
-                                String(
-                                    game.favorites
-                                )
-                                .replace(
-                                    /,/g,
-                                    ""
-                                )
-                            ) || 0
-                        )
-                    );
+                (total, game) =>
 
-                },
+                    total +
+
+                    (
+                        Number(
+                            String(
+                                game.favorites
+                            )
+                            .replace(
+                                /,/g,
+                                ""
+                            )
+                        ) || 0
+                    ),
+
                 0
+
             );
 
 
-        // ==========================================
+        // ======================================
         // TOTAL PLAYING
-        // ==========================================
+        // ======================================
 
         const totalPlaying =
             games.reduce(
-                (total, game) => {
 
-                    return (
-                        total +
-                        (
-                            Number(
-                                String(
-                                    game.players
-                                )
-                                .replace(
-                                    /,/g,
-                                    ""
-                                )
-                            ) || 0
-                        )
-                    );
+                (total, game) =>
 
-                },
+                    total +
+
+                    (
+                        Number(
+                            String(
+                                game.players
+                            )
+                            .replace(
+                                /,/g,
+                                ""
+                            )
+                        ) || 0
+                    ),
+
                 0
+
             );
 
 
-        // ==========================================
+        // ======================================
         // RESPONSE
-        // ==========================================
+        // ======================================
 
         const data = {
 
