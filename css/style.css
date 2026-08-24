@@ -3478,3 +3478,662 @@ footer{
     }
 
 }
+
+/* ==========================================
+   MANATON GAMES USER PANEL
+========================================== */
+
+.mg-user-panel-button{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:8px;
+
+    white-space:nowrap;
+
+    cursor:pointer;
+
+}
+
+
+.user-panel-icon{
+
+    font-size:16px;
+
+}
+
+
+.user-panel-name{
+
+    max-width:150px;
+
+    overflow:hidden;
+
+    text-overflow:ellipsis;
+
+    white-space:nowrap;
+
+}
+
+
+.user-panel-arrow{
+
+    font-size:10px;
+
+    opacity:.7;
+
+}
+
+
+/* ==========================================
+   USER MENU
+========================================== */
+
+#user-menu{
+
+    position:fixed;
+
+    width:250px;
+
+    padding:10px;
+
+    background:rgba(15,23,42,.98);
+
+    border:1px solid rgba(255,255,255,.10);
+
+    border-radius:16px;
+
+    box-shadow:
+        0 20px 50px rgba(0,0,0,.35);
+
+    backdrop-filter:blur(18px);
+
+    -webkit-backdrop-filter:blur(18px);
+
+    z-index:99999;
+
+    animation:
+        userMenuIn .18s ease;
+
+}
+
+
+@keyframes userMenuIn{
+
+    from{
+
+        opacity:0;
+
+        transform:
+            translateY(-6px)
+            scale(.97);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:
+            translateY(0)
+            scale(1);
+
+    }
+
+}
+
+
+/* ==========================================
+   USER HEADER
+========================================== */
+
+.user-header{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    padding:10px;
+
+}
+
+
+.user-avatar{
+
+    width:42px;
+
+    height:42px;
+
+    border-radius:50%;
+
+    object-fit:cover;
+
+    flex-shrink:0;
+
+}
+
+
+.user-header-info{
+
+    min-width:0;
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:3px;
+
+}
+
+
+.user-header-info strong{
+
+    color:white;
+
+    font-size:14px;
+
+    overflow:hidden;
+
+    text-overflow:ellipsis;
+
+    white-space:nowrap;
+
+}
+
+
+.user-header-info span{
+
+    color:#94a3b8;
+
+    font-size:12px;
+
+}
+
+
+/* ==========================================
+   ROBLOX INFO
+========================================== */
+
+.user-roblox-info{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    margin:4px 4px 8px;
+
+    padding:10px;
+
+    border-radius:12px;
+
+    background:rgba(255,255,255,.05);
+
+}
+
+
+.user-roblox-icon{
+
+    width:34px;
+
+    height:34px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    border-radius:10px;
+
+    background:rgba(37,99,235,.15);
+
+    font-size:17px;
+
+}
+
+
+.user-roblox-data{
+
+    min-width:0;
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:3px;
+
+}
+
+
+.user-roblox-data strong{
+
+    color:white;
+
+    font-size:13px;
+
+    overflow:hidden;
+
+    text-overflow:ellipsis;
+
+    white-space:nowrap;
+
+}
+
+
+.user-roblox-data span{
+
+    color:#60a5fa;
+
+    font-size:11px;
+
+    overflow:hidden;
+
+    text-overflow:ellipsis;
+
+    white-space:nowrap;
+
+}
+
+
+/* ==========================================
+   DIVIDER
+========================================== */
+
+.user-menu-divider{
+
+    height:1px;
+
+    margin:7px 4px;
+
+    background:rgba(255,255,255,.08);
+
+}
+
+
+/* ==========================================
+   MENU ITEMS
+========================================== */
+
+.user-menu-item{
+
+    width:100%;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    padding:10px 12px;
+
+    border:0;
+
+    border-radius:10px;
+
+    background:transparent;
+
+    color:#e2e8f0;
+
+    font-size:14px;
+
+    text-align:left;
+
+    cursor:pointer;
+
+    transition:
+        background .15s ease,
+        transform .15s ease;
+
+}
+
+
+.user-menu-item:hover{
+
+    background:rgba(255,255,255,.07);
+
+    transform:translateX(2px);
+
+}
+
+
+.user-menu-item span:first-child{
+
+    width:20px;
+
+    text-align:center;
+
+}
+
+
+/* ==========================================
+   LOGOUT
+========================================== */
+
+.logout-item{
+
+    color:#fca5a5;
+
+}
+
+
+.logout-item:hover{
+
+    background:rgba(239,68,68,.10);
+
+}
+
+
+/* ==========================================
+   PROFILE MODAL
+========================================== */
+
+#profile-modal{
+
+    position:fixed;
+
+    inset:0;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    padding:24px;
+
+    background:rgba(0,0,0,.65);
+
+    backdrop-filter:blur(8px);
+
+    -webkit-backdrop-filter:blur(8px);
+
+    z-index:100000;
+
+    overflow-y:auto;
+
+}
+
+
+.profile-card{
+
+    position:relative;
+
+    width:min(100%, 430px);
+
+    max-height:
+        calc(100vh - 48px);
+
+    overflow-y:auto;
+
+    margin:auto;
+
+    padding:30px;
+
+    border-radius:22px;
+
+    background:#0f172a;
+
+    border:1px solid rgba(255,255,255,.10);
+
+    box-shadow:
+        0 25px 80px rgba(0,0,0,.45);
+
+    text-align:center;
+
+    animation:
+        profileIn .2s ease;
+
+}
+
+
+@keyframes profileIn{
+
+    from{
+
+        opacity:0;
+
+        transform:
+            translateY(10px)
+            scale(.97);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:
+            translateY(0)
+            scale(1);
+
+    }
+
+}
+
+
+/* ==========================================
+   PROFILE CLOSE
+========================================== */
+
+#close-profile{
+
+    position:absolute;
+
+    top:14px;
+
+    right:14px;
+
+    width:34px;
+
+    height:34px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    border:0;
+
+    border-radius:10px;
+
+    background:rgba(255,255,255,.06);
+
+    color:#cbd5e1;
+
+    cursor:pointer;
+
+    font-size:16px;
+
+    transition:.15s ease;
+
+}
+
+
+#close-profile:hover{
+
+    background:rgba(255,255,255,.12);
+
+    color:white;
+
+}
+
+
+/* ==========================================
+   PROFILE AVATAR
+========================================== */
+
+.profile-avatar{
+
+    width:88px;
+
+    height:88px;
+
+    margin:4px auto 14px;
+
+    display:block;
+
+    border-radius:50%;
+
+    object-fit:cover;
+
+    border:3px solid rgba(255,255,255,.08);
+
+}
+
+
+.profile-card h2{
+
+    margin:0;
+
+    color:white;
+
+}
+
+
+.profile-card > p{
+
+    margin:6px 0 22px;
+
+    color:#94a3b8;
+
+    font-size:13px;
+
+}
+
+
+/* ==========================================
+   PROFILE INFO
+========================================== */
+
+.profile-info{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:8px;
+
+    text-align:left;
+
+}
+
+
+.profile-info > div{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    gap:15px;
+
+    padding:12px 14px;
+
+    border-radius:12px;
+
+    background:rgba(255,255,255,.045);
+
+}
+
+
+.profile-info span{
+
+    color:#94a3b8;
+
+    font-size:12px;
+
+}
+
+
+.profile-info strong{
+
+    color:#f8fafc;
+
+    font-size:13px;
+
+    text-align:right;
+
+}
+
+
+/* ==========================================
+   ROBLOX PROFILE SECTION
+========================================== */
+
+.roblox-profile-section{
+
+    margin-top:18px;
+
+    padding:15px;
+
+    border-radius:15px;
+
+    background:rgba(255,255,255,.045);
+
+    text-align:left;
+
+}
+
+
+.roblox-profile-title{
+
+    color:white;
+
+    font-weight:600;
+
+    margin-bottom:8px;
+
+}
+
+
+.roblox-account-status{
+
+    color:#94a3b8;
+
+    font-size:12px;
+
+    margin-bottom:12px;
+
+}
+
+
+.profile-action-btn{
+
+    width:100%;
+
+    padding:10px 14px;
+
+    border:0;
+
+    border-radius:10px;
+
+    background:#2563eb;
+
+    color:white;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.15s ease;
+
+}
+
+
+.profile-action-btn:hover{
+
+    background:#3b82f6;
+
+    transform:translateY(-1px);
+
+}
