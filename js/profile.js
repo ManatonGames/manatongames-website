@@ -1,5 +1,11 @@
 // ==========================================
 // MANATON GAMES - PROFILE
+// VERSION 2.6.0
+// ==========================================
+
+
+// ==========================================
+// PROFILE BUTTON
 // ==========================================
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -19,29 +25,67 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 // ==========================================
+// ESCAPE HTML
+// ==========================================
+
+function escapeHTML(value) {
+
+    if (value === null || value === undefined) {
+        return "";
+    }
+
+    return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+}
+
+
+// ==========================================
 // OPEN PROFILE
 // ==========================================
 
 async function openProfile() {
 
-    if (document.getElementById("profile-modal")) return;
+    if (
+        document.getElementById(
+            "profile-modal"
+        )
+    ) {
+        return;
+    }
 
-    const session = getSession();
+
+    const session =
+        getSession();
+
 
     if (!session) return;
 
 
-    const robloxLinked =
-        !!session.robloxUserId;
+    // ==========================================
+    // PROFILE DATA
+    // ==========================================
+
+    const username =
+        session.robloxUsername ||
+        session.username ||
+        "Guest";
 
 
-    const robloxUsername =
-        session.robloxUsername || null;
-
-
-    const robloxAvatar =
+    const avatar =
         session.robloxAvatar ||
+        session.avatar ||
         "assets/logo/logo.png";
+
+
+    const accountType =
+        session.robloxUserId
+            ? "Roblox Account"
+            : "Guest Account";
 
 
     // ==========================================
@@ -51,7 +95,9 @@ async function openProfile() {
     const modal =
         document.createElement("div");
 
-    modal.id = "profile-modal";
+
+    modal.id =
+        "profile-modal";
 
 
     modal.innerHTML = `
@@ -61,51 +107,61 @@ async function openProfile() {
             <button
                 id="close-profile"
                 class="profile-close-btn"
+                type="button"
             >
                 ✕
             </button>
 
 
             <!-- ==================================
-                 PROFILE HEADER
+                 AVATAR
             ================================== -->
 
-            <div class="profile-header">
+            <div class="profile-avatar-wrapper">
 
                 <img
-                    src="${robloxAvatar}"
+                    src="${escapeHTML(avatar)}"
                     class="profile-avatar"
-                    id="profile-avatar"
                     alt="Profile Avatar"
+                    onerror="
+                        this.onerror=null;
+                        this.src='assets/logo/logo.png';
+                    "
                 >
 
-                <div class="profile-header-info">
-
-                    <h2 id="profile-display-name">
-                        ${robloxUsername || session.username || "Guest"}
-                    </h2>
-
-                    <p class="profile-account-type">
-
-                        ${
-                            robloxLinked
-                                ? "Roblox Account"
-                                : "Guest Account"
-                        }
-
-                    </p>
-
-                </div>
+                <span class="profile-online-dot">
+                    ●
+                </span>
 
             </div>
 
 
             <!-- ==================================
-                 PROFILE INFORMATION
+                 NAME
+            ================================== -->
+
+            <h2 class="profile-name">
+
+                ${escapeHTML(username)}
+
+            </h2>
+
+
+            <p class="profile-account-type">
+
+                ${accountType}
+
+            </p>
+
+
+            <!-- ==================================
+                 INFORMATION
             ================================== -->
 
             <div class="profile-info">
 
+
+                <!-- USERNAME -->
 
                 <div class="profile-info-row">
 
@@ -113,12 +169,16 @@ async function openProfile() {
                         Username
                     </span>
 
-                    <strong>
-                        ${robloxUsername || session.username || "Guest"}
+                    <strong id="profile-username">
+
+                        ${escapeHTML(username)}
+
                     </strong>
 
                 </div>
 
+
+                <!-- ACCOUNT TYPE -->
 
                 <div class="profile-info-row">
 
@@ -127,15 +187,15 @@ async function openProfile() {
                     </span>
 
                     <strong>
-                        ${
-                            robloxLinked
-                                ? "Roblox"
-                                : "Guest"
-                        }
+
+                        ${accountType}
+
                     </strong>
 
                 </div>
 
+
+                <!-- STATUS -->
 
                 <div class="profile-info-row">
 
@@ -143,12 +203,16 @@ async function openProfile() {
                         Status
                     </span>
 
-                    <strong class="online-status">
+                    <strong class="profile-online">
+
                         🟢 Online
+
                     </strong>
 
                 </div>
 
+
+                <!-- MANATON GAMES ROLE -->
 
                 <div class="profile-info-row">
 
@@ -158,16 +222,14 @@ async function openProfile() {
 
                     <strong id="roblox-role">
 
-                        ${
-                            robloxLinked
-                                ? "🔄 Loading..."
-                                : "Not linked"
-                        }
+                        🔄 Loading...
 
                     </strong>
 
                 </div>
 
+
+                <!-- ROBLOX RANK -->
 
                 <div class="profile-info-row">
 
@@ -177,16 +239,14 @@ async function openProfile() {
 
                     <strong id="roblox-rank">
 
-                        ${
-                            robloxLinked
-                                ? "🔄 Loading..."
-                                : "—"
-                        }
+                        🔄 Loading...
 
                     </strong>
 
                 </div>
 
+
+                <!-- WEBSITE -->
 
                 <div class="profile-info-row">
 
@@ -200,6 +260,7 @@ async function openProfile() {
 
                 </div>
 
+
             </div>
 
 
@@ -209,9 +270,10 @@ async function openProfile() {
 
             <div class="roblox-profile-section">
 
+
                 <div class="roblox-profile-title">
 
-                    <span class="roblox-title-icon">
+                    <span>
                         🎮
                     </span>
 
@@ -223,27 +285,50 @@ async function openProfile() {
 
 
                 ${
-                    robloxLinked
+                    session.robloxUserId
+                    ?
 
-                    ? `
+                    `
 
-                    <div class="roblox-linked-account">
+                    <div
+                        id="roblox-account-status"
+                        class="roblox-account-status linked"
+                    >
 
-                        <img
-                            src="${robloxAvatar}"
-                            class="roblox-linked-avatar"
-                            alt="Roblox Avatar"
-                        >
+                        <div class="roblox-linked-user">
 
-                        <div class="roblox-linked-info">
+                            <img
+                                src="${
+                                    escapeHTML(
+                                        session.robloxAvatar ||
+                                        "assets/logo/logo.png"
+                                    )
+                                }"
+                                class="roblox-linked-avatar"
+                                alt="Roblox Avatar"
+                                onerror="
+                                    this.onerror=null;
+                                    this.src='assets/logo/logo.png';
+                                "
+                            >
 
-                            <strong>
-                                ${robloxUsername}
-                            </strong>
+                            <div>
 
-                            <span>
-                                ID: ${session.robloxUserId}
-                            </span>
+                                <strong>
+                                    ${escapeHTML(
+                                        session.robloxUsername ||
+                                        "Roblox User"
+                                    )}
+                                </strong>
+
+                                <span>
+                                    ID:
+                                    ${escapeHTML(
+                                        session.robloxUserId
+                                    )}
+                                </span>
+
+                            </div>
 
                         </div>
 
@@ -251,9 +336,14 @@ async function openProfile() {
 
                     `
 
-                    : `
+                    :
 
-                    <div class="roblox-not-linked">
+                    `
+
+                    <div
+                        id="roblox-account-status"
+                        class="roblox-account-status"
+                    >
 
                         🔗 No Roblox account linked
 
@@ -263,35 +353,47 @@ async function openProfile() {
                 }
 
 
+                <!-- ==================================
+                     LINK / CHANGE BUTTON
+                ================================== -->
+
                 <button
                     id="link-roblox-btn"
                     class="profile-action-btn"
+                    type="button"
                 >
 
                     ${
-                        robloxLinked
-                            ? "🔄 Change Roblox Account"
-                            : "🔗 Link Roblox Account"
+                        session.robloxUserId
+                        ? "🔄 Change Roblox Account"
+                        : "🔗 Link Roblox Account"
                     }
 
                 </button>
 
+
             </div>
+
 
         </div>
 
     `;
 
 
-    document.body.appendChild(modal);
+    document.body.appendChild(
+        modal
+    );
 
 
     // ==========================================
-    // CLOSE
+    // CLOSE PROFILE
     // ==========================================
 
     const closeButton =
-        document.getElementById("close-profile");
+        document.getElementById(
+            "close-profile"
+        );
+
 
     if (closeButton) {
 
@@ -305,11 +407,34 @@ async function openProfile() {
 
 
     // ==========================================
-    // LINK / CHANGE ROBLOX
+    // CLOSE WHEN CLICKING BACKDROP
+    // ==========================================
+
+    modal.addEventListener(
+        "click",
+        (event) => {
+
+            if (
+                event.target === modal
+            ) {
+
+                modal.remove();
+
+            }
+
+        }
+    );
+
+
+    // ==========================================
+    // LINK ROBLOX
     // ==========================================
 
     const linkButton =
-        document.getElementById("link-roblox-btn");
+        document.getElementById(
+            "link-roblox-btn"
+        );
+
 
     if (linkButton) {
 
@@ -323,16 +448,12 @@ async function openProfile() {
 
 
     // ==========================================
-    // LOAD ROBLOX ROLE
+    // LOAD ROLE
     // ==========================================
 
-    if (robloxLinked) {
-
-        loadRobloxRole(
-            session
-        );
-
-    }
+    loadRobloxRole(
+        session
+    );
 
 }
 
@@ -344,27 +465,47 @@ async function openProfile() {
 async function loadRobloxRole(session) {
 
     const roleElement =
-        document.getElementById("roblox-role");
+        document.getElementById(
+            "roblox-role"
+        );
+
 
     const rankElement =
-        document.getElementById("roblox-rank");
+        document.getElementById(
+            "roblox-rank"
+        );
 
 
-    if (!roleElement || !rankElement) return;
+    if (
+        !roleElement ||
+        !rankElement
+    ) {
+        return;
+    }
 
+
+    // ==========================================
+    // NO ROBLOX ACCOUNT
+    // ==========================================
 
     if (!session.robloxUserId) {
 
         roleElement.textContent =
             "Not linked";
 
+
         rankElement.textContent =
             "—";
+
 
         return;
 
     }
 
+
+    // ==========================================
+    // REQUEST API
+    // ==========================================
 
     try {
 
@@ -379,7 +520,7 @@ async function loadRobloxRole(session) {
         if (!response.ok) {
 
             throw new Error(
-                `API Error: ${response.status}`
+                `API returned ${response.status}`
             );
 
         }
@@ -395,11 +536,15 @@ async function loadRobloxRole(session) {
         ) {
 
             throw new Error(
-                "Invalid Roblox API response"
+                "Invalid Roblox profile"
             );
 
         }
 
+
+        // ==========================================
+        // UPDATE ROLE
+        // ==========================================
 
         roleElement.textContent =
             data.user.groupRole ||
@@ -411,70 +556,25 @@ async function loadRobloxRole(session) {
             "0";
 
 
-        // ======================================
-        // UPDATE ROBLOX USERNAME
-        // ======================================
+        // ==========================================
+        // UPDATE AVATAR
+        // ==========================================
 
-        if (data.user.username) {
-
-            session.robloxUsername =
-                data.user.username;
-
-        }
-
-
-        // ======================================
-        // UPDATE DISPLAY NAME
-        // ======================================
-
-        if (data.user.displayName) {
-
-            session.robloxDisplayName =
-                data.user.displayName;
-
-        }
-
-
-        // ======================================
-        // AVATAR
-        // ======================================
-
-        if (data.user.avatar) {
+        if (
+            data.user.avatar &&
+            session.robloxAvatar !==
+            data.user.avatar
+        ) {
 
             session.robloxAvatar =
                 data.user.avatar;
 
 
-            const avatar =
-                document.getElementById(
-                    "profile-avatar"
-                );
-
-            if (avatar) {
-
-                avatar.src =
-                    data.user.avatar;
-
-            }
-
-
-            const linkedAvatar =
-                document.querySelector(
-                    ".roblox-linked-avatar"
-                );
-
-            if (linkedAvatar) {
-
-                linkedAvatar.src =
-                    data.user.avatar;
-
-            }
+            saveSession(
+                session
+            );
 
         }
-
-
-        saveSession(session);
-
 
     }
 
@@ -509,14 +609,13 @@ function openRobloxLinkModal() {
             "roblox-link-modal"
         )
     ) {
-
         return;
-
     }
 
 
     const modal =
         document.createElement("div");
+
 
     modal.id =
         "roblox-link-modal";
@@ -526,41 +625,71 @@ function openRobloxLinkModal() {
 
         <div class="roblox-link-card">
 
+
+            <!-- CLOSE -->
+
             <button
                 id="close-roblox-link"
                 class="roblox-close-btn"
+                type="button"
             >
+
                 ✕
+
             </button>
 
 
+            <!-- ICON -->
+
             <div class="roblox-link-icon">
+
                 🎮
+
             </div>
 
 
+            <!-- TITLE -->
+
             <h2>
+
                 Link Roblox Account
+
             </h2>
 
 
             <p>
-                Enter your Roblox username to
-                find your Roblox account.
+
+                Enter your Roblox username to find
+                your account.
+
             </p>
 
 
-            <input
-                id="roblox-username-input"
-                type="text"
-                placeholder="Roblox username"
-                autocomplete="off"
-            >
+            <!-- INPUT -->
 
+            <div class="roblox-input-wrapper">
+
+                <span>
+                    👤
+                </span>
+
+                <input
+                    id="roblox-username-input"
+                    type="text"
+                    placeholder="Roblox username"
+                    autocomplete="off"
+                    maxlength="20"
+                >
+
+            </div>
+
+
+            <!-- SEARCH BUTTON -->
 
             <button
                 id="search-roblox-btn"
                 class="profile-action-btn"
+                type="button"
             >
 
                 🔍 Find Account
@@ -568,17 +697,22 @@ function openRobloxLinkModal() {
             </button>
 
 
+            <!-- RESULT -->
+
             <div
                 id="roblox-search-result"
                 class="roblox-search-result"
             ></div>
+
 
         </div>
 
     `;
 
 
-    document.body.appendChild(modal);
+    document.body.appendChild(
+        modal
+    );
 
 
     // ==========================================
@@ -589,6 +723,7 @@ function openRobloxLinkModal() {
         document.getElementById(
             "close-roblox-link"
         );
+
 
     if (closeButton) {
 
@@ -602,6 +737,26 @@ function openRobloxLinkModal() {
 
 
     // ==========================================
+    // BACKDROP
+    // ==========================================
+
+    modal.addEventListener(
+        "click",
+        (event) => {
+
+            if (
+                event.target === modal
+            ) {
+
+                modal.remove();
+
+            }
+
+        }
+    );
+
+
+    // ==========================================
     // SEARCH BUTTON
     // ==========================================
 
@@ -609,6 +764,7 @@ function openRobloxLinkModal() {
         document.getElementById(
             "search-roblox-btn"
         );
+
 
     if (searchButton) {
 
@@ -627,11 +783,12 @@ function openRobloxLinkModal() {
             "roblox-username-input"
         );
 
+
     if (input) {
 
         input.addEventListener(
             "keydown",
-            event => {
+            (event) => {
 
                 if (
                     event.key === "Enter"
@@ -667,18 +824,35 @@ async function searchRobloxUser() {
             "roblox-username-input"
         );
 
+
     const result =
         document.getElementById(
             "roblox-search-result"
         );
 
 
-    if (!input || !result) return;
+    const button =
+        document.getElementById(
+            "search-roblox-btn"
+        );
+
+
+    if (
+        !input ||
+        !result
+    ) {
+        return;
+
+    }
 
 
     const username =
         input.value.trim();
 
+
+    // ==========================================
+    // EMPTY USERNAME
+    // ==========================================
 
     if (!username) {
 
@@ -701,6 +875,17 @@ async function searchRobloxUser() {
     // LOADING
     // ==========================================
 
+    if (button) {
+
+        button.disabled =
+            true;
+
+        button.innerHTML =
+            "🔄 Searching...";
+
+    }
+
+
     result.innerHTML = `
 
         <div class="roblox-loading">
@@ -720,9 +905,9 @@ async function searchRobloxUser() {
 
     try {
 
-        // ======================================
-        // USE OUR SERVER API
-        // ======================================
+        // ==========================================
+        // USE MANATON GAMES API
+        // ==========================================
 
         const response =
             await fetch(
@@ -732,20 +917,16 @@ async function searchRobloxUser() {
             );
 
 
-        if (!response.ok) {
-
-            throw new Error(
-                `API Error: ${response.status}`
-            );
-
-        }
-
-
         const data =
             await response.json();
 
 
+        // ==========================================
+        // USER NOT FOUND
+        // ==========================================
+
         if (
+            response.status === 404 ||
             !data.success ||
             !data.user
         ) {
@@ -756,6 +937,10 @@ async function searchRobloxUser() {
 
                     ❌ Roblox user not found.
 
+                    <small>
+                        Check the username and try again.
+                    </small>
+
                 </div>
 
             `;
@@ -765,94 +950,137 @@ async function searchRobloxUser() {
         }
 
 
+        // ==========================================
+        // API ERROR
+        // ==========================================
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.error ||
+                "Roblox API error"
+            );
+
+        }
+
+
         const user =
             data.user;
 
 
-        // ======================================
+        // ==========================================
         // SHOW ACCOUNT
-        // ======================================
+        // ==========================================
 
         result.innerHTML = `
 
             <div class="roblox-found">
 
-                <div class="roblox-found-header">
 
-                    ${
-                        user.avatar
+                <!-- AVATAR -->
 
-                        ? `
+                <div class="roblox-found-avatar-wrapper">
 
-                        <img
-                            src="${user.avatar}"
-                            class="roblox-found-avatar"
-                            alt="Roblox Avatar"
-                        >
-
-                        `
-
-                        : `
-
-                        <div class="roblox-found-avatar-placeholder">
-                            🎮
-                        </div>
-
-                        `
-                    }
-
-
-                    <div class="roblox-found-user">
-
-                        <strong>
-                            ${user.username}
-                        </strong>
-
-                        <span>
-                            ${
-                                user.displayName &&
-                                user.displayName !==
-                                user.username
-
-                                ? user.displayName
-
-                                : "Roblox User"
-                            }
-                        </span>
-
-                    </div>
+                    <img
+                        src="${
+                            escapeHTML(
+                                user.avatar ||
+                                "assets/logo/logo.png"
+                            )
+                        }"
+                        class="roblox-found-avatar"
+                        alt="Roblox Avatar"
+                        onerror="
+                            this.onerror=null;
+                            this.src='assets/logo/logo.png';
+                        "
+                    >
 
                 </div>
 
 
-                <div class="roblox-found-id">
+                <!-- USER -->
 
-                    User ID
+                <div class="roblox-found-info">
 
                     <strong>
-                        ${user.id}
+
+                        ${escapeHTML(
+                            user.username
+                        )}
+
                     </strong>
+
+
+                    <span>
+
+                        ${escapeHTML(
+                            user.displayName ||
+                            user.username
+                        )}
+
+                    </span>
+
+
+                    <span>
+
+                        User ID:
+                        ${escapeHTML(
+                            user.id
+                        )}
+
+                    </span>
+
+
+                    <span>
+
+                        🎮
+                        ${
+                            escapeHTML(
+                                user.groupRole ||
+                                "Not in group"
+                            )
+                        }
+
+                    </span>
+
+
+                    <span>
+
+                        Roblox Rank:
+                        ${
+                            escapeHTML(
+                                user.groupRank ??
+                                0
+                            )
+                        }
+
+                    </span>
 
                 </div>
 
+
+                <!-- SELECT -->
 
                 <button
                     id="confirm-roblox-btn"
                     class="profile-action-btn"
+                    type="button"
                 >
 
                     ✅ Select This Account
 
                 </button>
 
+
             </div>
 
         `;
 
 
-        // ======================================
-        // SELECT
-        // ======================================
+        // ==========================================
+        // SELECT BUTTON
+        // ==========================================
 
         const confirmButton =
             document.getElementById(
@@ -862,13 +1090,14 @@ async function searchRobloxUser() {
 
         if (confirmButton) {
 
-            confirmButton.onclick = () => {
+            confirmButton.onclick =
+                () => {
 
-                selectRobloxAccount(
-                    user
-                );
+                    selectRobloxAccount(
+                        user
+                    );
 
-            };
+                };
 
         }
 
@@ -889,12 +1118,28 @@ async function searchRobloxUser() {
                 ❌ Unable to contact Roblox.
 
                 <small>
+
                     Please try again in a moment.
+
                 </small>
 
             </div>
 
         `;
+
+    }
+
+    finally {
+
+        if (button) {
+
+            button.disabled =
+                false;
+
+            button.innerHTML =
+                "🔍 Find Account";
+
+        }
 
     }
 
@@ -905,13 +1150,17 @@ async function searchRobloxUser() {
 // SELECT ROBLOX ACCOUNT
 // ==========================================
 
-async function selectRobloxAccount(user) {
+function selectRobloxAccount(user) {
 
     const session =
         getSession();
 
 
-    if (!session) return;
+    if (!session) {
+
+        return;
+
+    }
 
 
     // ==========================================
@@ -924,13 +1173,15 @@ async function selectRobloxAccount(user) {
 
     session.robloxUsername =
         user.username ||
-        user.name;
+        user.name ||
+        "Roblox User";
 
 
     session.robloxDisplayName =
         user.displayName ||
         user.username ||
-        user.name;
+        user.name ||
+        "Roblox User";
 
 
     session.robloxAvatar =
@@ -938,7 +1189,35 @@ async function selectRobloxAccount(user) {
         "assets/logo/logo.png";
 
 
-    saveSession(session);
+    session.robloxGroupRole =
+        user.groupRole ||
+        "Not in group";
+
+
+    session.robloxGroupRank =
+        user.groupRank ??
+        0;
+
+
+    // ==========================================
+    // SAVE SESSION
+    // ==========================================
+
+    const saved =
+        saveSession(
+            session
+        );
+
+
+    if (!saved) {
+
+        console.error(
+            "❌ Failed to save Roblox account."
+        );
+
+        return;
+
+    }
 
 
     // ==========================================
@@ -949,6 +1228,7 @@ async function selectRobloxAccount(user) {
         document.getElementById(
             "roblox-link-modal"
         );
+
 
     if (linkModal) {
 
@@ -966,6 +1246,7 @@ async function selectRobloxAccount(user) {
             "profile-modal"
         );
 
+
     if (profileModal) {
 
         profileModal.remove();
@@ -974,9 +1255,40 @@ async function selectRobloxAccount(user) {
 
 
     // ==========================================
-    // REOPEN PROFILE
+    // REFRESH PROFILE
     // ==========================================
 
-    await openProfile();
+    openProfile();
+
+
+    // ==========================================
+    // UPDATE USER PANEL
+    // ==========================================
+
+    if (
+        typeof updateUserPanel ===
+        "function"
+    ) {
+
+        updateUserPanel();
+
+    }
 
 }
+
+
+// ==========================================
+// EXPORT FUNCTIONS
+// ==========================================
+
+window.openProfile =
+    openProfile;
+
+window.openRobloxLinkModal =
+    openRobloxLinkModal;
+
+window.searchRobloxUser =
+    searchRobloxUser;
+
+window.selectRobloxAccount =
+    selectRobloxAccount;
