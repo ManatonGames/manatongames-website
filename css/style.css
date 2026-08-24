@@ -4321,3 +4321,768 @@ footer{
     }
 
 }
+
+/* ==========================================
+   MANATON GAMES - ROBLOX ACCOUNT UI
+========================================== */
+
+
+/* ==========================================
+   ROBLOX PROFILE SECTION
+========================================== */
+
+.roblox-profile-section {
+    width: 100%;
+    margin-top: 24px;
+    padding: 22px;
+
+    box-sizing: border-box;
+
+    border-radius: 18px;
+
+    background: rgba(255, 255, 255, 0.04);
+
+    border: 1px solid rgba(255, 255, 255, 0.08);
+
+    text-align: center;
+
+    overflow: hidden;
+}
+
+
+/* ==========================================
+   ROBLOX TITLE
+========================================== */
+
+.roblox-profile-title {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+
+    margin-bottom: 20px;
+
+    font-size: 17px;
+    font-weight: 700;
+}
+
+
+/* ==========================================
+   ACCOUNT STATUS
+========================================== */
+
+.roblox-account-status {
+    width: 100%;
+
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+}
+
+
+/* ==========================================
+   LINKED ACCOUNT
+========================================== */
+
+.roblox-linked-user {
+    width: 100%;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+}
+
+
+/* ==========================================
+   ROBLOX AVATAR
+========================================== */
+
+.roblox-linked-avatar {
+    width: 96px;
+    height: 96px;
+
+    display: block;
+
+    object-fit: cover;
+
+    margin: 0 auto 14px;
+
+    border-radius: 50%;
+
+    border: 3px solid rgba(255, 255, 255, 0.12);
+
+    background: #111827;
+
+    box-shadow:
+        0 8px 25px rgba(0, 0, 0, 0.35);
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+
+.roblox-linked-avatar:hover {
+    transform: scale(1.05);
+
+    box-shadow:
+        0 10px 30px rgba(0, 0, 0, 0.45);
+}
+
+
+/* ==========================================
+   USERNAME
+========================================== */
+
+.roblox-linked-user strong {
+    display: block;
+
+    margin-bottom: 5px;
+
+    font-size: 17px;
+    font-weight: 700;
+
+    line-height: 1.3;
+}
+
+
+/* ==========================================
+   USER ID
+========================================== */
+
+.roblox-linked-user span {
+    display: block;
+
+    font-size: 13px;
+
+    color: rgba(255, 255, 255, 0.55);
+
+    line-height: 1.4;
+}
+
+
+/* ==========================================
+   LINK / CHANGE BUTTON
+========================================== */
+
+.roblox-profile-section
+.profile-action-btn {
+    width: 100%;
+
+    min-height: 44px;
+
+    margin-top: 20px;
+
+    padding: 11px 18px;
+
+    border: none;
+
+    border-radius: 12px;
+
+    cursor: pointer;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    transition:
+        transform 0.2s ease,
+        opacity 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+.roblox-profile-section
+.profile-action-btn:hover {
+    transform: translateY(-2px);
+}
+
+
+.roblox-profile-section
+.profile-action-btn:active {
+    transform: translateY(0);
+}
+
+
+/* ==========================================
+   ROBLOX LINK MODAL
+========================================== */
+
+#roblox-link-modal {
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 10000;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+
+    box-sizing: border-box;
+
+    background: rgba(0, 0, 0, 0.65);
+
+    backdrop-filter: blur(8px);
+}
+
+
+/* ==========================================
+   LINK CARD
+========================================== */
+
+.roblox-link-card {
+    position: relative;
+
+    width: min(440px, 100%);
+
+    max-height: calc(100vh - 40px);
+
+    overflow-y: auto;
+
+    box-sizing: border-box;
+
+    padding: 30px;
+
+    border-radius: 22px;
+
+    background: #111827;
+
+    border: 1px solid rgba(255, 255, 255, 0.10);
+
+    box-shadow:
+        0 25px 70px rgba(0, 0, 0, 0.55);
+
+    text-align: center;
+
+    animation:
+        robloxModalIn 0.25s ease;
+}
+
+
+@keyframes robloxModalIn {
+
+    from {
+        opacity: 0;
+        transform: translateY(15px) scale(0.97);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+
+}
+
+
+/* ==========================================
+   CLOSE BUTTON
+========================================== */
+
+.roblox-close-btn {
+    position: absolute;
+
+    top: 15px;
+    right: 15px;
+
+    width: 36px;
+    height: 36px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border: none;
+
+    border-radius: 10px;
+
+    background: rgba(255, 255, 255, 0.06);
+
+    color: inherit;
+
+    cursor: pointer;
+
+    font-size: 16px;
+
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+.roblox-close-btn:hover {
+    background: rgba(255, 255, 255, 0.12);
+
+    transform: scale(1.05);
+}
+
+
+/* ==========================================
+   ROBLOX ICON
+========================================== */
+
+.roblox-link-icon {
+    width: 64px;
+    height: 64px;
+
+    margin: 0 auto 16px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 18px;
+
+    background: rgba(255, 255, 255, 0.06);
+
+    border: 1px solid rgba(255, 255, 255, 0.08);
+
+    font-size: 30px;
+}
+
+
+/* ==========================================
+   MODAL TITLE
+========================================== */
+
+.roblox-link-card h2 {
+    margin: 0 0 8px;
+
+    font-size: 24px;
+
+    font-weight: 750;
+}
+
+
+.roblox-link-card p {
+    margin: 0 auto 22px;
+
+    max-width: 340px;
+
+    font-size: 14px;
+
+    line-height: 1.5;
+
+    color: rgba(255, 255, 255, 0.60);
+}
+
+
+/* ==========================================
+   INPUT WRAPPER
+========================================== */
+
+.roblox-input-wrapper {
+    width: 100%;
+
+    height: 48px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    padding: 0 14px;
+
+    box-sizing: border-box;
+
+    border-radius: 12px;
+
+    background: rgba(255, 255, 255, 0.05);
+
+    border: 1px solid rgba(255, 255, 255, 0.10);
+
+    transition:
+        border-color 0.2s ease,
+        background 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+.roblox-input-wrapper:focus-within {
+    border-color: rgba(255, 255, 255, 0.25);
+
+    background: rgba(255, 255, 255, 0.07);
+
+    box-shadow:
+        0 0 0 3px rgba(255, 255, 255, 0.04);
+}
+
+
+.roblox-input-wrapper > span {
+    flex-shrink: 0;
+
+    font-size: 17px;
+
+    opacity: 0.7;
+}
+
+
+/* ==========================================
+   INPUT
+========================================== */
+
+#roblox-username-input {
+    width: 100%;
+    height: 100%;
+
+    padding: 0;
+
+    border: none;
+    outline: none;
+
+    background: transparent;
+
+    color: inherit;
+
+    font-family: inherit;
+
+    font-size: 14px;
+}
+
+
+#roblox-username-input::placeholder {
+    color: rgba(255, 255, 255, 0.40);
+}
+
+
+/* ==========================================
+   SEARCH BUTTON
+========================================== */
+
+#search-roblox-btn {
+    width: 100%;
+
+    min-height: 46px;
+
+    margin-top: 14px;
+
+    border: none;
+
+    border-radius: 12px;
+
+    cursor: pointer;
+
+    font-size: 14px;
+
+    font-weight: 650;
+
+    transition:
+        transform 0.2s ease,
+        opacity 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+#search-roblox-btn:hover {
+    transform: translateY(-2px);
+}
+
+
+#search-roblox-btn:active {
+    transform: translateY(0);
+}
+
+
+#search-roblox-btn:disabled {
+    opacity: 0.55;
+
+    cursor: wait;
+
+    transform: none;
+}
+
+
+/* ==========================================
+   SEARCH RESULT
+========================================== */
+
+.roblox-search-result {
+    width: 100%;
+
+    margin-top: 18px;
+
+    box-sizing: border-box;
+}
+
+
+/* ==========================================
+   LOADING
+========================================== */
+
+.roblox-loading {
+    width: 100%;
+
+    min-height: 55px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 9px;
+
+    box-sizing: border-box;
+
+    padding: 14px;
+
+    border-radius: 12px;
+
+    background: rgba(255, 255, 255, 0.04);
+
+    border: 1px solid rgba(255, 255, 255, 0.07);
+
+    font-size: 14px;
+
+    color: rgba(255, 255, 255, 0.70);
+}
+
+
+/* ==========================================
+   ERROR
+========================================== */
+
+.roblox-error {
+    width: 100%;
+
+    box-sizing: border-box;
+
+    padding: 14px 16px;
+
+    border-radius: 12px;
+
+    background: rgba(255, 80, 80, 0.08);
+
+    border: 1px solid rgba(255, 80, 80, 0.16);
+
+    color: #ff8b8b;
+
+    font-size: 14px;
+
+    line-height: 1.5;
+
+    text-align: center;
+}
+
+
+.roblox-error small {
+    display: block;
+
+    margin-top: 5px;
+
+    font-size: 12px;
+
+    opacity: 0.75;
+}
+
+
+/* ==========================================
+   FOUND ACCOUNT
+========================================== */
+
+.roblox-found {
+    width: 100%;
+
+    box-sizing: border-box;
+
+    padding: 20px;
+
+    border-radius: 16px;
+
+    background: rgba(255, 255, 255, 0.04);
+
+    border: 1px solid rgba(255, 255, 255, 0.08);
+
+    text-align: center;
+
+    animation:
+        robloxResultIn 0.25s ease;
+}
+
+
+@keyframes robloxResultIn {
+
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+}
+
+
+/* ==========================================
+   FOUND AVATAR
+========================================== */
+
+.roblox-found-avatar-wrapper {
+    display: flex;
+
+    justify-content: center;
+
+    margin-bottom: 13px;
+}
+
+
+.roblox-found-avatar {
+    width: 90px;
+    height: 90px;
+
+    display: block;
+
+    object-fit: cover;
+
+    border-radius: 50%;
+
+    border: 3px solid rgba(255, 255, 255, 0.12);
+
+    background: #111827;
+
+    box-shadow:
+        0 8px 25px rgba(0, 0, 0, 0.35);
+}
+
+
+/* ==========================================
+   FOUND USER INFO
+========================================== */
+
+.roblox-found-info {
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    gap: 4px;
+
+    text-align: center;
+}
+
+
+.roblox-found-info strong {
+    font-size: 18px;
+
+    font-weight: 700;
+
+    line-height: 1.3;
+}
+
+
+.roblox-found-info span {
+    font-size: 13px;
+
+    color: rgba(255, 255, 255, 0.55);
+
+    line-height: 1.4;
+}
+
+
+/* ==========================================
+   SELECT BUTTON
+========================================== */
+
+.roblox-found
+.profile-action-btn {
+    width: 100%;
+
+    min-height: 46px;
+
+    margin-top: 18px;
+
+    border: none;
+
+    border-radius: 12px;
+
+    cursor: pointer;
+
+    font-size: 14px;
+
+    font-weight: 650;
+
+    transition:
+        transform 0.2s ease,
+        opacity 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+.roblox-found
+.profile-action-btn:hover {
+    transform: translateY(-2px);
+}
+
+
+.roblox-found
+.profile-action-btn:active {
+    transform: translateY(0);
+}
+
+
+/* ==========================================
+   MOBILE
+========================================== */
+
+@media (max-width: 600px) {
+
+    .roblox-profile-section {
+        padding: 18px;
+        margin-top: 20px;
+    }
+
+
+    .roblox-linked-avatar {
+        width: 84px;
+        height: 84px;
+    }
+
+
+    .roblox-linked-user strong {
+        font-size: 16px;
+    }
+
+
+    .roblox-linked-user span {
+        font-size: 12px;
+    }
+
+
+    .roblox-link-card {
+        padding: 24px 18px;
+
+        border-radius: 18px;
+    }
+
+
+    .roblox-link-card h2 {
+        font-size: 21px;
+    }
+
+
+    .roblox-found {
+        padding: 17px;
+    }
+
+
+    .roblox-found-avatar {
+        width: 80px;
+        height: 80px;
+    }
+
+}
