@@ -7,24 +7,31 @@ document.addEventListener("DOMContentLoaded", () => {
     const loginButton =
         document.getElementById("login-btn");
 
-    if(!loginButton) return;
+    if (!loginButton) return;
 
-    const session =
-        getSession();
 
-    if(!session) return;
+    // ==========================================
+    // GET SESSION
+    // ==========================================
+
+    const session = getSession();
+
+    if (!session) return;
+
+
+    // ==========================================
+    // UPDATE LOGIN BUTTON
+    // ==========================================
+
+    const username =
+        session.username || "Guest";
 
     loginButton.innerHTML = `
         <span class="user-panel-icon">👤</span>
-        <span class="user-panel-name">
-            ${session.username || "Guest"}
-        </span>
+        <span>${username}</span>
         <span class="user-panel-arrow">▼</span>
     `;
 
-    loginButton.classList.add(
-        "mg-user-panel-button"
-    );
 
     loginButton.addEventListener(
         "click",
@@ -38,12 +45,17 @@ document.addEventListener("DOMContentLoaded", () => {
 // TOGGLE USER MENU
 // ==========================================
 
-function toggleUserMenu(){
+function toggleUserMenu() {
 
     let menu =
         document.getElementById("user-menu");
 
-    if(menu){
+
+    // ==========================================
+    // CLOSE IF ALREADY OPEN
+    // ==========================================
+
+    if (menu) {
 
         menu.remove();
 
@@ -57,11 +69,19 @@ function toggleUserMenu(){
     }
 
 
+    // ==========================================
+    // GET SESSION
+    // ==========================================
+
     const session =
         getSession();
 
-    if(!session) return;
+    if (!session) return;
 
+
+    // ==========================================
+    // USER DATA
+    // ==========================================
 
     const username =
         session.username || "Guest";
@@ -70,44 +90,20 @@ function toggleUserMenu(){
         session.avatar ||
         "assets/logo/logo.png";
 
+    const loginType =
+        session.loginType || "guest";
+
 
     // ==========================================
-    // ROBLOX INFORMATION
+    // ROBLOX DATA
     // ==========================================
 
-    let robloxHTML = "";
+    const robloxLinked =
+        !!session.robloxUserId;
 
-
-    if(session.robloxUserId){
-
-        robloxHTML = `
-
-            <div class="user-roblox-info">
-
-                <div class="user-roblox-icon">
-                    🎮
-                </div>
-
-                <div class="user-roblox-data">
-
-                    <strong>
-                        ${session.robloxUsername || "Roblox Account"}
-                    </strong>
-
-                    <span>
-                        ${
-                            session.robloxRole ||
-                            "Roblox account linked"
-                        }
-                    </span>
-
-                </div>
-
-            </div>
-
-        `;
-
-    }
+    const robloxUsername =
+        session.robloxUsername ||
+        null;
 
 
     // ==========================================
@@ -123,6 +119,10 @@ function toggleUserMenu(){
 
     menu.innerHTML = `
 
+        <!-- ==================================
+             USER HEADER
+        ================================== -->
+
         <div class="user-header">
 
             <img
@@ -137,26 +137,67 @@ function toggleUserMenu(){
                     ${username}
                 </strong>
 
-                <span>
-                    ${
-                        session.loginType === "guest"
+                <p>
+                    ${loginType === "guest"
                         ? "Guest Account"
-                        : `${session.loginType || "Account"}`
+                        : "Manaton Games Account"
                     }
-                </span>
+                </p>
 
             </div>
 
         </div>
 
 
-        ${
-            robloxHTML
-        }
+        <!-- ==================================
+             ROBLOX STATUS
+        ================================== -->
+
+        <div class="user-roblox-status">
+
+            <div class="user-roblox-icon">
+                🎮
+            </div>
+
+            <div class="user-roblox-info">
+
+                <span class="user-roblox-label">
+                    Roblox
+                </span>
+
+                ${
+                    robloxLinked
+                    ? `
+                        <strong>
+                            ${robloxUsername}
+                        </strong>
+
+                        <small>
+                            Account Linked
+                        </small>
+                    `
+                    : `
+                        <strong>
+                            Not Linked
+                        </strong>
+
+                        <small>
+                            Link your Roblox account
+                        </small>
+                    `
+                }
+
+            </div>
+
+        </div>
 
 
-        <div class="user-menu-divider"></div>
+        <hr>
 
+
+        <!-- ==================================
+             MENU OPTIONS
+        ================================== -->
 
         <button
             id="profile-btn"
@@ -214,7 +255,7 @@ function toggleUserMenu(){
         </button>
 
 
-        <div class="user-menu-divider"></div>
+        <hr>
 
 
         <button
@@ -233,6 +274,10 @@ function toggleUserMenu(){
     `;
 
 
+    // ==========================================
+    // ADD TO PAGE
+    // ==========================================
+
     document.body.appendChild(menu);
 
 
@@ -243,36 +288,46 @@ function toggleUserMenu(){
     const loginButton =
         document.getElementById("login-btn");
 
-    const rect =
-        loginButton.getBoundingClientRect();
+    if (loginButton) {
+
+        const rect =
+            loginButton.getBoundingClientRect();
 
 
-    menu.style.top =
-        `${rect.bottom + 10}px`;
+        menu.style.top =
+            `${rect.bottom + 10}px`;
 
 
-    menu.style.left =
-        `${Math.max(
-            10,
-            rect.right - 250
-        )}px`;
+        menu.style.left =
+            `${Math.max(
+                10,
+                rect.right - 300
+            )}px`;
+
+    }
 
 
     // ==========================================
     // LOGOUT
     // ==========================================
 
-    document
-        .getElementById("logout-btn")
-        .onclick = () => {
+    const logoutButton =
+        document.getElementById("logout-btn");
+
+
+    if (logoutButton) {
+
+        logoutButton.onclick = () => {
 
             logout();
 
         };
 
+    }
+
 
     // ==========================================
-    // CLOSE OUTSIDE
+    // CLOSE WHEN CLICKING OUTSIDE
     // ==========================================
 
     setTimeout(() => {
@@ -291,7 +346,7 @@ function toggleUserMenu(){
 // CLOSE USER MENU
 // ==========================================
 
-function closeUserMenu(event){
+function closeUserMenu(event) {
 
     const menu =
         document.getElementById("user-menu");
@@ -299,20 +354,41 @@ function closeUserMenu(event){
     const button =
         document.getElementById("login-btn");
 
-    if(!menu) return;
+
+    if (!menu) return;
 
 
-    if(
-        menu.contains(event.target) ||
-        button?.contains(event.target)
-    ){
+    // ==========================================
+    // CLICK INSIDE MENU
+    // ==========================================
+
+    if (menu.contains(event.target)) {
 
         return;
 
     }
 
 
+    // ==========================================
+    // CLICK LOGIN BUTTON
+    // ==========================================
+
+    if (
+        button &&
+        button.contains(event.target)
+    ) {
+
+        return;
+
+    }
+
+
+    // ==========================================
+    // REMOVE MENU
+    // ==========================================
+
     menu.remove();
+
 
     document.removeEventListener(
         "click",
