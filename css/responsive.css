@@ -397,3 +397,63 @@
     }
 
 }
+
+/* ==========================================
+   USER PANEL / PROFILE - MOBILE
+========================================== */
+
+@media(max-width:600px){
+
+    #user-menu{
+
+        width:
+            calc(100vw - 20px);
+
+        left:10px !important;
+
+        right:10px;
+
+    }
+
+
+    #profile-modal{
+
+        padding:12px;
+
+        align-items:center;
+
+    }
+
+
+    .profile-card{
+
+        width:100%;
+
+        max-height:
+            calc(100vh - 24px);
+
+        padding:24px 18px;
+
+        border-radius:18px;
+
+    }
+
+
+    .profile-info > div{
+
+        align-items:flex-start;
+
+        flex-direction:column;
+
+        gap:4px;
+
+    }
+
+
+    .profile-info strong{
+
+        text-align:left;
+
+    }
+
+}
