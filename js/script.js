@@ -1,5 +1,30 @@
 document.addEventListener("DOMContentLoaded", async () => {
 
+        // ==========================
+    // PRIVATE MODE
+    // ==========================
+
+    initializePrivateMode();
+
+
+    // ==========================
+    // SI ESTÁ PRIVADA
+    // ==========================
+
+    if (
+        typeof WEBSITE_MODE !== "undefined" &&
+        WEBSITE_MODE === "private"
+    ) {
+
+        console.log(
+            "🔒 Manaton Games está en Private Mode."
+        );
+
+        return;
+
+    }
+
+
     // ==========================
     // INICIALIZAR
     // ==========================
