@@ -1,4 +1,4 @@
-// ==========================================
+/// ==========================================
 // MANATON GAMES - WEBSITE CONFIG
 // ==========================================
 
@@ -10,12 +10,32 @@ const WEBSITE_MODE = "private";
 
 
 // ==========================================
+// OWNER CONFIG
+// ==========================================
+
+// ID de la cuenta de Owner.
+//
+// IMPORTANTE:
+// Reemplaza "TU_OWNER_ID" por el identificador
+// que utilizará tu sistema de sesión.
+//
+// No pongas una contraseña aquí.
+
+const OWNER_CONFIG = {
+
+    id: "TU_OWNER_ID"
+
+};
+
+
+// ==========================================
 // PRIVATE MODE TEXT
 // ==========================================
 
 const PRIVATE_MODE_CONFIG = {
 
-    title: "We'll be back soon.",
+    title:
+        "We'll be back soon.",
 
     subtitle:
         "Manaton Games is currently preparing something new.",
