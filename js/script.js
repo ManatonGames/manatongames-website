@@ -268,6 +268,10 @@ async function loadGames(){
 
         if(!container){
 
+            console.warn(
+                "⚠️ No se encontró #games-container."
+            );
+
             return;
 
         }
@@ -433,6 +437,7 @@ async function loadGames(){
                                 Play Now
                             </a>
 
+
                             <button
                                 class="favorite-btn ${
                                     favorite
@@ -441,6 +446,11 @@ async function loadGames(){
                                 }"
                                 data-game-id="${game.id}"
                                 type="button"
+                                aria-pressed="${
+                                    favorite
+                                        ? "true"
+                                        : "false"
+                                }"
                             >
                                 ${
                                     favorite
@@ -470,6 +480,17 @@ async function loadGames(){
                         "error",
                         () => {
 
+                            if(
+                                cardImage.src.includes(
+                                    "game-placeholder.png"
+                                )
+                            ){
+
+                                return;
+
+                            }
+
+
                             cardImage.src =
                                 "assets/images/game-placeholder.png";
 
@@ -484,7 +505,9 @@ async function loadGames(){
                 // ==========================
 
                 const favoriteButton =
-                    card.querySelector(".favorite-btn");
+                    card.querySelector(
+                        ".favorite-btn"
+                    );
 
 
                 if(favoriteButton){
@@ -511,15 +534,26 @@ async function loadGames(){
                             }
 
 
+                            // Cambiar favorito
+                            toggleFavorite(game);
+
+
+                            // Comprobar el estado REAL
                             const isNowFavorite =
-    toggleFavorite(game);
-                                
+                                typeof isFavorite === "function"
+                                    ? isFavorite(game.id)
+                                    : false;
 
 
                             updateFavoriteButton(
                                 favoriteButton,
                                 isNowFavorite
                             );
+
+
+                            // Actualizar cualquier
+                            // otro botón relacionado
+                            refreshFavoriteButtons();
 
                         }
                     );
@@ -629,6 +663,10 @@ function initializeFavorites(){
     }
 
 
+    // ==========================
+    // ACTUALIZAR BOTONES
+    // ==========================
+
     refreshFavoriteButtons();
 
 
@@ -698,8 +736,11 @@ function refreshFavoriteButtons(){
             }
 
 
-            const isNowFavorite =
-    toggleFavorite(game);
+            // IMPORTANTE:
+            // Aquí SOLO comprobamos el estado.
+            // NO usamos toggleFavorite().
+            const favorite =
+                isFavorite(gameId);
 
 
             updateFavoriteButton(
@@ -736,7 +777,9 @@ function updateFavoriteButton(
 
     button.setAttribute(
         "aria-pressed",
-        favorite ? "true" : "false"
+        favorite
+            ? "true"
+            : "false"
     );
 
 
@@ -2439,8 +2482,17 @@ function openGameModal(game){
             }
 
 
+            // IMPORTANTE:
+            // toggleFavorite recibe el objeto completo
+            toggleFavorite(game);
+
+
+            // Obtener el estado REAL después
+            // de agregar/quitar el favorito
             const isNowFavorite =
-                toggleFavorite(game.id);
+                typeof isFavorite === "function"
+                    ? isFavorite(game.id)
+                    : false;
 
 
             updateFavoriteButton(
@@ -2449,7 +2501,9 @@ function openGameModal(game){
             );
 
 
+            // Actualizar botones de las tarjetas
             refreshFavoriteButtons();
+
 
         };
 
