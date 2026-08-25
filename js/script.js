@@ -547,7 +547,8 @@ async function loadGames(){
 
                             updateFavoriteButton(
                                 favoriteButton,
-                                isNowFavorite
+                                isNowFavorite,
+                                true
                             );
 
 
@@ -754,12 +755,13 @@ function refreshFavoriteButtons(){
 
 
 // =====================================================
-// ACTUALIZAR UN BOTÓN FAVORITE
+// ACTUALIZAR BOTÓN FAVORITE
 // =====================================================
 
 function updateFavoriteButton(
     button,
-    favorite
+    favorite,
+    animate = false
 ){
 
     if(!button){
@@ -768,6 +770,10 @@ function updateFavoriteButton(
 
     }
 
+
+    // ==========================
+    // ACTUALIZAR ESTADO
+    // ==========================
 
     button.classList.toggle(
         "favorited",
@@ -787,6 +793,37 @@ function updateFavoriteButton(
         favorite
             ? "⭐ Favorited"
             : "☆ Favorite";
+
+
+    // ==========================
+    // ANIMACIÓN
+    // ==========================
+
+    if(animate){
+
+        button.classList.remove(
+            "favorite-pop"
+        );
+
+
+        // Reiniciar animación
+        void button.offsetWidth;
+
+
+        button.classList.add(
+            "favorite-pop"
+        );
+
+
+        setTimeout(() => {
+
+            button.classList.remove(
+                "favorite-pop"
+            );
+
+        }, 700);
+
+    }
 
 }
 
