@@ -23,7 +23,7 @@ const WEBSITE_MODE = "private";
 
 const OWNER_CONFIG = {
 
-    id: "TU_OWNER_ID"
+    id: "6187500560"
 
 };
 
