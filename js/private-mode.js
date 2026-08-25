@@ -2,6 +2,7 @@
 // MANATON GAMES - PRIVATE MODE
 // ==========================================
 
+
 function initializePrivateMode() {
 
     const privateMode =
@@ -18,7 +19,7 @@ function initializePrivateMode() {
 
 
     // ==========================================
-    // PUBLIC
+    // PUBLIC MODE
     // ==========================================
 
     if (
@@ -30,13 +31,100 @@ function initializePrivateMode() {
             "active"
         );
 
+        document.body.style.overflow = "";
+
         return;
 
     }
 
 
     // ==========================================
-    // PRIVATE
+    // CHECK OWNER
+    // ==========================================
+
+    let ownerAccess = false;
+
+
+    try {
+
+        const session =
+            typeof getSession === "function"
+                ? getSession()
+                : null;
+
+
+        if (
+            session &&
+            session.loggedIn === true &&
+            typeof OWNER_CONFIG !== "undefined"
+        ) {
+
+            const ownerId =
+                String(
+                    OWNER_CONFIG.id || ""
+                ).trim();
+
+
+            const sessionUserId =
+                String(
+                    session.userId ||
+                    session.id ||
+                    session.robloxId ||
+                    session.robloxUserId ||
+                    ""
+                ).trim();
+
+
+            if (
+                ownerId &&
+                sessionUserId &&
+                ownerId === sessionUserId
+            ) {
+
+                ownerAccess = true;
+
+            }
+
+        }
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "❌ Private Mode Owner Check Error:",
+            error
+        );
+
+    }
+
+
+    // ==========================================
+    // OWNER ACCESS
+    // ==========================================
+
+    if (ownerAccess) {
+
+        privateMode.classList.remove(
+            "active"
+        );
+
+
+        document.body.style.overflow = "";
+
+
+        console.log(
+            "👑 Owner access granted."
+        );
+
+
+        return;
+
+    }
+
+
+    // ==========================================
+    // PRIVATE MODE
     // ==========================================
 
     privateMode.classList.add(
@@ -45,7 +133,7 @@ function initializePrivateMode() {
 
 
     // ==========================================
-    // TEXT
+    // PRIVATE MODE TEXT
     // ==========================================
 
     if (
@@ -149,5 +237,32 @@ function initializePrivateMode() {
             "none";
 
     }
+
+
+    console.log(
+        "🔒 Manaton Games is currently in Private Mode."
+    );
+
+}
+
+
+// ==========================================
+// INITIALIZE
+// ==========================================
+
+if (
+    document.readyState === "loading"
+) {
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        initializePrivateMode
+    );
+
+}
+
+else {
+
+    initializePrivateMode();
 
 }
