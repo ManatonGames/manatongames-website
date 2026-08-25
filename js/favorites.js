@@ -60,6 +60,13 @@ function saveFavorites(favorites) {
             JSON.stringify(favorites)
         );
 
+        // Avisar al resto de la página
+        window.dispatchEvent(
+            new CustomEvent(
+                "favoritesUpdated"
+            )
+        );
+
         return true;
 
     }
@@ -102,13 +109,22 @@ function isFavorite(gameId) {
 
 function addFavorite(game) {
 
-    if (!game || !game.id) return false;
+    if (!game || !game.id) {
+
+        console.error(
+            "❌ Cannot add favorite: invalid game."
+        );
+
+        return false;
+
+    }
 
 
     const favorites =
         getFavorites();
 
 
+    // Ya existe
     if (
         favorites.some(
             favorite =>
@@ -124,7 +140,8 @@ function addFavorite(game) {
 
     favorites.push({
 
-        id: game.id,
+        id:
+            game.id,
 
         name:
             game.name ||
@@ -132,6 +149,7 @@ function addFavorite(game) {
 
         thumbnail:
             game.thumbnail ||
+            game.image ||
             "assets/logo/logo.png",
 
         universeId:
@@ -145,9 +163,23 @@ function addFavorite(game) {
     });
 
 
-    return saveFavorites(
-        favorites
-    );
+    const saved =
+        saveFavorites(
+            favorites
+        );
+
+
+    if (saved) {
+
+        console.log(
+            "⭐ Game added to favorites:",
+            game.name
+        );
+
+    }
+
+
+    return saved;
 
 }
 
@@ -157,6 +189,13 @@ function addFavorite(game) {
 // ==========================================
 
 function removeFavorite(gameId) {
+
+    if (!gameId) {
+
+        return false;
+
+    }
+
 
     const favorites =
         getFavorites();
@@ -170,9 +209,23 @@ function removeFavorite(gameId) {
         );
 
 
-    return saveFavorites(
-        updated
-    );
+    const saved =
+        saveFavorites(
+            updated
+        );
+
+
+    if (saved) {
+
+        console.log(
+            "🗑️ Game removed from favorites:",
+            gameId
+        );
+
+    }
+
+
+    return saved;
 
 }
 
@@ -185,25 +238,66 @@ function toggleFavorite(game) {
 
     if (!game || !game.id) {
 
+        console.error(
+            "❌ toggleFavorite recibió un juego inválido:",
+            game
+        );
+
         return false;
 
     }
 
 
+    const gameId =
+        game.id;
+
+
+    // ==========================================
+    // REMOVE
+    // ==========================================
+
     if (
-        isFavorite(game.id)
+        isFavorite(gameId)
     ) {
 
-        return removeFavorite(
-            game.id
+        removeFavorite(
+            gameId
+        );
+
+    }
+
+    // ==========================================
+    // ADD
+    // ==========================================
+
+    else {
+
+        addFavorite(
+            game
         );
 
     }
 
 
-    return addFavorite(
-        game
+    // ==========================================
+    // DEVOLVER ESTADO REAL
+    // ==========================================
+
+    const newState =
+        isFavorite(
+            gameId
+        );
+
+
+    console.log(
+        newState
+            ? "⭐ Favorited:"
+            : "☆ Unfavorited:",
+        game.name
     );
+
+
+    return newState;
 
 }
 
@@ -242,6 +336,7 @@ function openFavorites() {
             <button
                 id="close-favorites"
                 class="favorites-close-btn"
+                type="button"
             >
                 ✕
             </button>
@@ -283,15 +378,21 @@ function openFavorites() {
     );
 
 
-    document
-        .getElementById(
+    const closeButton =
+        document.getElementById(
             "close-favorites"
-        )
-        .onclick = () => {
+        );
+
+
+    if (closeButton) {
+
+        closeButton.onclick = () => {
 
             modal.remove();
 
         };
+
+    }
 
 
     renderFavorites();
@@ -311,7 +412,11 @@ function renderFavorites() {
         );
 
 
-    if (!container) return;
+    if (!container) {
+
+        return;
+
+    }
 
 
     const favorites =
@@ -392,9 +497,8 @@ function renderFavorites() {
 
                             <button
                                 class="favorite-play-btn"
-                                data-universe-id="${
-                                    game.universeId || ""
-                                }"
+                                data-game-id="${game.id}"
+                                type="button"
                             >
                                 🎮 Play
                             </button>
@@ -403,6 +507,7 @@ function renderFavorites() {
                             <button
                                 class="favorite-remove-btn"
                                 data-game-id="${game.id}"
+                                type="button"
                             >
                                 🗑️ Remove
                             </button>
@@ -430,11 +535,11 @@ function renderFavorites() {
 
                 button.onclick = () => {
 
-                    const universeId =
-                        button.dataset.universeId;
+                    const gameId =
+                        button.dataset.gameId;
 
 
-                    if (!universeId) {
+                    if (!gameId) {
 
                         return;
 
@@ -442,7 +547,7 @@ function renderFavorites() {
 
 
                     window.open(
-                        `https://www.roblox.com/games/${universeId}`,
+                        `https://www.roblox.com/games/${gameId}`,
                         "_blank"
                     );
 
@@ -465,11 +570,27 @@ function renderFavorites() {
 
                 button.onclick = () => {
 
+                    const gameId =
+                        button.dataset.gameId;
+
+
                     removeFavorite(
-                        button.dataset.gameId
+                        gameId
                     );
 
+
                     renderFavorites();
+
+
+                    // Actualizar botones de las tarjetas
+                    if (
+                        typeof refreshFavoriteButtons ===
+                        "function"
+                    ) {
+
+                        refreshFavoriteButtons();
+
+                    }
 
                 };
 
@@ -497,7 +618,14 @@ document.addEventListener(
                     );
 
 
-                if (!button) return;
+                if (!button) {
+
+                    return;
+
+                }
+
+
+                event.preventDefault();
 
 
                 openFavorites();
