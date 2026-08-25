@@ -1,14 +1,13 @@
 {
-    "version": "1.0.4",
-    "title": "Version 1.0.4",
-    "released": "2026-08-01",
+    "version": "1.0.2",
+    "title": "Version 1.0.2",
+    "released": "2026-08-24",
     "message": "Performance improvements and bug fixes.",
     "changes": [
         "Fixed Loading Screen",
-        "Fixed Live status bar",
-        "Added New 1 game in the Our Games section: PLS DONATE 1",
-        "Added new profile system, for now: Guest",
-        "Working on the login and sign in system",
-        "Continue with google and discord is not available for now, only the continue as guest is working"
+        "Added Roblox System: You can link your roblox acc now",
+        "Fixed Web Style",
+        "Fixed Studio Stats, Now working!!",
+        "All Systems are operational now, Web is working now!!",
     ]
 }
