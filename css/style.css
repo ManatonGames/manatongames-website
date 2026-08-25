@@ -5453,3 +5453,209 @@ footer{
     }
 
 }
+
+/* ==========================================
+   FAVORITE BUTTON
+========================================== */
+
+.favorite-btn {
+
+    display:inline-flex;
+
+    align-items:center;
+    justify-content:center;
+
+    gap:8px;
+
+    padding:11px 16px;
+
+    border:1px solid rgba(255,255,255,.10);
+
+    border-radius:10px;
+
+    background:rgba(255,255,255,.06);
+
+    color:#cbd5e1;
+
+    font-family:inherit;
+
+    font-size:14px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:
+        background .25s ease,
+        color .25s ease,
+        border-color .25s ease,
+        transform .25s ease,
+        box-shadow .25s ease;
+
+}
+
+
+/* =========================
+   HOVER
+========================= */
+
+.favorite-btn:hover {
+
+    background:rgba(59,130,246,.12);
+
+    border-color:rgba(59,130,246,.45);
+
+    color:#60a5fa;
+
+    transform:translateY(-2px);
+
+    box-shadow:
+        0 8px 20px rgba(37,99,235,.15);
+
+}
+
+
+/* =========================
+   ACTIVE / FAVORITED
+========================= */
+
+.favorite-btn.active {
+
+    background:rgba(250,204,21,.10);
+
+    border-color:rgba(250,204,21,.45);
+
+    color:#facc15;
+
+    box-shadow:
+        0 8px 20px rgba(250,204,21,.10);
+
+}
+
+
+/* =========================
+   ACTIVE HOVER
+========================= */
+
+.favorite-btn.active:hover {
+
+    background:rgba(250,204,21,.16);
+
+    border-color:rgba(250,204,21,.65);
+
+    color:#fde047;
+
+}
+
+
+/* =========================
+   STAR ICON
+========================= */
+
+.favorite-btn .favorite-icon {
+
+    font-size:16px;
+
+    line-height:1;
+
+    transition:
+        transform .25s ease;
+
+}
+
+
+.favorite-btn:hover .favorite-icon {
+
+    transform:scale(1.12);
+
+}
+
+
+/* =========================
+   STAR ANIMATION
+========================= */
+
+.favorite-btn.active .favorite-icon {
+
+    animation:
+        favoritePop .3s ease;
+
+}
+
+
+@keyframes favoritePop {
+
+    0% {
+
+        transform:scale(.7) rotate(-10deg);
+
+    }
+
+    60% {
+
+        transform:scale(1.25) rotate(5deg);
+
+    }
+
+    100% {
+
+        transform:scale(1) rotate(0);
+
+    }
+
+}
+
+
+/* =========================
+   CLICK
+========================= */
+
+.favorite-btn:active {
+
+    transform:scale(.96);
+
+}
+
+
+/* =========================
+   FOCUS
+========================= */
+
+.favorite-btn:focus-visible {
+
+    outline:2px solid #60a5fa;
+
+    outline-offset:3px;
+
+}
+
+
+/* =========================
+   FAVORITE BUTTON INSIDE
+   GAME MODAL
+========================= */
+
+.game-modal-buttons .favorite-btn {
+
+    min-height:50px;
+
+    padding:14px 20px;
+
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width:768px) {
+
+    .favorite-btn {
+
+        width:100%;
+
+        min-height:44px;
+
+    }
+
+}
