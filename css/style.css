@@ -5659,3 +5659,197 @@ footer{
     }
 
 }
+
+/* =====================================================
+   FAVORITES ANIMATIONS
+===================================================== */
+
+/* Botón favorito */
+.favorite-btn {
+    transition:
+        transform 0.2s ease,
+        background-color 0.25s ease,
+        color 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+/* Al pasar el mouse */
+.favorite-btn:hover {
+    transform: translateY(-2px);
+}
+
+/* Animación al añadir */
+.favorite-btn.favorite-pop {
+    animation: favoritePop 0.45s ease;
+}
+
+@keyframes favoritePop {
+
+    0% {
+        transform: scale(1);
+    }
+
+    35% {
+        transform: scale(1.18);
+    }
+
+    65% {
+        transform: scale(0.92);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+
+}
+
+
+/* Brillo */
+.favorite-btn.favorite-pop::after {
+
+    content: "✨";
+
+    position: absolute;
+
+    pointer-events: none;
+
+    animation: favoriteSparkle 0.7s ease forwards;
+
+}
+
+@keyframes favoriteSparkle {
+
+    0% {
+        opacity: 0;
+        transform: scale(0.5) translateY(0);
+    }
+
+    30% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+        transform: scale(1.4) translateY(-18px);
+    }
+
+}
+
+
+/* =====================================================
+   FAVORITE GAME REMOVE ANIMATION
+===================================================== */
+
+.favorite-game.favorite-removing {
+
+    animation: favoriteRemove 0.35s ease forwards;
+
+}
+
+@keyframes favoriteRemove {
+
+    0% {
+
+        opacity: 1;
+        transform: scale(1);
+
+    }
+
+    100% {
+
+        opacity: 0;
+        transform: scale(0.92) translateX(25px);
+
+    }
+
+}
+
+
+/* =====================================================
+   FAVORITES MODAL
+===================================================== */
+
+#favorites-modal {
+
+    animation: favoritesModalIn 0.3s ease;
+
+}
+
+@keyframes favoritesModalIn {
+
+    from {
+
+        opacity: 0;
+
+    }
+
+    to {
+
+        opacity: 1;
+
+    }
+
+}
+
+
+.favorites-card {
+
+    animation: favoritesCardIn 0.35s ease;
+
+}
+
+@keyframes favoritesCardIn {
+
+    from {
+
+        opacity: 0;
+        transform: translateY(20px) scale(0.96);
+
+    }
+
+    to {
+
+        opacity: 1;
+        transform: translateY(0) scale(1);
+
+    }
+
+}
+
+
+/* =====================================================
+   FAVORITE GAME CARDS
+===================================================== */
+
+.favorite-game {
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+
+}
+
+.favorite-game:hover {
+
+    transform: translateY(-3px);
+
+}
+
+
+/* =====================================================
+   REDUCED MOTION
+===================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .favorite-btn,
+    .favorite-game,
+    #favorites-modal,
+    .favorites-card {
+
+        animation: none !important;
+        transition: none !important;
+
+    }
+
+}
