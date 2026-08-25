@@ -512,7 +512,8 @@ async function loadGames(){
 
 
                             const isNowFavorite =
-                                toggleFavorite(game.id);
+    toggleFavorite(game);
+                                
 
 
                             updateFavoriteButton(
@@ -697,8 +698,8 @@ function refreshFavoriteButtons(){
             }
 
 
-            const favorite =
-                isFavorite(gameId);
+            const isNowFavorite =
+    toggleFavorite(game);
 
 
             updateFavoriteButton(
