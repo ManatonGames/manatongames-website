@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     if (
         typeof WEBSITE_MODE !== "undefined" &&
-        WEBSITE_MODE === "private"
+        WEBSITE_MODE === "public"
     ) {
 
         console.log(
