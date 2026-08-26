@@ -10,44 +10,85 @@
 document.addEventListener("DOMContentLoaded", async () => {
 
     // =================================================
-    // PRIVATE MODE
-    // =================================================
+// PRIVATE MODE
+// =================================================
 
-    let privateModeBlocked = false;
+let privateModeBlocked = false;
+
+
+// =================================================
+// COMPROBAR WEBSITE MODE
+// =================================================
+
+if (
+    typeof WEBSITE_MODE !== "undefined" &&
+    WEBSITE_MODE === "private"
+) {
+
+    console.log(
+        "🔒 Manaton Games está en Private Mode."
+    );
+
+
+    // =============================================
+    // COMPROBAR OWNER
+    // =============================================
+
+    let ownerAccess = false;
 
 
     if (
-        typeof WEBSITE_MODE !== "undefined" &&
-        WEBSITE_MODE === "private"
+        typeof isOwner === "function"
     ) {
 
+        try {
+
+            ownerAccess =
+                isOwner();
+
+        }
+
+        catch (error) {
+
+            console.error(
+                "❌ Error comprobando Owner:",
+                error
+            );
+
+        }
+
+    }
+
+
+    // =============================================
+    // USUARIO NORMAL
+    // =============================================
+
+    if (!ownerAccess) {
+
+        privateModeBlocked = true;
+
+
         console.log(
-            "🔒 Manaton Games está en Private Mode."
+            "🔒 Acceso bloqueado: Private Mode."
         );
 
 
-        // =============================================
-        // COMPROBAR OWNER
-        // =============================================
-
-        let ownerAccess = false;
-
-
         if (
-            typeof isOwner === "function"
+            typeof initializePrivateMode ===
+            "function"
         ) {
 
             try {
 
-                ownerAccess =
-                    isOwner();
+                initializePrivateMode();
 
             }
 
             catch (error) {
 
                 console.error(
-                    "❌ Error comprobando Owner:",
+                    "❌ Private Mode Error:",
                     error
                 );
 
@@ -56,94 +97,58 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
 
 
-        // =============================================
-        // SI NO ES OWNER
-        // =============================================
-
-        if (!ownerAccess) {
-
-            privateModeBlocked = true;
-
-
-            console.log(
-                "🔒 Acceso bloqueado: Private Mode."
-            );
-
-
-            // Ejecutar el sistema visual de
-            // Private Mode si existe
-
-            if (
-                typeof initializePrivateMode ===
-                "function"
-            ) {
-
-                try {
-
-                    initializePrivateMode();
-
-                }
-
-                catch (error) {
-
-                    console.error(
-                        "❌ Private Mode Error:",
-                        error
-                    );
-
-                }
-
-            }
-
-
-            return;
-
-        }
-
-
-        // =============================================
-        // OWNER
-        // =============================================
-
-        console.log(
-            "👑 Owner detectado."
-        );
-
-
-        console.log(
-            "✅ Acceso completo permitido en Private Mode."
-        );
+        return;
 
     }
 
 
-    // =================================================
-    // PRIVATE MODE PARA USUARIOS NORMALES
-    // =================================================
+    // =============================================
+    // OWNER
+    // =============================================
 
-    if (
-        !privateModeBlocked &&
-        typeof initializePrivateMode ===
-        "function"
-    ) {
+    console.log(
+        "👑 Owner detectado."
+    );
 
-        try {
 
-            initializePrivateMode();
+    console.log(
+        "✅ Acceso completo permitido en Private Mode."
+    );
 
-        }
+}
 
-        catch (error) {
 
-            console.error(
-                "❌ Private Mode Error:",
-                error
-            );
+// =================================================
+// PUBLIC MODE
+// =================================================
 
-        }
+// Si la página está pública,
+// asegurarnos de que Private Mode esté oculto.
+
+if (
+    typeof WEBSITE_MODE === "undefined" ||
+    WEBSITE_MODE === "public"
+) {
+
+    console.log(
+        "🌐 Manaton Games está en Public Mode."
+    );
+
+
+    const privateMode =
+        document.getElementById(
+            "private-mode"
+        );
+
+
+    if (privateMode) {
+
+        privateMode.style.display =
+            "none";
 
     }
 
+}
 
     // =================================================
     // INICIALIZAR
