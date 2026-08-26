@@ -216,17 +216,48 @@ function initializeMenu(){
     }
 
 
+    // ==========================
+    // ABRIR / CERRAR MENÚ
+    // ==========================
+
     menuToggle.addEventListener(
         "click",
         () => {
 
-            navbar.classList.toggle(
-                "active"
+            const isOpen =
+                navbar.classList.toggle(
+                    "active"
+                );
+
+
+            // ==========================
+            // ANIMAR HAMBURGUESA
+            // ==========================
+
+            menuToggle.classList.toggle(
+                "active",
+                isOpen
+            );
+
+
+            // ==========================
+            // ACCESSIBILITY
+            // ==========================
+
+            menuToggle.setAttribute(
+                "aria-expanded",
+                isOpen
+                    ? "true"
+                    : "false"
             );
 
         }
     );
 
+
+    // ==========================
+    // CERRAR AL SELECCIONAR LINK
+    // ==========================
 
     document
         .querySelectorAll(
@@ -241,6 +272,17 @@ function initializeMenu(){
 
                         navbar.classList.remove(
                             "active"
+                        );
+
+
+                        menuToggle.classList.remove(
+                            "active"
+                        );
+
+
+                        menuToggle.setAttribute(
+                            "aria-expanded",
+                            "false"
                         );
 
                     }
