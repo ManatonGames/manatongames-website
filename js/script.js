@@ -13,25 +13,38 @@ document.addEventListener("DOMContentLoaded", async () => {
     // PRIVATE MODE
     // ==========================
 
-    const hasPrivateAccess =
-        initializePrivateMode();
+    initializePrivateMode();
 
 
     // ==========================
-    // SI ESTÁ PRIVADA
+    // CHECK PRIVATE ACCESS
     // ==========================
 
-    if (
+    const websiteIsPrivate =
         typeof WEBSITE_MODE !== "undefined" &&
-        WEBSITE_MODE === "private" &&
-        !hasPrivateAccess
-    ) {
+        WEBSITE_MODE === "private";
+
+
+    const ownerAccess =
+        isWebsiteOwner();
+
+
+    if(websiteIsPrivate && !ownerAccess){
 
         console.log(
             "🔒 Manaton Games está en Private Mode."
         );
 
         return;
+
+    }
+
+
+    if(websiteIsPrivate && ownerAccess){
+
+        console.log(
+            "👑 Owner detected. Private Mode bypass enabled."
+        );
 
     }
 
@@ -60,14 +73,14 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 
     // ==========================
-    // NEWS
+    // CARGAR NEWS
     // ==========================
 
     await loadNews();
 
 
     // ==========================
-    // ANIMACIONES
+    // INICIALIZAR ANIMACIONES
     // ==========================
 
     initializeScrollReveal();
@@ -77,169 +90,14 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 
 // =====================================================
-// PRIVATE MODE
+// OWNER ACCESS
 // =====================================================
 
-function initializePrivateMode(){
+function isWebsiteOwner(){
 
-    // ==========================
-    // PUBLIC MODE
-    // ==========================
-
-    if(
-        typeof WEBSITE_MODE === "undefined" ||
-        WEBSITE_MODE !== "private"
-    ){
-
-        return true;
-
-    }
-
-
-    // ==========================
-    // COMPROBAR OWNER
-    // ==========================
-
-    const owner =
-        isManatonOwner();
-
-
-    // ==========================
-    // SI ES OWNER
-    // ==========================
-
-    if(owner){
-
-        console.log(
-            "👑 Owner detectado. Private Mode permitido."
-        );
-
-
-        // Ocultar pantalla privada
-        // si existe
-
-        const privateScreen =
-            document.getElementById(
-                "private-mode"
-            );
-
-
-        if(privateScreen){
-
-            privateScreen.style.display =
-                "none";
-
-        }
-
-
-        const privateOverlay =
-            document.getElementById(
-                "private-overlay"
-            );
-
-
-        if(privateOverlay){
-
-            privateOverlay.style.display =
-                "none";
-
-        }
-
-
-        document.body.classList.remove(
-            "private-mode-active"
-        );
-
-
-        document.body.classList.add(
-            "private-owner-access"
-        );
-
-
-        return true;
-
-    }
-
-
-    // ==========================
-    // VISITANTE NORMAL
-    // ==========================
-
-    console.log(
-        "🔒 Visitante bloqueado por Private Mode."
-    );
-
-
-    document.body.classList.add(
-        "private-mode-active"
-    );
-
-
-    // ==========================
-    // OCULTAR CONTENIDO
-    // ==========================
-
-    const privateContent =
-        document.querySelectorAll(
-            "[data-private-content]"
-        );
-
-
-    privateContent.forEach(element => {
-
-        element.style.display =
-            "none";
-
-    });
-
-
-    // ==========================
-    // MOSTRAR PANTALLA PRIVADA
-    // ==========================
-
-    const privateScreen =
-        document.getElementById(
-            "private-mode"
-        );
-
-
-    if(privateScreen){
-
-        privateScreen.style.display =
-            "flex";
-
-    }
-
-
-    const privateOverlay =
-        document.getElementById(
-            "private-overlay"
-        );
-
-
-    if(privateOverlay){
-
-        privateOverlay.style.display =
-            "flex";
-
-    }
-
-
-    return false;
-
-}
-
-
-// =====================================================
-// OWNER DETECTION
-// =====================================================
-
-function isManatonOwner(){
-
-    // ==========================
+    // =================================================
     // OPCIÓN 1
-    // session.js
-    // ==========================
+    // =================================================
 
     if(
         typeof window.isOwner === "boolean"
@@ -250,126 +108,128 @@ function isManatonOwner(){
     }
 
 
-    // ==========================
+    // =================================================
     // OPCIÓN 2
-    // MG SESSION
-    // ==========================
+    // =================================================
 
     if(
-        window.MG_SESSION &&
-        typeof window.MG_SESSION.isOwner ===
-            "boolean"
+        typeof window.IS_OWNER === "boolean"
     ){
 
-        return window.MG_SESSION.isOwner;
+        return window.IS_OWNER;
 
     }
 
 
-    // ==========================
+    // =================================================
     // OPCIÓN 3
-    // CURRENT USER
-    // ==========================
+    // =================================================
 
     if(
-        window.currentUser &&
-        typeof window.currentUser.isOwner ===
-            "boolean"
+        typeof window.isWebsiteOwner === "boolean"
     ){
 
-        return window.currentUser.isOwner;
+        return window.isWebsiteOwner;
 
     }
 
 
-    // ==========================
+    // =================================================
     // OPCIÓN 4
-    // SESSION USER
-    // ==========================
+    // Buscar información del usuario
+    // =================================================
 
-    if(
-        window.sessionUser &&
-        typeof window.sessionUser.isOwner ===
-            "boolean"
-    ){
+    const possibleUsers = [
 
-        return window.sessionUser.isOwner;
+        window.currentUser,
+        window.currentSessionUser,
+        window.sessionUser,
+        window.loggedUser,
+        window.user,
+        window.session
 
-    }
-
-
-    // ==========================
-    // OPCIÓN 5
-    // ROBLOX USER ID
-    // ==========================
-
-    const ownerRobloxId =
-        window.OWNER_ROBLOX_USER_ID;
+    ];
 
 
-    const currentRobloxId =
-        window.robloxUserId ||
-        window.currentRobloxUserId;
+    // =================================================
+    // OWNER ROBLOX ID
+    // =================================================
+
+    const ownerId =
+        window.OWNER_ROBLOX_ID ||
+        window.MANATON_OWNER_ROBLOX_ID ||
+        window.OWNER_ID ||
+        window.ownerRobloxId;
 
 
-    if(
-        ownerRobloxId &&
-        currentRobloxId
-    ){
+    if(ownerId){
 
-        return (
-            String(currentRobloxId) ===
-            String(ownerRobloxId)
-        );
-
-    }
+        const normalizedOwnerId =
+            String(ownerId);
 
 
-    // ==========================
-    // OPCIÓN 6
-    // CURRENT USER ROBLOX ID
-    // ==========================
+        for(
+            const user of possibleUsers
+        ){
 
-    if(
-        window.currentUser &&
-        window.currentUser.robloxUserId &&
-        ownerRobloxId
-    ){
+            if(!user){
 
-        return (
-            String(
-                window.currentUser.robloxUserId
-            ) ===
-            String(ownerRobloxId)
-        );
+                continue;
 
-    }
+            }
 
 
-    // ==========================
-    // OPCIÓN 7
-    // MG SESSION ROBLOX ID
-    // ==========================
+            const possibleId =
+                user.robloxUserId ||
+                user.robloxId ||
+                user.robloxID ||
+                user.userId ||
+                user.id;
 
-    if(
-        window.MG_SESSION &&
-        window.MG_SESSION.robloxUserId &&
-        ownerRobloxId
-    ){
 
-        return (
-            String(
-                window.MG_SESSION.robloxUserId
-            ) ===
-            String(ownerRobloxId)
-        );
+            if(
+                possibleId &&
+                String(possibleId) ===
+                normalizedOwnerId
+            ){
+
+                return true;
+
+            }
+
+        }
 
     }
 
 
-    // ==========================
-    // NO OWNER
-    // ==========================
+    // =================================================
+    // REVISAR OBJETOS DE SESIÓN
+    // =================================================
+
+    for(
+        const user of possibleUsers
+    ){
+
+        if(!user){
+
+            continue;
+
+        }
+
+
+        if(
+            user.isOwner === true ||
+            user.owner === true ||
+            user.role === "Owner" ||
+            user.role === "owner"
+        ){
+
+            return true;
+
+        }
+
+    }
+
 
     return false;
 
@@ -386,6 +246,7 @@ function initializeMenu(){
         document.getElementById(
             "menu-toggle"
         );
+
 
     const navbar =
         document.getElementById(
@@ -464,15 +325,18 @@ async function loadStats(){
                 "games-count"
             );
 
+
         const membersCount =
             document.getElementById(
                 "members-count"
             );
 
+
         const visitsCount =
             document.getElementById(
                 "visits-count"
             );
+
 
         const favoritesCount =
             document.getElementById(
@@ -563,6 +427,7 @@ async function loadGames(){
 
         const localGames =
             await RobloxAPI.getGames();
+
 
         const robloxData =
             await RobloxAPI.getStats();
@@ -775,7 +640,7 @@ async function loadGames(){
                             <span>
                                 👥
                                 ${
-                                    game.players ||
+                                    game.players ??
                                     "Coming Soon"
                                 }
                             </span>
@@ -784,7 +649,7 @@ async function loadGames(){
                             <span>
                                 👁️
                                 ${
-                                    game.visits ||
+                                    game.visits ??
                                     "Coming Soon"
                                 }
                             </span>
@@ -818,11 +683,13 @@ async function loadGames(){
                                         : "false"
                                 }"
                             >
+
                                 ${
                                     favorite
                                         ? "⭐ Favorited"
                                         : "☆ Favorite"
                                 }
+
                             </button>
 
                         </div>
@@ -837,7 +704,9 @@ async function loadGames(){
                 // ==========================
 
                 const cardImage =
-                    card.querySelector("img");
+                    card.querySelector(
+                        "img"
+                    );
 
 
                 if(cardImage){
@@ -1219,12 +1088,12 @@ async function loadNews(){
                 <div class="news-header">
 
                     <span class="news-category">
-                        ${item.category}
+                        ${item.category || ""}
                     </span>
 
 
                     <span class="news-date">
-                        ${item.date}
+                        ${item.date || ""}
                     </span>
 
                 </div>
@@ -1232,12 +1101,12 @@ async function loadNews(){
 
                 <h3>
                     ${item.icon || "📰"}
-                    ${item.title}
+                    ${item.title || ""}
                 </h3>
 
 
                 <p>
-                    ${item.description}
+                    ${item.description || ""}
                 </p>
 
             `;
@@ -1333,7 +1202,9 @@ function initializeGameSearch(){
 
 
             const status =
-                card.querySelector(".game-status")
+                card.querySelector(
+                    ".game-status"
+                )
                     ?.textContent
                     .trim() || "";
 
@@ -1353,8 +1224,7 @@ function initializeGameSearch(){
                 matchesFilter
             ){
 
-                card.style.display =
-                    "";
+                card.style.display = "";
 
                 visibleGames++;
 
@@ -1519,15 +1389,17 @@ function initializeScrollReveal(){
         !("IntersectionObserver" in window)
     ){
 
-        document.querySelectorAll(
-            ".reveal, .reveal-left, .reveal-right, .reveal-zoom, .stagger"
-        ).forEach(element => {
+        document
+            .querySelectorAll(
+                ".reveal, .reveal-left, .reveal-right, .reveal-zoom, .stagger"
+            )
+            .forEach(element => {
 
-            element.classList.add(
-                "active"
-            );
+                element.classList.add(
+                    "active"
+                );
 
-        });
+            });
 
 
         return;
@@ -1537,7 +1409,6 @@ function initializeScrollReveal(){
 
     revealObserver =
         new IntersectionObserver(
-
             entries => {
 
                 entries.forEach(entry => {
@@ -1560,23 +1431,23 @@ function initializeScrollReveal(){
                 });
 
             },
-
             {
                 threshold: 0.15
             }
-
         );
 
 
-    document.querySelectorAll(
-        ".reveal, .reveal-left, .reveal-right, .reveal-zoom, .stagger"
-    ).forEach(element => {
+    document
+        .querySelectorAll(
+            ".reveal, .reveal-left, .reveal-right, .reveal-zoom, .stagger"
+        )
+        .forEach(element => {
 
-        revealObserver.observe(
-            element
-        );
+            revealObserver.observe(
+                element
+            );
 
-    });
+        });
 
 }
 
@@ -1587,14 +1458,16 @@ function initializeScrollReveal(){
 
 function initializeStagger(){
 
-    document.querySelectorAll(
-        ".stagger"
-    ).forEach((element, index) => {
+    document
+        .querySelectorAll(
+            ".stagger"
+        )
+        .forEach((element, index) => {
 
-        element.style.transitionDelay =
-            `${index * 0.08}s`;
+            element.style.transitionDelay =
+                `${index * 0.08}s`;
 
-    });
+        });
 
 }
 
@@ -1609,7 +1482,10 @@ async function loadSystemStatus(){
 
         const response =
             await fetch(
-                "/data/status.json"
+                "/data/status.json",
+                {
+                    cache: "no-store"
+                }
             );
 
 
@@ -1645,17 +1521,9 @@ async function loadSystemStatus(){
         }
 
 
-        // ==========================
-        // TEXTO
-        // ==========================
-
         status.textContent =
-            `${data.icon} ${data.title}`;
+            `${data.icon || "🟢"} ${data.title || "Operational"}`;
 
-
-        // ==========================
-        // LIMPIAR CLASES
-        // ==========================
 
         status.classList.remove(
             "status-operational",
@@ -1677,10 +1545,6 @@ async function loadSystemStatus(){
         }
 
 
-        // ==========================
-        // APLICAR ESTADO
-        // ==========================
-
         switch(data.status){
 
             case "operational":
@@ -1688,7 +1552,6 @@ async function loadSystemStatus(){
                 status.classList.add(
                     "status-operational"
                 );
-
 
                 statusBar?.classList.add(
                     "statusbar-operational"
@@ -1703,7 +1566,6 @@ async function loadSystemStatus(){
                     "status-minor"
                 );
 
-
                 statusBar?.classList.add(
                     "statusbar-minor"
                 );
@@ -1716,7 +1578,6 @@ async function loadSystemStatus(){
                 status.classList.add(
                     "status-maintenance"
                 );
-
 
                 statusBar?.classList.add(
                     "statusbar-maintenance"
@@ -1731,7 +1592,6 @@ async function loadSystemStatus(){
                     "status-outage"
                 );
 
-
                 statusBar?.classList.add(
                     "statusbar-outage"
                 );
@@ -1744,7 +1604,6 @@ async function loadSystemStatus(){
                 status.classList.add(
                     "status-operational"
                 );
-
 
                 statusBar?.classList.add(
                     "statusbar-operational"
@@ -1833,10 +1692,6 @@ async function loadStatusStats(){
         }
 
 
-        // ==========================
-        // GAMES
-        // ==========================
-
         const games =
             data.games || [];
 
@@ -1849,10 +1704,6 @@ async function loadStatusStats(){
         }
 
 
-        // ==========================
-        // MEMBERS
-        // ==========================
-
         if(membersStatus){
 
             membersStatus.textContent =
@@ -1864,10 +1715,6 @@ async function loadStatusStats(){
 
         }
 
-
-        // ==========================
-        // VISITS
-        // ==========================
 
         if(visitsStatus){
 
@@ -1926,10 +1773,6 @@ async function checkWebsiteUpdate(){
             );
 
 
-        // ==========================
-        // PRIMERA VISITA
-        // ==========================
-
         if(!savedVersion){
 
             localStorage.setItem(
@@ -1941,10 +1784,6 @@ async function checkWebsiteUpdate(){
 
         }
 
-
-        // ==========================
-        // NUEVA VERSIÓN
-        // ==========================
 
         if(
             savedVersion !==
@@ -1975,7 +1814,9 @@ async function checkWebsiteUpdate(){
 // UPDATE BANNER
 // =====================================================
 
-function showUpdateBanner(versionData){
+function showUpdateBanner(
+    versionData
+){
 
     if(
         document.getElementById(
@@ -2003,12 +1844,12 @@ function showUpdateBanner(versionData){
         <div class="update-box">
 
             <h2>
-                🚀 ${versionData.title}
+                🚀 ${versionData.title || "Website Updated"}
             </h2>
 
 
             <p>
-                ${versionData.message}
+                ${versionData.message || ""}
             </p>
 
 
@@ -2017,11 +1858,9 @@ function showUpdateBanner(versionData){
                 ${
                     (versionData.changes || [])
                         .map(change => `
-
                             <li>
                                 ✅ ${change}
                             </li>
-
                         `)
                         .join("")
                 }
@@ -2052,10 +1891,6 @@ function showUpdateBanner(versionData){
     );
 
 
-    // ==========================
-    // LATER
-    // ==========================
-
     const laterButton =
         document.getElementById(
             "later-update"
@@ -2075,10 +1910,6 @@ function showUpdateBanner(versionData){
 
     }
 
-
-    // ==========================
-    // UPDATE NOW
-    // ==========================
 
     const updateButton =
         document.getElementById(
@@ -2185,8 +2016,7 @@ function openGameModal(game){
                         <span
                             id="modal-game-status"
                             class="game-status"
-                        >
-                        </span>
+                        ></span>
 
 
                         <h2 id="modal-game-title"></h2>
@@ -2197,8 +2027,7 @@ function openGameModal(game){
                     <p
                         id="modal-game-description"
                         class="game-modal-description"
-                    >
-                    </p>
+                    ></p>
 
 
                     <div class="game-modal-stats">
@@ -2364,7 +2193,6 @@ function openGameModal(game){
                         ☆ Favorite
                     </button>
 
-
                 </div>
 
             </div>
@@ -2376,10 +2204,6 @@ function openGameModal(game){
             modal
         );
 
-
-        // ==========================
-        // CERRAR
-        // ==========================
 
         const closeButton =
             modal.querySelector(
@@ -2497,9 +2321,9 @@ function openGameModal(game){
         );
 
 
-    // ==========================================
-    // GAME THUMBNAIL
-    // ==========================================
+    // =================================================
+    // IMAGE
+    // =================================================
 
     if(image){
 
@@ -2546,12 +2370,28 @@ function openGameModal(game){
         image.alt =
             game.name || "Game";
 
+
+        image.onerror = () => {
+
+            if(
+                !image.src.includes(
+                    "game-placeholder.png"
+                )
+            ){
+
+                image.src =
+                    "assets/images/game-placeholder.png";
+
+            }
+
+        };
+
     }
 
 
-    // ==========================
+    // =================================================
     // TITLE
-    // ==========================
+    // =================================================
 
     if(title){
 
@@ -2562,9 +2402,9 @@ function openGameModal(game){
     }
 
 
-    // ==========================
+    // =================================================
     // DESCRIPTION
-    // ==========================
+    // =================================================
 
     if(description){
 
@@ -2575,9 +2415,9 @@ function openGameModal(game){
     }
 
 
-    // ==========================
+    // =================================================
     // STATUS
-    // ==========================
+    // =================================================
 
     if(status){
 
@@ -2599,9 +2439,9 @@ function openGameModal(game){
     }
 
 
-    // ==========================
+    // =================================================
     // PLAYERS
-    // ==========================
+    // =================================================
 
     if(players){
 
@@ -2613,9 +2453,9 @@ function openGameModal(game){
     }
 
 
-    // ==========================
+    // =================================================
     // MAX PLAYERS
-    // ==========================
+    // =================================================
 
     if(maxPlayers){
 
@@ -2627,9 +2467,9 @@ function openGameModal(game){
     }
 
 
-    // ==========================
+    // =================================================
     // VISITS
-    // ==========================
+    // =================================================
 
     if(visits){
 
@@ -2641,9 +2481,9 @@ function openGameModal(game){
     }
 
 
-    // ==========================
+    // =================================================
     // FAVORITES
-    // ==========================
+    // =================================================
 
     if(favorites){
 
@@ -2655,9 +2495,9 @@ function openGameModal(game){
     }
 
 
-    // ==========================
+    // =================================================
     // GENRE
-    // ==========================
+    // =================================================
 
     if(genre){
 
@@ -2668,9 +2508,9 @@ function openGameModal(game){
     }
 
 
-    // ==========================
+    // =================================================
     // LATEST UPDATE
-    // ==========================
+    // =================================================
 
     if(update){
 
@@ -2681,9 +2521,9 @@ function openGameModal(game){
     }
 
 
-    // ==========================
+    // =================================================
     // PLAY BUTTON
-    // ==========================
+    // =================================================
 
     if(playButton){
 
@@ -2712,9 +2552,9 @@ function openGameModal(game){
     }
 
 
-    // ==========================================
+    // =================================================
     // COPY GAME LINK
-    // ==========================================
+    // =================================================
 
     if(copyButton){
 
@@ -2766,9 +2606,9 @@ function openGameModal(game){
     }
 
 
-    // ==========================================
+    // =================================================
     // MODAL FAVORITE
-    // ==========================================
+    // =================================================
 
     if(modalFavoriteButton){
 
@@ -2820,7 +2660,8 @@ function openGameModal(game){
 
                 updateFavoriteButton(
                     modalFavoriteButton,
-                    isNowFavorite
+                    isNowFavorite,
+                    true
                 );
 
 
@@ -2831,9 +2672,9 @@ function openGameModal(game){
     }
 
 
-    // ==========================
+    // =================================================
     // MOSTRAR MODAL
-    // ==========================
+    // =================================================
 
     modal.classList.add(
         "active"
@@ -2919,7 +2760,7 @@ function closeGameModal(){
 
 
 // =====================================================
-// ESC PARA CERRAR
+// ESC PARA CERRAR MODAL
 // =====================================================
 
 document.addEventListener(
