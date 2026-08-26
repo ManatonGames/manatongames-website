@@ -9,231 +9,183 @@
 
 document.addEventListener("DOMContentLoaded", async () => {
 
-    // ==========================
+    // =================================================
     // PRIVATE MODE
-    // ==========================
+    // =================================================
 
-    initializePrivateMode();
+    let privateModeBlocked = false;
 
 
-    // ==========================
-    // CHECK PRIVATE ACCESS
-    // ==========================
-
-    const websiteIsPrivate =
+    if (
         typeof WEBSITE_MODE !== "undefined" &&
-        WEBSITE_MODE === "private";
-
-
-    const ownerAccess =
-        isWebsiteOwner();
-
-
-    if(websiteIsPrivate && !ownerAccess){
+        WEBSITE_MODE === "private"
+    ) {
 
         console.log(
             "🔒 Manaton Games está en Private Mode."
         );
 
-        return;
 
-    }
+        // =============================================
+        // COMPROBAR OWNER
+        // =============================================
+
+        let ownerAccess = false;
 
 
-    if(websiteIsPrivate && ownerAccess){
+        if (
+            typeof isOwner === "function"
+        ) {
+
+            try {
+
+                ownerAccess =
+                    isOwner();
+
+            }
+
+            catch (error) {
+
+                console.error(
+                    "❌ Error comprobando Owner:",
+                    error
+                );
+
+            }
+
+        }
+
+
+        // =============================================
+        // SI NO ES OWNER
+        // =============================================
+
+        if (!ownerAccess) {
+
+            privateModeBlocked = true;
+
+
+            console.log(
+                "🔒 Acceso bloqueado: Private Mode."
+            );
+
+
+            // Ejecutar el sistema visual de
+            // Private Mode si existe
+
+            if (
+                typeof initializePrivateMode ===
+                "function"
+            ) {
+
+                try {
+
+                    initializePrivateMode();
+
+                }
+
+                catch (error) {
+
+                    console.error(
+                        "❌ Private Mode Error:",
+                        error
+                    );
+
+                }
+
+            }
+
+
+            return;
+
+        }
+
+
+        // =============================================
+        // OWNER
+        // =============================================
 
         console.log(
-            "👑 Owner detected. Private Mode bypass enabled."
+            "👑 Owner detectado."
+        );
+
+
+        console.log(
+            "✅ Acceso completo permitido en Private Mode."
         );
 
     }
 
 
-    // ==========================
+    // =================================================
+    // PRIVATE MODE PARA USUARIOS NORMALES
+    // =================================================
+
+    if (
+        !privateModeBlocked &&
+        typeof initializePrivateMode ===
+        "function"
+    ) {
+
+        try {
+
+            initializePrivateMode();
+
+        }
+
+        catch (error) {
+
+            console.error(
+                "❌ Private Mode Error:",
+                error
+            );
+
+        }
+
+    }
+
+
+    // =================================================
     // INICIALIZAR
-    // ==========================
+    // =================================================
 
     initializeMenu();
+
     initializeGameSearch();
 
 
-    // ==========================
+    // =================================================
     // CARGAR DATOS
-    // ==========================
+    // =================================================
 
     await loadStats();
+
     await loadGames();
 
 
-    // ==========================
+    // =================================================
     // INICIALIZAR FAVORITES
-    // ==========================
+    // =================================================
 
     initializeFavorites();
 
 
-    // ==========================
-    // CARGAR NEWS
-    // ==========================
+    // =================================================
+    // NEWS
+    // =================================================
 
     await loadNews();
 
 
-    // ==========================
-    // INICIALIZAR ANIMACIONES
-    // ==========================
+    // =================================================
+    // ANIMACIONES
+    // =================================================
 
     initializeScrollReveal();
+
     initializeStagger();
 
 });
-
-
-// =====================================================
-// OWNER ACCESS
-// =====================================================
-
-function isWebsiteOwner(){
-
-    // =================================================
-    // OPCIÓN 1
-    // =================================================
-
-    if(
-        typeof window.isOwner === "boolean"
-    ){
-
-        return window.isOwner;
-
-    }
-
-
-    // =================================================
-    // OPCIÓN 2
-    // =================================================
-
-    if(
-        typeof window.IS_OWNER === "boolean"
-    ){
-
-        return window.IS_OWNER;
-
-    }
-
-
-    // =================================================
-    // OPCIÓN 3
-    // =================================================
-
-    if(
-        typeof window.isWebsiteOwner === "boolean"
-    ){
-
-        return window.isWebsiteOwner;
-
-    }
-
-
-    // =================================================
-    // OPCIÓN 4
-    // Buscar información del usuario
-    // =================================================
-
-    const possibleUsers = [
-
-        window.currentUser,
-        window.currentSessionUser,
-        window.sessionUser,
-        window.loggedUser,
-        window.user,
-        window.session
-
-    ];
-
-
-    // =================================================
-    // OWNER ROBLOX ID
-    // =================================================
-
-    const ownerId =
-        window.OWNER_ROBLOX_ID ||
-        window.MANATON_OWNER_ROBLOX_ID ||
-        window.OWNER_ID ||
-        window.ownerRobloxId;
-
-
-    if(ownerId){
-
-        const normalizedOwnerId =
-            String(ownerId);
-
-
-        for(
-            const user of possibleUsers
-        ){
-
-            if(!user){
-
-                continue;
-
-            }
-
-
-            const possibleId =
-                user.robloxUserId ||
-                user.robloxId ||
-                user.robloxID ||
-                user.userId ||
-                user.id;
-
-
-            if(
-                possibleId &&
-                String(possibleId) ===
-                normalizedOwnerId
-            ){
-
-                return true;
-
-            }
-
-        }
-
-    }
-
-
-    // =================================================
-    // REVISAR OBJETOS DE SESIÓN
-    // =================================================
-
-    for(
-        const user of possibleUsers
-    ){
-
-        if(!user){
-
-            continue;
-
-        }
-
-
-        if(
-            user.isOwner === true ||
-            user.owner === true ||
-            user.role === "Owner" ||
-            user.role === "owner"
-        ){
-
-            return true;
-
-        }
-
-    }
-
-
-    return false;
-
-}
 
 
 // =====================================================
@@ -254,7 +206,10 @@ function initializeMenu(){
         );
 
 
-    if(!menuToggle || !navbar){
+    if(
+        !menuToggle ||
+        !navbar
+    ){
 
         return;
 
@@ -274,21 +229,25 @@ function initializeMenu(){
 
 
     document
-        .querySelectorAll("#navbar a")
-        .forEach(link => {
+        .querySelectorAll(
+            "#navbar a"
+        )
+        .forEach(
+            link => {
 
-            link.addEventListener(
-                "click",
-                () => {
+                link.addEventListener(
+                    "click",
+                    () => {
 
-                    navbar.classList.remove(
-                        "active"
-                    );
+                        navbar.classList.remove(
+                            "active"
+                        );
 
-                }
-            );
+                    }
+                );
 
-        });
+            }
+        );
 
 }
 
@@ -344,9 +303,9 @@ async function loadStats(){
             );
 
 
-        // ==========================
+        // =============================================
         // GAMES
-        // ==========================
+        // =============================================
 
         if(gamesCount){
 
@@ -358,9 +317,9 @@ async function loadStats(){
         }
 
 
-        // ==========================
+        // =============================================
         // MEMBERS
-        // ==========================
+        // =============================================
 
         if(membersCount){
 
@@ -372,9 +331,9 @@ async function loadStats(){
         }
 
 
-        // ==========================
+        // =============================================
         // VISITS
-        // ==========================
+        // =============================================
 
         if(visitsCount){
 
@@ -386,9 +345,9 @@ async function loadStats(){
         }
 
 
-        // ==========================
+        // =============================================
         // FAVORITES
-        // ==========================
+        // =============================================
 
         if(favoritesCount){
 
@@ -421,10 +380,6 @@ async function loadGames(){
 
     try{
 
-        // ==========================
-        // OBTENER DATOS
-        // ==========================
-
         const localGames =
             await RobloxAPI.getGames();
 
@@ -432,10 +387,6 @@ async function loadGames(){
         const robloxData =
             await RobloxAPI.getStats();
 
-
-        // ==========================
-        // VALIDAR DATOS
-        // ==========================
 
         if(
             !localGames ||
@@ -455,35 +406,29 @@ async function loadGames(){
             robloxData?.games || [];
 
 
-        // ==========================
-        // COMBINAR DATOS
-        // ==========================
-
         const games =
-            localGames.map(localGame => {
+            localGames.map(
+                localGame => {
 
-                const robloxGame =
-                    robloxGames.find(
-                        game =>
-                            String(game.id) ===
-                            String(localGame.id)
-                    );
-
-
-                return {
-
-                    ...localGame,
-
-                    ...(robloxGame || {})
-
-                };
-
-            });
+                    const robloxGame =
+                        robloxGames.find(
+                            game =>
+                                String(game.id) ===
+                                String(localGame.id)
+                        );
 
 
-        // ==========================
-        // CONTENEDOR
-        // ==========================
+                    return {
+
+                        ...localGame,
+
+                        ...(robloxGame || {})
+
+                    };
+
+                }
+            );
+
 
         const container =
             document.getElementById(
@@ -505,9 +450,9 @@ async function loadGames(){
         container.innerHTML = "";
 
 
-        // ==========================
+        // =============================================
         // CREAR TARJETAS
-        // ==========================
+        // =============================================
 
         games.forEach(
             (game, index) => {
@@ -530,9 +475,9 @@ async function loadGames(){
                     game.id;
 
 
-                // ==========================
-                // IMAGEN
-                // ==========================
+                // =====================================
+                // IMAGE
+                // =====================================
 
                 let gameImage =
                     "assets/images/game-placeholder.png";
@@ -571,27 +516,28 @@ async function loadGames(){
                 }
 
 
-                // ==========================
+                // =====================================
                 // STATUS
-                // ==========================
+                // =====================================
 
                 const released =
                     game.status === "Released";
 
 
-                // ==========================
+                // =====================================
                 // FAVORITE
-                // ==========================
+                // =====================================
 
                 const favorite =
-                    typeof isFavorite === "function"
+                    typeof isFavorite ===
+                    "function"
                         ? isFavorite(game.id)
                         : false;
 
 
-                // ==========================
-                // TARJETA
-                // ==========================
+                // =====================================
+                // CARD
+                // =====================================
 
                 card.innerHTML = `
 
@@ -640,7 +586,7 @@ async function loadGames(){
                             <span>
                                 👥
                                 ${
-                                    game.players ??
+                                    game.players ||
                                     "Coming Soon"
                                 }
                             </span>
@@ -649,7 +595,7 @@ async function loadGames(){
                             <span>
                                 👁️
                                 ${
-                                    game.visits ??
+                                    game.visits ||
                                     "Coming Soon"
                                 }
                             </span>
@@ -699,9 +645,9 @@ async function loadGames(){
                 `;
 
 
-                // ==========================
-                // ERROR DE IMAGEN
-                // ==========================
+                // =====================================
+                // IMAGE ERROR
+                // =====================================
 
                 const cardImage =
                     card.querySelector(
@@ -735,9 +681,9 @@ async function loadGames(){
                 }
 
 
-                // ==========================
-                // BOTÓN FAVORITE
-                // ==========================
+                // =====================================
+                // FAVORITE BUTTON
+                // =====================================
 
                 const favoriteButton =
                     card.querySelector(
@@ -752,6 +698,7 @@ async function loadGames(){
                         event => {
 
                             event.preventDefault();
+
                             event.stopPropagation();
 
 
@@ -769,11 +716,14 @@ async function loadGames(){
                             }
 
 
-                            toggleFavorite(game);
+                            toggleFavorite(
+                                game
+                            );
 
 
                             const isNowFavorite =
-                                typeof isFavorite === "function"
+                                typeof isFavorite ===
+                                "function"
                                     ? isFavorite(game.id)
                                     : false;
 
@@ -793,9 +743,9 @@ async function loadGames(){
                 }
 
 
-                // ==========================
-                // ABRIR MODAL
-                // ==========================
+                // =====================================
+                // OPEN MODAL
+                // =====================================
 
                 card.addEventListener(
                     "click",
@@ -823,7 +773,9 @@ async function loadGames(){
                         }
 
 
-                        openGameModal(game);
+                        openGameModal(
+                            game
+                        );
 
                     }
                 );
@@ -837,17 +789,13 @@ async function loadGames(){
         );
 
 
-        // ==========================
-        // GUARDAR JUEGOS
-        // ==========================
+        // =============================================
+        // GLOBAL GAMES
+        // =============================================
 
         window.manatonGames =
             games;
 
-
-        // ==========================
-        // ACTUALIZAR FAVORITES
-        // ==========================
 
         refreshFavoriteButtons();
 
@@ -878,8 +826,10 @@ async function loadGames(){
 function initializeFavorites(){
 
     if(
-        typeof isFavorite !== "function" ||
-        typeof toggleFavorite !== "function"
+        typeof isFavorite !==
+        "function" ||
+        typeof toggleFavorite !==
+        "function"
     ){
 
         console.warn(
@@ -909,7 +859,8 @@ function initializeFavorites(){
         event => {
 
             if(
-                event.key === "mg_favorites"
+                event.key ===
+                "mg_favorites"
             ){
 
                 refreshFavoriteButtons();
@@ -923,13 +874,14 @@ function initializeFavorites(){
 
 
 // =====================================================
-// ACTUALIZAR BOTONES FAVORITE
+// REFRESH FAVORITE BUTTONS
 // =====================================================
 
 function refreshFavoriteButtons(){
 
     if(
-        typeof isFavorite !== "function"
+        typeof isFavorite !==
+        "function"
     ){
 
         return;
@@ -938,36 +890,42 @@ function refreshFavoriteButtons(){
 
 
     document
-        .querySelectorAll(".favorite-btn")
-        .forEach(button => {
+        .querySelectorAll(
+            ".favorite-btn"
+        )
+        .forEach(
+            button => {
 
-            const gameId =
-                button.dataset.gameId;
+                const gameId =
+                    button.dataset.gameId;
 
 
-            if(!gameId){
+                if(!gameId){
 
-                return;
+                    return;
+
+                }
+
+
+                const favorite =
+                    isFavorite(
+                        gameId
+                    );
+
+
+                updateFavoriteButton(
+                    button,
+                    favorite
+                );
 
             }
-
-
-            const favorite =
-                isFavorite(gameId);
-
-
-            updateFavoriteButton(
-                button,
-                favorite
-            );
-
-        });
+        );
 
 }
 
 
 // =====================================================
-// ACTUALIZAR BOTÓN FAVORITE
+// UPDATE FAVORITE BUTTON
 // =====================================================
 
 function updateFavoriteButton(
@@ -1018,13 +976,16 @@ function updateFavoriteButton(
         );
 
 
-        setTimeout(() => {
+        setTimeout(
+            () => {
 
-            button.classList.remove(
-                "favorite-pop"
-            );
+                button.classList.remove(
+                    "favorite-pop"
+                );
 
-        }, 700);
+            },
+            700
+        );
 
     }
 
@@ -1061,62 +1022,75 @@ async function loadNews(){
             news.length === 0
         ){
 
-            newsContainer.innerHTML = "";
+            newsContainer.innerHTML =
+                "";
 
             return;
 
         }
 
 
-        newsContainer.innerHTML = "";
+        newsContainer.innerHTML =
+            "";
 
 
-        news.forEach(item => {
+        news.forEach(
+            item => {
 
-            const card =
-                document.createElement(
-                    "div"
+                const card =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                card.className =
+                    "news-card";
+
+
+                card.innerHTML = `
+
+                    <div class="news-header">
+
+                        <span class="news-category">
+
+                            ${item.category}
+
+                        </span>
+
+
+                        <span class="news-date">
+
+                            ${item.date}
+
+                        </span>
+
+                    </div>
+
+
+                    <h3>
+
+                        ${item.icon || "📰"}
+
+                        ${item.title}
+
+                    </h3>
+
+
+                    <p>
+
+                        ${item.description}
+
+                    </p>
+
+                `;
+
+
+                newsContainer.appendChild(
+                    card
                 );
 
-
-            card.className =
-                "news-card";
-
-
-            card.innerHTML = `
-
-                <div class="news-header">
-
-                    <span class="news-category">
-                        ${item.category || ""}
-                    </span>
-
-
-                    <span class="news-date">
-                        ${item.date || ""}
-                    </span>
-
-                </div>
-
-
-                <h3>
-                    ${item.icon || "📰"}
-                    ${item.title || ""}
-                </h3>
-
-
-                <p>
-                    ${item.description || ""}
-                </p>
-
-            `;
-
-
-            newsContainer.appendChild(
-                card
-            );
-
-        });
+            }
+        );
 
     }
 
@@ -1133,7 +1107,7 @@ async function loadNews(){
 
 
 // =====================================================
-// BUSCADOR + FILTRO DE JUEGOS
+// GAME SEARCH
 // =====================================================
 
 function initializeGameSearch(){
@@ -1187,57 +1161,66 @@ function initializeGameSearch(){
         let visibleGames = 0;
 
 
-        cards.forEach(card => {
+        cards.forEach(
+            card => {
 
-            const title =
-                card.querySelector("h3")
+                const title =
+                    card.querySelector(
+                        "h3"
+                    )
                     ?.textContent
                     .toLowerCase() || "";
 
 
-            const description =
-                card.querySelector("p")
+                const description =
+                    card.querySelector(
+                        "p"
+                    )
                     ?.textContent
                     .toLowerCase() || "";
 
 
-            const status =
-                card.querySelector(
-                    ".game-status"
-                )
+                const status =
+                    card.querySelector(
+                        ".game-status"
+                    )
                     ?.textContent
                     .trim() || "";
 
 
-            const matchesSearch =
-                title.includes(search) ||
-                description.includes(search);
+                const matchesSearch =
+                    title.includes(search) ||
+                    description.includes(search);
 
 
-            const matchesFilter =
-                filter === "all" ||
-                status.includes(filter);
+                const matchesFilter =
+                    filter === "all" ||
+                    status.includes(
+                        filter
+                    );
 
 
-            if(
-                matchesSearch &&
-                matchesFilter
-            ){
+                if(
+                    matchesSearch &&
+                    matchesFilter
+                ){
 
-                card.style.display = "";
+                    card.style.display =
+                        "";
 
-                visibleGames++;
+                    visibleGames++;
+
+                }
+
+                else{
+
+                    card.style.display =
+                        "none";
+
+                }
 
             }
-
-            else{
-
-                card.style.display =
-                    "none";
-
-            }
-
-        });
+        );
 
 
         if(noGames){
@@ -1279,24 +1262,30 @@ if(
         () => {
 
             navigator.serviceWorker
-                .register("/sw.js")
+                .register(
+                    "/sw.js"
+                )
 
-                .then(() => {
+                .then(
+                    () => {
 
-                    console.log(
-                        "✅ Service Worker registrado correctamente."
-                    );
+                        console.log(
+                            "✅ Service Worker registrado correctamente."
+                        );
 
-                })
+                    }
+                )
 
-                .catch(error => {
+                .catch(
+                    error => {
 
-                    console.error(
-                        "❌ Error al registrar el Service Worker:",
-                        error
-                    );
+                        console.error(
+                            "❌ Error al registrar el Service Worker:",
+                            error
+                        );
 
-                });
+                    }
+                );
 
         }
     );
@@ -1325,24 +1314,30 @@ window.addEventListener(
         }
 
 
-        setTimeout(() => {
+        setTimeout(
+            () => {
 
-            loader.classList.add(
-                "hidden"
-            );
+                loader.classList.add(
+                    "hidden"
+                );
 
 
-            setTimeout(() => {
+                setTimeout(
+                    () => {
 
-                if(loader){
+                        if(loader){
 
-                    loader.remove();
+                            loader.remove();
 
-                }
+                        }
 
-            }, 600);
+                    },
+                    600
+                );
 
-        }, 1200);
+            },
+            1200
+        );
 
     }
 );
@@ -1362,7 +1357,8 @@ function initializeWebsiteVersion(){
 
     if(
         versionElement &&
-        typeof APP_VERSION !== "undefined"
+        typeof APP_VERSION !==
+        "undefined"
     ){
 
         versionElement.textContent =
@@ -1380,26 +1376,32 @@ initializeWebsiteVersion();
 // SCROLL REVEAL
 // =====================================================
 
-let revealObserver = null;
+let revealObserver =
+    null;
 
 
 function initializeScrollReveal(){
 
     if(
-        !("IntersectionObserver" in window)
+        !(
+            "IntersectionObserver"
+            in window
+        )
     ){
 
         document
             .querySelectorAll(
                 ".reveal, .reveal-left, .reveal-right, .reveal-zoom, .stagger"
             )
-            .forEach(element => {
+            .forEach(
+                element => {
 
-                element.classList.add(
-                    "active"
-                );
+                    element.classList.add(
+                        "active"
+                    );
 
-            });
+                }
+            );
 
 
         return;
@@ -1409,31 +1411,36 @@ function initializeScrollReveal(){
 
     revealObserver =
         new IntersectionObserver(
+
             entries => {
 
-                entries.forEach(entry => {
+                entries.forEach(
+                    entry => {
 
-                    if(
-                        entry.isIntersecting
-                    ){
+                        if(
+                            entry.isIntersecting
+                        ){
 
-                        entry.target.classList.add(
-                            "active"
-                        );
+                            entry.target.classList.add(
+                                "active"
+                            );
 
 
-                        revealObserver.unobserve(
-                            entry.target
-                        );
+                            revealObserver.unobserve(
+                                entry.target
+                            );
+
+                        }
 
                     }
-
-                });
+                );
 
             },
+
             {
                 threshold: 0.15
             }
+
         );
 
 
@@ -1441,13 +1448,15 @@ function initializeScrollReveal(){
         .querySelectorAll(
             ".reveal, .reveal-left, .reveal-right, .reveal-zoom, .stagger"
         )
-        .forEach(element => {
+        .forEach(
+            element => {
 
-            revealObserver.observe(
-                element
-            );
+                revealObserver.observe(
+                    element
+                );
 
-        });
+            }
+        );
 
 }
 
@@ -1462,12 +1471,14 @@ function initializeStagger(){
         .querySelectorAll(
             ".stagger"
         )
-        .forEach((element, index) => {
+        .forEach(
+            (element, index) => {
 
-            element.style.transitionDelay =
-                `${index * 0.08}s`;
+                element.style.transitionDelay =
+                    `${index * 0.08}s`;
 
-        });
+            }
+        );
 
 }
 
@@ -1482,10 +1493,7 @@ async function loadSystemStatus(){
 
         const response =
             await fetch(
-                "/data/status.json",
-                {
-                    cache: "no-store"
-                }
+                "/data/status.json"
             );
 
 
@@ -1522,7 +1530,7 @@ async function loadSystemStatus(){
 
 
         status.textContent =
-            `${data.icon || "🟢"} ${data.title || "Operational"}`;
+            `${data.icon} ${data.title}`;
 
 
         status.classList.remove(
@@ -1545,13 +1553,16 @@ async function loadSystemStatus(){
         }
 
 
-        switch(data.status){
+        switch(
+            data.status
+        ){
 
             case "operational":
 
                 status.classList.add(
                     "status-operational"
                 );
+
 
                 statusBar?.classList.add(
                     "statusbar-operational"
@@ -1566,6 +1577,7 @@ async function loadSystemStatus(){
                     "status-minor"
                 );
 
+
                 statusBar?.classList.add(
                     "statusbar-minor"
                 );
@@ -1578,6 +1590,7 @@ async function loadSystemStatus(){
                 status.classList.add(
                     "status-maintenance"
                 );
+
 
                 statusBar?.classList.add(
                     "statusbar-maintenance"
@@ -1592,6 +1605,7 @@ async function loadSystemStatus(){
                     "status-outage"
                 );
 
+
                 statusBar?.classList.add(
                     "statusbar-outage"
                 );
@@ -1604,6 +1618,7 @@ async function loadSystemStatus(){
                 status.classList.add(
                     "status-operational"
                 );
+
 
                 statusBar?.classList.add(
                     "statusbar-operational"
@@ -1844,25 +1859,32 @@ function showUpdateBanner(
         <div class="update-box">
 
             <h2>
-                🚀 ${versionData.title || "Website Updated"}
+                🚀 ${versionData.title}
             </h2>
 
 
             <p>
-                ${versionData.message || ""}
+                ${versionData.message}
             </p>
 
 
             <ul>
 
                 ${
-                    (versionData.changes || [])
-                        .map(change => `
+                    (
+                        versionData.changes ||
+                        []
+                    )
+                    .map(
+                        change => `
+
                             <li>
                                 ✅ ${change}
                             </li>
-                        `)
-                        .join("")
+
+                        `
+                    )
+                    .join("")
                 }
 
             </ul>
@@ -1943,7 +1965,9 @@ function showUpdateBanner(
 // GAME DETAILS MODAL
 // =====================================================
 
-function openGameModal(game){
+function openGameModal(
+    game
+){
 
     if(!game){
 
@@ -1962,9 +1986,9 @@ function openGameModal(game){
         );
 
 
-    // ==========================
-    // CREAR MODAL
-    // ==========================
+    // =================================================
+    // CREATE MODAL
+    // =================================================
 
     if(!modal){
 
@@ -1989,6 +2013,7 @@ function openGameModal(game){
 
             <div class="game-modal-box">
 
+
                 <button
                     class="close-game-modal"
                     aria-label="Close game details"
@@ -2011,6 +2036,7 @@ function openGameModal(game){
 
                 <div class="game-modal-content">
 
+
                     <div class="game-modal-header">
 
                         <span
@@ -2032,6 +2058,7 @@ function openGameModal(game){
 
                     <div class="game-modal-stats">
 
+
                         <div class="modal-stat">
 
                             <span
@@ -2047,7 +2074,9 @@ function openGameModal(game){
                                     Players
                                 </small>
 
-                                <strong id="modal-game-players">
+                                <strong
+                                    id="modal-game-players"
+                                >
                                     -
                                 </strong>
 
@@ -2071,7 +2100,9 @@ function openGameModal(game){
                                     Max Players
                                 </small>
 
-                                <strong id="modal-game-max-players">
+                                <strong
+                                    id="modal-game-max-players"
+                                >
                                     -
                                 </strong>
 
@@ -2095,7 +2126,9 @@ function openGameModal(game){
                                     Visits
                                 </small>
 
-                                <strong id="modal-game-visits">
+                                <strong
+                                    id="modal-game-visits"
+                                >
                                     -
                                 </strong>
 
@@ -2119,13 +2152,16 @@ function openGameModal(game){
                                     Favorites
                                 </small>
 
-                                <strong id="modal-game-favorites">
+                                <strong
+                                    id="modal-game-favorites"
+                                >
                                     -
                                 </strong>
 
                             </div>
 
                         </div>
+
 
                     </div>
 
@@ -2138,7 +2174,9 @@ function openGameModal(game){
                                 🎮 Genre
                             </span>
 
-                            <strong id="modal-game-genre">
+                            <strong
+                                id="modal-game-genre"
+                            >
                                 -
                             </strong>
 
@@ -2154,7 +2192,9 @@ function openGameModal(game){
                         </h3>
 
 
-                        <p id="modal-game-update">
+                        <p
+                            id="modal-game-update"
+                        >
                             More information coming soon.
                         </p>
 
@@ -2192,6 +2232,7 @@ function openGameModal(game){
                     >
                         ☆ Favorite
                     </button>
+
 
                 </div>
 
@@ -2239,9 +2280,9 @@ function openGameModal(game){
     }
 
 
-    // ==========================
-    // ELEMENTOS
-    // ==========================
+    // =================================================
+    // ELEMENTS
+    // =================================================
 
     const image =
         modal.querySelector(
@@ -2368,23 +2409,8 @@ function openGameModal(game){
 
 
         image.alt =
-            game.name || "Game";
-
-
-        image.onerror = () => {
-
-            if(
-                !image.src.includes(
-                    "game-placeholder.png"
-                )
-            ){
-
-                image.src =
-                    "assets/images/game-placeholder.png";
-
-            }
-
-        };
+            game.name ||
+            "Game";
 
     }
 
@@ -2422,7 +2448,8 @@ function openGameModal(game){
     if(status){
 
         const released =
-            game.status === "Released";
+            game.status ===
+            "Released";
 
 
         status.textContent =
@@ -2440,7 +2467,7 @@ function openGameModal(game){
 
 
     // =================================================
-    // PLAYERS
+    // STATS
     // =================================================
 
     if(players){
@@ -2453,10 +2480,6 @@ function openGameModal(game){
     }
 
 
-    // =================================================
-    // MAX PLAYERS
-    // =================================================
-
     if(maxPlayers){
 
         maxPlayers.textContent =
@@ -2467,10 +2490,6 @@ function openGameModal(game){
     }
 
 
-    // =================================================
-    // VISITS
-    // =================================================
-
     if(visits){
 
         visits.textContent =
@@ -2480,10 +2499,6 @@ function openGameModal(game){
 
     }
 
-
-    // =================================================
-    // FAVORITES
-    // =================================================
 
     if(favorites){
 
@@ -2509,7 +2524,7 @@ function openGameModal(game){
 
 
     // =================================================
-    // LATEST UPDATE
+    // UPDATE
     // =================================================
 
     if(update){
@@ -2553,7 +2568,7 @@ function openGameModal(game){
 
 
     // =================================================
-    // COPY GAME LINK
+    // COPY LINK
     // =================================================
 
     if(copyButton){
@@ -2583,12 +2598,15 @@ function openGameModal(game){
                         "✅ Copied!";
 
 
-                    setTimeout(() => {
+                    setTimeout(
+                        () => {
 
-                        copyButton.textContent =
-                            "📋 Copy Link";
+                            copyButton.textContent =
+                                "📋 Copy Link";
 
-                    }, 2000);
+                        },
+                        2000
+                    );
 
                 }
 
@@ -2613,7 +2631,8 @@ function openGameModal(game){
     if(modalFavoriteButton){
 
         const favorite =
-            typeof isFavorite === "function"
+            typeof isFavorite ===
+            "function"
                 ? isFavorite(game.id)
                 : false;
 
@@ -2632,6 +2651,7 @@ function openGameModal(game){
             event => {
 
                 event.preventDefault();
+
                 event.stopPropagation();
 
 
@@ -2649,19 +2669,21 @@ function openGameModal(game){
                 }
 
 
-                toggleFavorite(game);
+                toggleFavorite(
+                    game
+                );
 
 
                 const isNowFavorite =
-                    typeof isFavorite === "function"
+                    typeof isFavorite ===
+                    "function"
                         ? isFavorite(game.id)
                         : false;
 
 
                 updateFavoriteButton(
                     modalFavoriteButton,
-                    isNowFavorite,
-                    true
+                    isNowFavorite
                 );
 
 
@@ -2673,7 +2695,7 @@ function openGameModal(game){
 
 
     // =================================================
-    // MOSTRAR MODAL
+    // SHOW MODAL
     // =================================================
 
     modal.classList.add(
@@ -2688,10 +2710,12 @@ function openGameModal(game){
 
 
 // =====================================================
-// FORMATEAR NÚMEROS
+// FORMAT GAME NUMBER
 // =====================================================
 
-function formatGameNumber(value){
+function formatGameNumber(
+    value
+){
 
     if(
         value === undefined ||
@@ -2705,7 +2729,8 @@ function formatGameNumber(value){
 
 
     if(
-        typeof value === "string"
+        typeof value ===
+        "string"
     ){
 
         return value;
@@ -2714,7 +2739,8 @@ function formatGameNumber(value){
 
 
     if(
-        typeof value === "number"
+        typeof value ===
+        "number"
     ){
 
         return value.toLocaleString(
@@ -2760,7 +2786,7 @@ function closeGameModal(){
 
 
 // =====================================================
-// ESC PARA CERRAR MODAL
+// ESC TO CLOSE MODAL
 // =====================================================
 
 document.addEventListener(
@@ -2768,7 +2794,8 @@ document.addEventListener(
     event => {
 
         if(
-            event.key !== "Escape"
+            event.key !==
+            "Escape"
         ){
 
             return;
