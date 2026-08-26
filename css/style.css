@@ -5856,54 +5856,47 @@ footer{
 
 /* =====================================================
    MANATON GAMES - PRIVATE MODE
+   PREMIUM BACKGROUND
 ===================================================== */
 
-.private-mode {
+#private-mode.private-mode{
 
     position: fixed;
 
     inset: 0;
 
     width: 100%;
-    height: 100vh;
+    height: 100%;
 
-    z-index: 999999;
-
-    display: none;
+    min-height: 100vh;
 
     overflow: hidden;
 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
     background:
         radial-gradient(
-            circle at 50% 40%,
-            rgba(37, 99, 235, 0.16),
-            transparent 38%
+            circle at 50% 45%,
+            rgba(37, 99, 235, 0.12),
+            transparent 35%
         ),
-        linear-gradient(
-            135deg,
-            #020617 0%,
-            #0f172a 50%,
-            #020617 100%
-        );
+        radial-gradient(
+            circle at 15% 20%,
+            rgba(99, 102, 241, 0.10),
+            transparent 30%
+        ),
+        radial-gradient(
+            circle at 85% 80%,
+            rgba(59, 130, 246, 0.08),
+            transparent 30%
+        ),
+        #050816;
 
-    color: white;
+    color: #ffffff;
 
-}
-
-
-/* =====================================================
-   ACTIVE
-===================================================== */
-
-.private-mode.active {
-
-    display: block;
-
-    animation:
-        privateFadeIn
-        0.8s
-        ease
-        forwards;
+    z-index: 99999;
 
 }
 
@@ -5912,11 +5905,14 @@ footer{
    BACKGROUND
 ===================================================== */
 
-.private-background {
+.private-background{
 
     position: absolute;
 
     inset: 0;
+
+    width: 100%;
+    height: 100%;
 
     overflow: hidden;
 
@@ -5926,121 +5922,223 @@ footer{
 
 
 /* =====================================================
-   GLOWS
+   GRID
 ===================================================== */
 
-.private-glow {
+.private-background::before{
 
-    position: absolute;
-
-    width: 450px;
-    height: 450px;
-
-    border-radius: 50%;
-
-    filter: blur(100px);
-
-    opacity: 0.18;
-
-    animation:
-        privateFloat
-        12s
-        ease-in-out
-        infinite;
-
-}
-
-
-.private-glow-1 {
-
-    top: -180px;
-    left: -120px;
-
-    background: #2563eb;
-
-}
-
-
-.private-glow-2 {
-
-    right: -150px;
-    bottom: -180px;
-
-    background: #7c3aed;
-
-    animation-delay: -4s;
-
-}
-
-
-.private-glow-3 {
-
-    left: 45%;
-    top: 55%;
-
-    width: 300px;
-    height: 300px;
-
-    background: #06b6d4;
-
-    opacity: 0.08;
-
-    animation-delay: -8s;
-
-}
-
-
-/* =====================================================
-   STARS
-===================================================== */
-
-.private-stars {
+    content: "";
 
     position: absolute;
 
     inset: 0;
 
+    background-image:
+        linear-gradient(
+            rgba(255,255,255,0.025) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(255,255,255,0.025) 1px,
+            transparent 1px
+        );
+
+    background-size: 55px 55px;
+
+    mask-image:
+        radial-gradient(
+            ellipse at center,
+            black 20%,
+            transparent 80%
+        );
+
     opacity: 0.45;
+
+}
+
+
+/* =====================================================
+   CENTER GLOW
+===================================================== */
+
+.private-background::after{
+
+    content: "";
+
+    position: absolute;
+
+    width: 700px;
+    height: 700px;
+
+    left: 50%;
+    top: 50%;
+
+    transform: translate(-50%, -50%);
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(37, 99, 235, 0.13) 0%,
+            rgba(37, 99, 235, 0.05) 35%,
+            transparent 70%
+        );
+
+    filter: blur(30px);
+
+    animation:
+        private-center-glow 7s ease-in-out infinite;
+
+}
+
+
+/* =====================================================
+   GLOW ORBS
+===================================================== */
+
+.private-glow{
+
+    position: absolute;
+
+    border-radius: 50%;
+
+    filter: blur(90px);
+
+    opacity: 0.35;
+
+    pointer-events: none;
+
+}
+
+
+/* TOP LEFT */
+
+.private-glow-1{
+
+    width: 420px;
+    height: 420px;
+
+    top: -180px;
+    left: -120px;
+
+    background:
+        rgba(37, 99, 235, 0.35);
+
+    animation:
+        private-float-1 12s ease-in-out infinite;
+
+}
+
+
+/* BOTTOM RIGHT */
+
+.private-glow-2{
+
+    width: 500px;
+    height: 500px;
+
+    right: -180px;
+    bottom: -220px;
+
+    background:
+        rgba(79, 70, 229, 0.28);
+
+    animation:
+        private-float-2 15s ease-in-out infinite;
+
+}
+
+
+/* CENTER */
+
+.private-glow-3{
+
+    width: 260px;
+    height: 260px;
+
+    top: 45%;
+    left: 50%;
+
+    transform:
+        translate(-50%, -50%);
+
+    background:
+        rgba(59, 130, 246, 0.18);
+
+    filter: blur(100px);
+
+    animation:
+        private-pulse 6s ease-in-out infinite;
+
+}
+
+
+/* =====================================================
+   STARS / PARTICLES
+===================================================== */
+
+.private-stars{
+
+    position: absolute;
+
+    inset: 0;
+
+    opacity: 0.55;
 
     background-image:
         radial-gradient(
-            1px 1px at 20% 30%,
-            rgba(255,255,255,0.8),
+            1px 1px at 10% 20%,
+            rgba(255,255,255,0.75),
             transparent
         ),
         radial-gradient(
-            1px 1px at 70% 20%,
-            rgba(255,255,255,0.6),
+            1px 1px at 25% 70%,
+            rgba(255,255,255,0.55),
             transparent
         ),
         radial-gradient(
-            1px 1px at 40% 80%,
+            1px 1px at 40% 35%,
+            rgba(255,255,255,0.65),
+            transparent
+        ),
+        radial-gradient(
+            1px 1px at 58% 15%,
+            rgba(255,255,255,0.5),
+            transparent
+        ),
+        radial-gradient(
+            1px 1px at 72% 60%,
             rgba(255,255,255,0.7),
             transparent
         ),
         radial-gradient(
-            1px 1px at 85% 70%,
-            rgba(255,255,255,0.6),
+            1px 1px at 88% 30%,
+            rgba(255,255,255,0.55),
             transparent
         ),
         radial-gradient(
-            1px 1px at 15% 65%,
-            rgba(255,255,255,0.5),
+            1px 1px at 93% 82%,
+            rgba(255,255,255,0.7),
+            transparent
+        ),
+        radial-gradient(
+            1px 1px at 15% 90%,
+            rgba(255,255,255,0.45),
             transparent
         );
 
     background-size:
         220px 220px,
-        300px 300px,
+        280px 280px,
+        330px 330px,
         260px 260px,
-        340px 340px,
-        280px 280px;
+        300px 300px,
+        240px 240px,
+        350px 350px,
+        310px 310px;
 
     animation:
-        starsMove
-        30s
-        linear
-        infinite;
+        private-stars-move 25s linear infinite;
 
 }
 
@@ -6049,64 +6147,116 @@ footer{
    CONTENT
 ===================================================== */
 
-.private-content {
+.private-content{
 
     position: relative;
 
-    z-index: 2;
+    z-index: 5;
 
-    width: 100%;
-    height: 100%;
+    width: min(
+        90%,
+        760px
+    );
+
+    text-align: center;
 
     display: flex;
 
     flex-direction: column;
 
-    justify-content: center;
-
     align-items: center;
 
-    text-align: center;
-
-    padding: 30px;
-
-    box-sizing: border-box;
+    justify-content: center;
 
 }
 
 
 /* =====================================================
-   MESSAGE
+   MESSAGE CARD
 ===================================================== */
 
-.private-message {
+.private-message{
 
-    max-width: 850px;
+    position: relative;
 
-    animation:
-        privateContentIn
-        1s
-        ease
-        forwards;
+    padding:
+        55px
+        60px;
+
+    border-radius: 28px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(15, 23, 42, 0.82),
+            rgba(2, 6, 23, 0.68)
+        );
+
+    border:
+        1px solid
+        rgba(148, 163, 184, 0.12);
+
+    box-shadow:
+        0 30px 100px
+        rgba(0, 0, 0, 0.45),
+
+        inset 0 1px 0
+        rgba(255,255,255,0.04);
+
+    backdrop-filter:
+        blur(20px);
+
+    -webkit-backdrop-filter:
+        blur(20px);
+
+    overflow: hidden;
+
+}
+
+
+/* TOP LIGHT */
+
+.private-message::before{
+
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: 15%;
+
+    width: 70%;
+    height: 1px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(96,165,250,0.7),
+            transparent
+        );
 
 }
 
 
 /* =====================================================
-   TITLE
+   SMALL TITLE
 ===================================================== */
 
-.private-title {
+.private-title{
 
-    margin: 0 0 22px;
+    margin: 0 0 14px;
 
-    font-size: 20px;
+    font-size: 15px;
 
-    font-weight: 500;
+    font-weight: 600;
 
-    letter-spacing: 0.5px;
+    letter-spacing: 0.18em;
 
-    color: rgba(255,255,255,0.78);
+    text-transform: uppercase;
+
+    color:
+        rgba(148, 163, 184, 0.9);
 
 }
 
@@ -6115,27 +6265,43 @@ footer{
    BRAND
 ===================================================== */
 
-.private-brand {
+.private-brand{
 
     margin: 0;
 
-    font-size: clamp(
-        48px,
-        9vw,
-        110px
-    );
-
-    font-weight: 800;
-
-    letter-spacing: 8px;
+    font-size:
+        clamp(
+            42px,
+            7vw,
+            76px
+        );
 
     line-height: 1;
 
-    color: white;
+    font-weight: 800;
+
+    letter-spacing:
+        -0.045em;
+
+    background:
+        linear-gradient(
+            135deg,
+            #ffffff 10%,
+            #bfdbfe 45%,
+            #60a5fa 75%,
+            #2563eb 100%
+        );
+
+    -webkit-background-clip: text;
+
+    background-clip: text;
+
+    -webkit-text-fill-color:
+        transparent;
 
     text-shadow:
-        0 0 20px rgba(59,130,246,0.25),
-        0 0 50px rgba(59,130,246,0.15);
+        0 0 50px
+        rgba(59,130,246,0.15);
 
 }
 
@@ -6144,22 +6310,24 @@ footer{
    SUBTITLE
 ===================================================== */
 
-.private-subtitle {
+.private-subtitle{
+
+    max-width: 570px;
 
     margin:
+        22px auto 0;
 
-        28px
-        auto
-        0;
+    font-size:
+        clamp(
+            17px,
+            2.5vw,
+            21px
+        );
 
-    max-width: 650px;
-
-    font-size: 19px;
-
-    line-height: 1.7;
+    line-height: 1.6;
 
     color:
-        rgba(255,255,255,0.68);
+        #cbd5e1;
 
 }
 
@@ -6168,13 +6336,14 @@ footer{
    DIVIDER
 ===================================================== */
 
-.private-divider {
+.private-divider{
 
-    width: 70px;
+    width: 80px;
 
     height: 2px;
 
-    margin: 28px auto;
+    margin:
+        30px auto;
 
     border-radius: 999px;
 
@@ -6182,9 +6351,13 @@ footer{
         linear-gradient(
             90deg,
             transparent,
-            rgba(255,255,255,0.75),
+            #3b82f6,
             transparent
         );
+
+    box-shadow:
+        0 0 20px
+        rgba(59,130,246,0.5);
 
 }
 
@@ -6193,16 +6366,18 @@ footer{
    DESCRIPTION
 ===================================================== */
 
-.private-description {
+.private-description{
 
-    margin: 0;
+    max-width: 500px;
 
-    font-size: 14px;
+    margin: 0 auto;
 
-    line-height: 1.6;
+    font-size: 15px;
+
+    line-height: 1.7;
 
     color:
-        rgba(255,255,255,0.45);
+        #94a3b8;
 
 }
 
@@ -6211,24 +6386,17 @@ footer{
    FOOTER
 ===================================================== */
 
-.private-footer {
+.private-footer{
 
-    position: absolute;
+    margin-top: 28px;
 
-    bottom: 28px;
+    font-size: 13px;
 
-    left: 0;
-
-    width: 100%;
-
-    text-align: center;
-
-    font-size: 12px;
-
-    letter-spacing: 1px;
+    letter-spacing:
+        0.08em;
 
     color:
-        rgba(255,255,255,0.28);
+        rgba(148,163,184,0.55);
 
 }
 
@@ -6237,94 +6405,118 @@ footer{
    ANIMATIONS
 ===================================================== */
 
-@keyframes privateFadeIn {
+@keyframes private-center-glow{
 
-    from {
+    0%,
+    100%{
 
-        opacity: 0;
+        opacity: 0.6;
+
+        transform:
+            translate(-50%, -50%)
+            scale(0.95);
 
     }
 
-    to {
+    50%{
 
         opacity: 1;
+
+        transform:
+            translate(-50%, -50%)
+            scale(1.08);
 
     }
 
 }
 
 
-@keyframes privateContentIn {
+@keyframes private-pulse{
 
-    from {
+    0%,
+    100%{
 
-        opacity: 0;
+        opacity: 0.25;
 
         transform:
-            translateY(25px);
+            translate(-50%, -50%)
+            scale(0.9);
 
     }
 
-    to {
+    50%{
 
-        opacity: 1;
+        opacity: 0.5;
+
+        transform:
+            translate(-50%, -50%)
+            scale(1.15);
+
+    }
+
+}
+
+
+@keyframes private-float-1{
+
+    0%,
+    100%{
+
+        transform:
+            translate(0, 0);
+
+    }
+
+    50%{
+
+        transform:
+            translate(80px, 50px);
+
+    }
+
+}
+
+
+@keyframes private-float-2{
+
+    0%,
+    100%{
+
+        transform:
+            translate(0, 0);
+
+    }
+
+    50%{
+
+        transform:
+            translate(-70px, -50px);
+
+    }
+
+}
+
+
+@keyframes private-stars-move{
+
+    0%{
 
         transform:
             translateY(0);
 
     }
 
-}
-
-
-@keyframes privateFloat {
-
-    0% {
+    50%{
 
         transform:
-            translate(
-                0,
-                0
-            );
+            translateY(-15px);
 
     }
 
-    50% {
-
-        transform:
-            translate(
-                40px,
-                -30px
-            );
-
-    }
-
-    100% {
-
-        transform:
-            translate(
-                0,
-                0
-            );
-
-    }
-
-}
-
-
-@keyframes starsMove {
-
-    from {
+    100%{
 
         transform:
             translateY(0);
-
-    }
-
-    to {
-
-        transform:
-            translateY(-100px);
 
     }
 
@@ -6335,55 +6527,115 @@ footer{
    MOBILE
 ===================================================== */
 
-@media (max-width: 768px) {
+@media (max-width: 768px){
 
-    .private-content {
+    #private-mode.private-mode{
 
         padding:
+            20px;
+
+    }
+
+
+    .private-message{
+
+        width: 100%;
+
+        padding:
+            42px
             25px;
 
-    }
-
-
-    .private-title {
-
-        font-size: 17px;
+        border-radius: 22px;
 
     }
 
 
-    .private-brand {
+    .private-title{
 
-        font-size: clamp(
-            36px,
-            11vw,
-            65px
-        );
+        font-size: 12px;
 
-        letter-spacing: 4px;
+        letter-spacing:
+            0.14em;
 
     }
 
 
-    .private-subtitle {
+    .private-brand{
+
+        font-size:
+            clamp(
+                34px,
+                11vw,
+                52px
+            );
+
+    }
+
+
+    .private-subtitle{
 
         font-size: 16px;
 
-        max-width: 400px;
+    }
+
+
+    .private-description{
+
+        font-size: 14px;
 
     }
 
 
-    .private-description {
+    .private-glow-1{
+
+        width: 280px;
+        height: 280px;
+
+    }
+
+
+    .private-glow-2{
+
+        width: 320px;
+        height: 320px;
+
+    }
+
+}
+
+
+/* =====================================================
+   VERY SMALL DEVICES
+===================================================== */
+
+@media (max-width: 400px){
+
+    .private-message{
+
+        padding:
+            35px
+            20px;
+
+    }
+
+
+    .private-brand{
+
+        font-size: 31px;
+
+    }
+
+
+    .private-subtitle{
+
+        font-size: 15px;
+
+    }
+
+
+    .private-description{
 
         font-size: 13px;
-
-    }
-
-
-    .private-footer {
-
-        bottom: 20px;
 
     }
 
@@ -6394,14 +6646,13 @@ footer{
    REDUCED MOTION
 ===================================================== */
 
-@media (prefers-reduced-motion: reduce) {
+@media (prefers-reduced-motion: reduce){
 
-    .private-mode *,
-    .private-mode {
+    .private-glow,
+    .private-stars,
+    .private-background::after{
 
         animation: none !important;
-
-        transition: none !important;
 
     }
 
