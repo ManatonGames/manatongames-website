@@ -1,10 +1,20 @@
+// =====================================================
+// MANATON GAMES - MAIN SCRIPT
+// =====================================================
+
+
+// =====================================================
+// DOM CONTENT LOADED
+// =====================================================
+
 document.addEventListener("DOMContentLoaded", async () => {
 
     // ==========================
     // PRIVATE MODE
     // ==========================
 
-    initializePrivateMode();
+    const hasPrivateAccess =
+        initializePrivateMode();
 
 
     // ==========================
@@ -13,7 +23,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     if (
         typeof WEBSITE_MODE !== "undefined" &&
-        WEBSITE_MODE === "private"
+        WEBSITE_MODE === "private" &&
+        !hasPrivateAccess
     ) {
 
         console.log(
@@ -32,6 +43,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     initializeMenu();
     initializeGameSearch();
 
+
     // ==========================
     // CARGAR DATOS
     // ==========================
@@ -39,16 +51,23 @@ document.addEventListener("DOMContentLoaded", async () => {
     await loadStats();
     await loadGames();
 
+
     // ==========================
     // INICIALIZAR FAVORITES
     // ==========================
 
     initializeFavorites();
 
-    await loadNews();
 
     // ==========================
-    // INICIALIZAR ANIMACIONES
+    // NEWS
+    // ==========================
+
+    await loadNews();
+
+
+    // ==========================
+    // ANIMACIONES
     // ==========================
 
     initializeScrollReveal();
@@ -58,16 +77,320 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 
 // =====================================================
+// PRIVATE MODE
+// =====================================================
+
+function initializePrivateMode(){
+
+    // ==========================
+    // PUBLIC MODE
+    // ==========================
+
+    if(
+        typeof WEBSITE_MODE === "undefined" ||
+        WEBSITE_MODE !== "private"
+    ){
+
+        return true;
+
+    }
+
+
+    // ==========================
+    // COMPROBAR OWNER
+    // ==========================
+
+    const owner =
+        isManatonOwner();
+
+
+    // ==========================
+    // SI ES OWNER
+    // ==========================
+
+    if(owner){
+
+        console.log(
+            "👑 Owner detectado. Private Mode permitido."
+        );
+
+
+        // Ocultar pantalla privada
+        // si existe
+
+        const privateScreen =
+            document.getElementById(
+                "private-mode"
+            );
+
+
+        if(privateScreen){
+
+            privateScreen.style.display =
+                "none";
+
+        }
+
+
+        const privateOverlay =
+            document.getElementById(
+                "private-overlay"
+            );
+
+
+        if(privateOverlay){
+
+            privateOverlay.style.display =
+                "none";
+
+        }
+
+
+        document.body.classList.remove(
+            "private-mode-active"
+        );
+
+
+        document.body.classList.add(
+            "private-owner-access"
+        );
+
+
+        return true;
+
+    }
+
+
+    // ==========================
+    // VISITANTE NORMAL
+    // ==========================
+
+    console.log(
+        "🔒 Visitante bloqueado por Private Mode."
+    );
+
+
+    document.body.classList.add(
+        "private-mode-active"
+    );
+
+
+    // ==========================
+    // OCULTAR CONTENIDO
+    // ==========================
+
+    const privateContent =
+        document.querySelectorAll(
+            "[data-private-content]"
+        );
+
+
+    privateContent.forEach(element => {
+
+        element.style.display =
+            "none";
+
+    });
+
+
+    // ==========================
+    // MOSTRAR PANTALLA PRIVADA
+    // ==========================
+
+    const privateScreen =
+        document.getElementById(
+            "private-mode"
+        );
+
+
+    if(privateScreen){
+
+        privateScreen.style.display =
+            "flex";
+
+    }
+
+
+    const privateOverlay =
+        document.getElementById(
+            "private-overlay"
+        );
+
+
+    if(privateOverlay){
+
+        privateOverlay.style.display =
+            "flex";
+
+    }
+
+
+    return false;
+
+}
+
+
+// =====================================================
+// OWNER DETECTION
+// =====================================================
+
+function isManatonOwner(){
+
+    // ==========================
+    // OPCIÓN 1
+    // session.js
+    // ==========================
+
+    if(
+        typeof window.isOwner === "boolean"
+    ){
+
+        return window.isOwner;
+
+    }
+
+
+    // ==========================
+    // OPCIÓN 2
+    // MG SESSION
+    // ==========================
+
+    if(
+        window.MG_SESSION &&
+        typeof window.MG_SESSION.isOwner ===
+            "boolean"
+    ){
+
+        return window.MG_SESSION.isOwner;
+
+    }
+
+
+    // ==========================
+    // OPCIÓN 3
+    // CURRENT USER
+    // ==========================
+
+    if(
+        window.currentUser &&
+        typeof window.currentUser.isOwner ===
+            "boolean"
+    ){
+
+        return window.currentUser.isOwner;
+
+    }
+
+
+    // ==========================
+    // OPCIÓN 4
+    // SESSION USER
+    // ==========================
+
+    if(
+        window.sessionUser &&
+        typeof window.sessionUser.isOwner ===
+            "boolean"
+    ){
+
+        return window.sessionUser.isOwner;
+
+    }
+
+
+    // ==========================
+    // OPCIÓN 5
+    // ROBLOX USER ID
+    // ==========================
+
+    const ownerRobloxId =
+        window.OWNER_ROBLOX_USER_ID;
+
+
+    const currentRobloxId =
+        window.robloxUserId ||
+        window.currentRobloxUserId;
+
+
+    if(
+        ownerRobloxId &&
+        currentRobloxId
+    ){
+
+        return (
+            String(currentRobloxId) ===
+            String(ownerRobloxId)
+        );
+
+    }
+
+
+    // ==========================
+    // OPCIÓN 6
+    // CURRENT USER ROBLOX ID
+    // ==========================
+
+    if(
+        window.currentUser &&
+        window.currentUser.robloxUserId &&
+        ownerRobloxId
+    ){
+
+        return (
+            String(
+                window.currentUser.robloxUserId
+            ) ===
+            String(ownerRobloxId)
+        );
+
+    }
+
+
+    // ==========================
+    // OPCIÓN 7
+    // MG SESSION ROBLOX ID
+    // ==========================
+
+    if(
+        window.MG_SESSION &&
+        window.MG_SESSION.robloxUserId &&
+        ownerRobloxId
+    ){
+
+        return (
+            String(
+                window.MG_SESSION.robloxUserId
+            ) ===
+            String(ownerRobloxId)
+        );
+
+    }
+
+
+    // ==========================
+    // NO OWNER
+    // ==========================
+
+    return false;
+
+}
+
+
+// =====================================================
 // MENÚ HAMBURGUESA
 // =====================================================
 
 function initializeMenu(){
 
     const menuToggle =
-        document.getElementById("menu-toggle");
+        document.getElementById(
+            "menu-toggle"
+        );
 
     const navbar =
-        document.getElementById("navbar");
+        document.getElementById(
+            "navbar"
+        );
 
 
     if(!menuToggle || !navbar){
@@ -77,22 +400,34 @@ function initializeMenu(){
     }
 
 
-    menuToggle.addEventListener("click", () => {
+    menuToggle.addEventListener(
+        "click",
+        () => {
 
-        navbar.classList.toggle("active");
+            navbar.classList.toggle(
+                "active"
+            );
 
-    });
+        }
+    );
 
 
-    document.querySelectorAll("#navbar a").forEach(link => {
+    document
+        .querySelectorAll("#navbar a")
+        .forEach(link => {
 
-        link.addEventListener("click", () => {
+            link.addEventListener(
+                "click",
+                () => {
 
-            navbar.classList.remove("active");
+                    navbar.classList.remove(
+                        "active"
+                    );
+
+                }
+            );
 
         });
-
-    });
 
 }
 
@@ -313,7 +648,9 @@ async function loadGames(){
             (game, index) => {
 
                 const card =
-                    document.createElement("div");
+                    document.createElement(
+                        "div"
+                    );
 
 
                 card.className =
@@ -346,8 +683,12 @@ async function loadGames(){
                 else if(game.image){
 
                     if(
-                        game.image.startsWith("http://") ||
-                        game.image.startsWith("https://")
+                        game.image.startsWith(
+                            "http://"
+                        ) ||
+                        game.image.startsWith(
+                            "https://"
+                        )
                     ){
 
                         gameImage =
@@ -559,11 +900,9 @@ async function loadGames(){
                             }
 
 
-                            // Cambiar favorito
                             toggleFavorite(game);
 
 
-                            // Comprobar el estado REAL
                             const isNowFavorite =
                                 typeof isFavorite === "function"
                                     ? isFavorite(game.id)
@@ -577,8 +916,6 @@ async function loadGames(){
                             );
 
 
-                            // Actualizar cualquier
-                            // otro botón relacionado
                             refreshFavoriteButtons();
 
                         }
@@ -595,9 +932,6 @@ async function loadGames(){
                     "click",
                     event => {
 
-                        // No abrir modal si
-                        // hicieron click en Play Now
-
                         if(
                             event.target.closest(
                                 ".play-btn"
@@ -608,9 +942,6 @@ async function loadGames(){
 
                         }
 
-
-                        // No abrir modal si
-                        // hicieron click en Favorite
 
                         if(
                             event.target.closest(
@@ -629,7 +960,9 @@ async function loadGames(){
                 );
 
 
-                container.appendChild(card);
+                container.appendChild(
+                    card
+                );
 
             }
         );
@@ -689,16 +1022,8 @@ function initializeFavorites(){
     }
 
 
-    // ==========================
-    // ACTUALIZAR BOTONES
-    // ==========================
-
     refreshFavoriteButtons();
 
-
-    // ==========================
-    // EVENTO PERSONALIZADO
-    // ==========================
 
     window.addEventListener(
         "favoritesUpdated",
@@ -709,10 +1034,6 @@ function initializeFavorites(){
         }
     );
 
-
-    // ==========================
-    // OTRAS PESTAÑAS
-    // ==========================
 
     window.addEventListener(
         "storage",
@@ -762,9 +1083,6 @@ function refreshFavoriteButtons(){
             }
 
 
-            // IMPORTANTE:
-            // Aquí SOLO comprobamos el estado.
-            // NO usamos toggleFavorite().
             const favorite =
                 isFavorite(gameId);
 
@@ -796,10 +1114,6 @@ function updateFavoriteButton(
     }
 
 
-    // ==========================
-    // ACTUALIZAR ESTADO
-    // ==========================
-
     button.classList.toggle(
         "favorited",
         favorite
@@ -820,10 +1134,6 @@ function updateFavoriteButton(
             : "☆ Favorite";
 
 
-    // ==========================
-    // ANIMACIÓN
-    // ==========================
-
     if(animate){
 
         button.classList.remove(
@@ -831,7 +1141,6 @@ function updateFavoriteButton(
         );
 
 
-        // Reiniciar animación
         void button.offsetWidth;
 
 
@@ -896,7 +1205,9 @@ async function loadNews(){
         news.forEach(item => {
 
             const card =
-                document.createElement("div");
+                document.createElement(
+                    "div"
+                );
 
 
             card.className =
@@ -908,40 +1219,33 @@ async function loadNews(){
                 <div class="news-header">
 
                     <span class="news-category">
-
                         ${item.category}
-
                     </span>
 
 
                     <span class="news-date">
-
                         ${item.date}
-
                     </span>
 
                 </div>
 
 
                 <h3>
-
                     ${item.icon || "📰"}
-
                     ${item.title}
-
                 </h3>
 
 
                 <p>
-
                     ${item.description}
-
                 </p>
 
             `;
 
 
-            newsContainer.appendChild(card);
+            newsContainer.appendChild(
+                card
+            );
 
         });
 
@@ -970,10 +1274,12 @@ function initializeGameSearch(){
             "game-search"
         );
 
+
     const filterSelect =
         document.getElementById(
             "game-filter"
         );
+
 
     const noGames =
         document.getElementById(
@@ -1032,34 +1338,23 @@ function initializeGameSearch(){
                     .trim() || "";
 
 
-            // ==========================
-            // BUSCADOR
-            // ==========================
-
             const matchesSearch =
                 title.includes(search) ||
                 description.includes(search);
 
-
-            // ==========================
-            // FILTRO
-            // ==========================
 
             const matchesFilter =
                 filter === "all" ||
                 status.includes(filter);
 
 
-            // ==========================
-            // MOSTRAR / OCULTAR
-            // ==========================
-
             if(
                 matchesSearch &&
                 matchesFilter
             ){
 
-                card.style.display = "";
+                card.style.display =
+                    "";
 
                 visibleGames++;
 
@@ -1067,16 +1362,13 @@ function initializeGameSearch(){
 
             else{
 
-                card.style.display = "none";
+                card.style.display =
+                    "none";
 
             }
 
         });
 
-
-        // ==========================
-        // NO GAMES FOUND
-        // ==========================
 
         if(noGames){
 
@@ -1089,10 +1381,6 @@ function initializeGameSearch(){
 
     }
 
-
-    // ==========================
-    // EVENTOS
-    // ==========================
 
     searchInput.addEventListener(
         "input",
@@ -1112,31 +1400,36 @@ function initializeGameSearch(){
 // SERVICE WORKER / PWA
 // =====================================================
 
-if("serviceWorker" in navigator){
+if(
+    "serviceWorker" in navigator
+){
 
-    window.addEventListener("load", () => {
+    window.addEventListener(
+        "load",
+        () => {
 
-        navigator.serviceWorker
-            .register("/sw.js")
+            navigator.serviceWorker
+                .register("/sw.js")
 
-            .then(() => {
+                .then(() => {
 
-                console.log(
-                    "✅ Service Worker registrado correctamente."
-                );
+                    console.log(
+                        "✅ Service Worker registrado correctamente."
+                    );
 
-            })
+                })
 
-            .catch(error => {
+                .catch(error => {
 
-                console.error(
-                    "❌ Error al registrar el Service Worker:",
-                    error
-                );
+                    console.error(
+                        "❌ Error al registrar el Service Worker:",
+                        error
+                    );
 
-            });
+                });
 
-    });
+        }
+    );
 
 }
 
@@ -1145,41 +1438,44 @@ if("serviceWorker" in navigator){
 // LOADING SCREEN
 // =====================================================
 
-window.addEventListener("load", () => {
+window.addEventListener(
+    "load",
+    () => {
 
-    const loader =
-        document.getElementById(
-            "loader"
-        );
-
-
-    if(!loader){
-
-        return;
-
-    }
+        const loader =
+            document.getElementById(
+                "loader"
+            );
 
 
-    setTimeout(() => {
+        if(!loader){
 
-        loader.classList.add(
-            "hidden"
-        );
+            return;
+
+        }
 
 
         setTimeout(() => {
 
-            if(loader){
+            loader.classList.add(
+                "hidden"
+            );
 
-                loader.remove();
 
-            }
+            setTimeout(() => {
 
-        }, 600);
+                if(loader){
 
-    }, 1200);
+                    loader.remove();
 
-});
+                }
+
+            }, 600);
+
+        }, 1200);
+
+    }
+);
 
 
 // =====================================================
@@ -1393,6 +1689,7 @@ async function loadSystemStatus(){
                     "status-operational"
                 );
 
+
                 statusBar?.classList.add(
                     "statusbar-operational"
                 );
@@ -1405,6 +1702,7 @@ async function loadSystemStatus(){
                 status.classList.add(
                     "status-minor"
                 );
+
 
                 statusBar?.classList.add(
                     "statusbar-minor"
@@ -1419,6 +1717,7 @@ async function loadSystemStatus(){
                     "status-maintenance"
                 );
 
+
                 statusBar?.classList.add(
                     "statusbar-maintenance"
                 );
@@ -1432,6 +1731,7 @@ async function loadSystemStatus(){
                     "status-outage"
                 );
 
+
                 statusBar?.classList.add(
                     "statusbar-outage"
                 );
@@ -1444,6 +1744,7 @@ async function loadSystemStatus(){
                 status.classList.add(
                     "status-operational"
                 );
+
 
                 statusBar?.classList.add(
                     "statusbar-operational"
@@ -1676,10 +1977,6 @@ async function checkWebsiteUpdate(){
 
 function showUpdateBanner(versionData){
 
-    // ==========================
-    // EVITAR DUPLICADOS
-    // ==========================
-
     if(
         document.getElementById(
             "update-center"
@@ -1861,9 +2158,6 @@ function openGameModal(game){
 
             <div class="game-modal-box">
 
-
-                <!-- CLOSE -->
-
                 <button
                     class="close-game-modal"
                     aria-label="Close game details"
@@ -1872,8 +2166,6 @@ function openGameModal(game){
                     ✕
                 </button>
 
-
-                <!-- IMAGE -->
 
                 <div class="game-modal-image">
 
@@ -1886,12 +2178,7 @@ function openGameModal(game){
                 </div>
 
 
-                <!-- CONTENT -->
-
                 <div class="game-modal-content">
-
-
-                    <!-- HEADER -->
 
                     <div class="game-modal-header">
 
@@ -1907,8 +2194,6 @@ function openGameModal(game){
                     </div>
 
 
-                    <!-- DESCRIPTION -->
-
                     <p
                         id="modal-game-description"
                         class="game-modal-description"
@@ -1916,11 +2201,7 @@ function openGameModal(game){
                     </p>
 
 
-                    <!-- STATS -->
-
                     <div class="game-modal-stats">
-
-                        <!-- PLAYERS -->
 
                         <div class="modal-stat">
 
@@ -1946,8 +2227,6 @@ function openGameModal(game){
                         </div>
 
 
-                        <!-- MAX PLAYERS -->
-
                         <div class="modal-stat">
 
                             <span
@@ -1972,8 +2251,6 @@ function openGameModal(game){
                         </div>
 
 
-                        <!-- VISITS -->
-
                         <div class="modal-stat">
 
                             <span
@@ -1997,8 +2274,6 @@ function openGameModal(game){
 
                         </div>
 
-
-                        <!-- FAVORITES -->
 
                         <div class="modal-stat">
 
@@ -2043,8 +2318,6 @@ function openGameModal(game){
                     </div>
 
 
-                    <!-- UPDATE -->
-
                     <div class="game-modal-update">
 
                         <h3>
@@ -2058,8 +2331,6 @@ function openGameModal(game){
 
                     </div>
 
-
-                    <!-- BUTTON -->
 
                     <div class="game-modal-buttons">
 
@@ -2084,8 +2355,6 @@ function openGameModal(game){
 
                     </div>
 
-
-                    <!-- FAVORITE -->
 
                     <button
                         id="modal-favorite-btn"
@@ -2234,10 +2503,6 @@ function openGameModal(game){
 
     if(image){
 
-        // ==========================================
-        // PRIORIDAD 1 — ROBLOX THUMBNAIL
-        // ==========================================
-
         if(game.thumbnail){
 
             image.src =
@@ -2245,15 +2510,15 @@ function openGameModal(game){
 
         }
 
-        // ==========================================
-        // PRIORIDAD 2 — IMAGEN CONFIGURADA
-        // ==========================================
-
         else if(game.image){
 
             if(
-                game.image.startsWith("http://") ||
-                game.image.startsWith("https://")
+                game.image.startsWith(
+                    "http://"
+                ) ||
+                game.image.startsWith(
+                    "https://"
+                )
             ){
 
                 image.src =
@@ -2269,10 +2534,6 @@ function openGameModal(game){
             }
 
         }
-
-        // ==========================================
-        // PRIORIDAD 3 — PLACEHOLDER
-        // ==========================================
 
         else{
 
@@ -2352,9 +2613,9 @@ function openGameModal(game){
     }
 
 
-    // ==========================================
+    // ==========================
     // MAX PLAYERS
-    // ==========================================
+    // ==========================
 
     if(maxPlayers){
 
@@ -2394,9 +2655,9 @@ function openGameModal(game){
     }
 
 
-    // ==========================================
+    // ==========================
     // GENRE
-    // ==========================================
+    // ==========================
 
     if(genre){
 
@@ -2431,6 +2692,7 @@ function openGameModal(game){
             playButton.href =
                 `https://www.roblox.com/games/${game.id}`;
 
+
             playButton.style.display =
                 "inline-flex";
 
@@ -2440,6 +2702,7 @@ function openGameModal(game){
 
             playButton.href =
                 "#";
+
 
             playButton.style.display =
                 "none";
@@ -2455,49 +2718,50 @@ function openGameModal(game){
 
     if(copyButton){
 
-        copyButton.onclick = async () => {
+        copyButton.onclick =
+            async () => {
 
-            if(!game.id){
+                if(!game.id){
 
-                return;
+                    return;
 
-            }
-
-
-            const gameUrl =
-                `https://www.roblox.com/games/${game.id}`;
+                }
 
 
-            try{
-
-                await navigator.clipboard.writeText(
-                    gameUrl
-                );
+                const gameUrl =
+                    `https://www.roblox.com/games/${game.id}`;
 
 
-                copyButton.textContent =
-                    "✅ Copied!";
+                try{
 
+                    await navigator.clipboard.writeText(
+                        gameUrl
+                    );
 
-                setTimeout(() => {
 
                     copyButton.textContent =
-                        "📋 Copy Link";
+                        "✅ Copied!";
 
-                }, 2000);
 
-            }
+                    setTimeout(() => {
 
-            catch(error){
+                        copyButton.textContent =
+                            "📋 Copy Link";
 
-                console.error(
-                    "❌ Could not copy game link:",
-                    error
-                );
+                    }, 2000);
 
-            }
+                }
 
-        };
+                catch(error){
+
+                    console.error(
+                        "❌ Could not copy game link:",
+                        error
+                    );
+
+                }
+
+            };
 
     }
 
@@ -2524,50 +2788,45 @@ function openGameModal(game){
             game.id;
 
 
-        modalFavoriteButton.onclick = event => {
+        modalFavoriteButton.onclick =
+            event => {
 
-            event.preventDefault();
-            event.stopPropagation();
+                event.preventDefault();
+                event.stopPropagation();
 
 
-            if(
-                typeof toggleFavorite !==
-                "function"
-            ){
+                if(
+                    typeof toggleFavorite !==
+                    "function"
+                ){
 
-                console.error(
-                    "❌ favorites.js no está cargado."
+                    console.error(
+                        "❌ favorites.js no está cargado."
+                    );
+
+                    return;
+
+                }
+
+
+                toggleFavorite(game);
+
+
+                const isNowFavorite =
+                    typeof isFavorite === "function"
+                        ? isFavorite(game.id)
+                        : false;
+
+
+                updateFavoriteButton(
+                    modalFavoriteButton,
+                    isNowFavorite
                 );
 
-                return;
 
-            }
+                refreshFavoriteButtons();
 
-
-            // IMPORTANTE:
-            // toggleFavorite recibe el objeto completo
-            toggleFavorite(game);
-
-
-            // Obtener el estado REAL después
-            // de agregar/quitar el favorito
-            const isNowFavorite =
-                typeof isFavorite === "function"
-                    ? isFavorite(game.id)
-                    : false;
-
-
-            updateFavoriteButton(
-                modalFavoriteButton,
-                isNowFavorite
-            );
-
-
-            // Actualizar botones de las tarjetas
-            refreshFavoriteButtons();
-
-
-        };
+            };
 
     }
 
@@ -2665,28 +2924,31 @@ function closeGameModal(){
 
 document.addEventListener(
     "keydown",
-    (event) => {
+    event => {
 
         if(
-            event.key === "Escape"
+            event.key !== "Escape"
         ){
 
-            const modal =
-                document.getElementById(
-                    "game-details-modal"
-                );
+            return;
+
+        }
 
 
-            if(
-                modal &&
-                modal.classList.contains(
-                    "active"
-                )
-            ){
+        const modal =
+            document.getElementById(
+                "game-details-modal"
+            );
 
-                closeGameModal();
 
-            }
+        if(
+            modal &&
+            modal.classList.contains(
+                "active"
+            )
+        ){
+
+            closeGameModal();
 
         }
 
