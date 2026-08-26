@@ -9,11 +9,21 @@
 
 document.addEventListener("DOMContentLoaded", async () => {
 
-    // =================================================
+ // =================================================
 // PRIVATE MODE
 // =================================================
 
 let privateModeBlocked = false;
+
+
+// =================================================
+// OBTENER PRIVATE MODE
+// =================================================
+
+const privateMode =
+    document.getElementById(
+        "private-mode"
+    );
 
 
 // =================================================
@@ -74,6 +84,18 @@ if (
         );
 
 
+        if (privateMode) {
+
+            privateMode.style.display =
+                "flex";
+
+        }
+
+
+        // =========================================
+        // INICIALIZAR PRIVATE MODE
+        // =========================================
+
         if (
             typeof initializePrivateMode ===
             "function"
@@ -115,15 +137,24 @@ if (
         "✅ Acceso completo permitido en Private Mode."
     );
 
+
+    // =============================================
+    // OCULTAR PRIVATE MODE PARA OWNER
+    // =============================================
+
+    if (privateMode) {
+
+        privateMode.style.display =
+            "none";
+
+    }
+
 }
 
 
 // =================================================
 // PUBLIC MODE
 // =================================================
-
-// Si la página está pública,
-// asegurarnos de que Private Mode esté oculto.
 
 if (
     typeof WEBSITE_MODE === "undefined" ||
@@ -133,12 +164,6 @@ if (
     console.log(
         "🌐 Manaton Games está en Public Mode."
     );
-
-
-    const privateMode =
-        document.getElementById(
-            "private-mode"
-        );
 
 
     if (privateMode) {
