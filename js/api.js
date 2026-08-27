@@ -1,3 +1,12 @@
+// ==========================================
+// MANATON GAMES - API MANAGER
+// ==========================================
+
+
+// ==========================================
+// ROBLOX API
+// ==========================================
+
 class RobloxAPI {
 
     // ==========================================
@@ -16,6 +25,7 @@ class RobloxAPI {
                     }
                 );
 
+
             if (!response.ok) {
 
                 throw new Error(
@@ -23,6 +33,7 @@ class RobloxAPI {
                 );
 
             }
+
 
             return await response.json();
 
@@ -58,6 +69,7 @@ class RobloxAPI {
                     }
                 );
 
+
             if (!response.ok) {
 
                 throw new Error(
@@ -65,6 +77,7 @@ class RobloxAPI {
                 );
 
             }
+
 
             return await response.json();
 
@@ -100,6 +113,7 @@ class RobloxAPI {
                     }
                 );
 
+
             if (!response.ok) {
 
                 throw new Error(
@@ -107,6 +121,7 @@ class RobloxAPI {
                 );
 
             }
+
 
             return await response.json();
 
@@ -212,3 +227,130 @@ class RobloxAPI {
     }
 
 }
+
+
+// ==========================================
+// MANATON GAMES - DATABASE API
+// ==========================================
+
+class MGApi {
+
+    // ==========================================
+    // BASE REQUEST
+    // ==========================================
+
+    static async request(
+        endpoint,
+        options = {}
+    ) {
+
+        try {
+
+            const response =
+                await fetch(
+                    `/api${endpoint}`,
+                    {
+                        ...options,
+
+                        headers: {
+
+                            "Content-Type":
+                                "application/json",
+
+                            ...(options.headers || {})
+
+                        }
+
+                    }
+                );
+
+
+            // ==========================================
+            // READ RESPONSE
+            // ==========================================
+
+            const data =
+                await response.json();
+
+
+            // ==========================================
+            // CHECK RESPONSE
+            // ==========================================
+
+            if (!response.ok) {
+
+                throw new Error(
+                    data.error ||
+                    `API returned ${response.status}`
+                );
+
+            }
+
+
+            return data;
+
+        }
+
+        catch (error) {
+
+            console.error(
+                "❌ Manaton Games API Error:",
+                error
+            );
+
+            throw error;
+
+        }
+
+    }
+
+
+    // ==========================================
+    // GET USERS
+    // ==========================================
+
+    static async getUsers() {
+
+        return await this.request(
+            "/users",
+            {
+                method: "GET"
+            }
+        );
+
+    }
+
+
+    // ==========================================
+    // CREATE USER
+    // ==========================================
+
+    static async createUser(
+        userData
+    ) {
+
+        return await this.request(
+            "/users",
+            {
+                method: "POST",
+
+                body:
+                    JSON.stringify(
+                        userData
+                    )
+
+            }
+        );
+
+    }
+
+}
+
+
+// ==========================================
+// MANATON GAMES API READY
+// ==========================================
+
+console.log(
+    "✅ Manaton Games API Manager loaded."
+);
