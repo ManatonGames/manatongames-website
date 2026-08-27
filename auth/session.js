@@ -1,13 +1,14 @@
 // ==========================================
 // MANATON GAMES - SESSION MANAGER
+// VERSION 2.0.0
 // ==========================================
 
 
 // ==========================================
-// CONFIG
+// SESSION STORAGE KEY
 // ==========================================
 
-const MG_SESSION_KEY = "mg_session";
+const MG_SESSION_STORAGE_KEY = "session";
 
 
 // ==========================================
@@ -28,8 +29,8 @@ function getSession() {
     try {
 
         const session =
-            localStorage.getItem(
-                MG_SESSION_KEY
+            storageGet(
+                MG_SESSION_STORAGE_KEY
             );
 
 
@@ -40,17 +41,13 @@ function getSession() {
         }
 
 
-        const parsed =
-            JSON.parse(session);
-
-
         if (
-            !parsed ||
-            typeof parsed !== "object"
+            typeof session !== "object" ||
+            Array.isArray(session)
         ) {
 
-            localStorage.removeItem(
-                MG_SESSION_KEY
+            storageRemove(
+                MG_SESSION_STORAGE_KEY
             );
 
             return null;
@@ -63,15 +60,15 @@ function getSession() {
         // ==========================================
 
         const robloxUserId =
-            parsed.robloxUserId ||
-            parsed.robloxId ||
-            parsed.userId ||
+            session.robloxUserId ||
+            session.robloxId ||
+            session.userId ||
             null;
 
 
-        if (robloxUserId) {
+        if (robloxUserId !== null) {
 
-            parsed.robloxUserId =
+            session.robloxUserId =
                 String(
                     robloxUserId
                 );
@@ -83,11 +80,11 @@ function getSession() {
         // COMPROBAR OWNER
         // ==========================================
 
-        parsed.isOwner =
+        session.isOwner =
             !!(
-                parsed.robloxUserId &&
+                session.robloxUserId &&
                 String(
-                    parsed.robloxUserId
+                    session.robloxUserId
                 ) ===
                 MG_OWNER_ROBLOX_ID
             );
@@ -97,15 +94,15 @@ function getSession() {
         // NORMALIZAR ROLE
         // ==========================================
 
-        if (parsed.isOwner) {
+        if (session.isOwner) {
 
-            parsed.role =
+            session.role =
                 "owner";
 
         }
 
 
-        return parsed;
+        return session;
 
     }
 
@@ -116,11 +113,9 @@ function getSession() {
             error
         );
 
-
-        localStorage.removeItem(
-            MG_SESSION_KEY
+        storageRemove(
+            MG_SESSION_STORAGE_KEY
         );
-
 
         return null;
 
@@ -137,11 +132,12 @@ function saveSession(session) {
 
     if (
         !session ||
-        typeof session !== "object"
+        typeof session !== "object" ||
+        Array.isArray(session)
     ) {
 
         console.error(
-            "❌ Cannot save empty session."
+            "❌ Cannot save invalid session."
         );
 
         return false;
@@ -152,15 +148,8 @@ function saveSession(session) {
     try {
 
         // ==========================================
-        // NORMALIZAR ROBLOX ID
+        // COPY SESSION
         // ==========================================
-
-        const robloxUserId =
-            session.robloxUserId ||
-            session.robloxId ||
-            session.userId ||
-            null;
-
 
         const normalizedSession = {
 
@@ -169,7 +158,18 @@ function saveSession(session) {
         };
 
 
-        if (robloxUserId) {
+        // ==========================================
+        // NORMALIZE ROBLOX ID
+        // ==========================================
+
+        const robloxUserId =
+            normalizedSession.robloxUserId ||
+            normalizedSession.robloxId ||
+            normalizedSession.userId ||
+            null;
+
+
+        if (robloxUserId !== null) {
 
             normalizedSession.robloxUserId =
                 String(
@@ -203,15 +203,14 @@ function saveSession(session) {
         }
 
 
-        localStorage.setItem(
-            MG_SESSION_KEY,
-            JSON.stringify(
-                normalizedSession
-            )
+        // ==========================================
+        // SAVE
+        // ==========================================
+
+        return storageSet(
+            MG_SESSION_STORAGE_KEY,
+            normalizedSession
         );
-
-
-        return true;
 
     }
 
@@ -221,7 +220,6 @@ function saveSession(session) {
             "❌ Error saving session:",
             error
         );
-
 
         return false;
 
@@ -238,7 +236,8 @@ function updateSession(data) {
 
     if (
         !data ||
-        typeof data !== "object"
+        typeof data !== "object" ||
+        Array.isArray(data)
     ) {
 
         console.error(
@@ -257,7 +256,6 @@ function updateSession(data) {
     const newSession = {
 
         ...currentSession,
-
         ...data
 
     };
@@ -330,6 +328,10 @@ function setRobloxUserId(
 
     };
 
+
+    // ==========================================
+    // OWNER
+    // ==========================================
 
     if (
         String(
@@ -474,8 +476,8 @@ function logout() {
 
 function clearSession() {
 
-    localStorage.removeItem(
-        MG_SESSION_KEY
+    storageRemove(
+        MG_SESSION_STORAGE_KEY
     );
 
 }
