@@ -23,12 +23,15 @@
 
 const MEA_API_CONFIG = {
 
+    // USGS - terremotos M2.5+ de las últimas 24 horas
     USGS_FEED:
         "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_day.geojson",
 
+    // Tiempo máximo de espera de USGS
     timeout:
         10000,
 
+    // Máximo de eventos enviados a MEA
     maxEvents:
         100
 
@@ -102,6 +105,7 @@ function normalizeUSGSEvent(feature) {
     const geometry =
         feature.geometry || {};
 
+
     const coordinates =
         Array.isArray(
             geometry.coordinates
@@ -110,14 +114,24 @@ function normalizeUSGSEvent(feature) {
             : [];
 
 
+    // --------------------------------------------------------
+    // COORDINATES
+    // --------------------------------------------------------
+
     const longitude =
-        Number(coordinates[0]);
+        Number(
+            coordinates[0]
+        );
 
     const latitude =
-        Number(coordinates[1]);
+        Number(
+            coordinates[1]
+        );
 
     const depth =
-        Number(coordinates[2]);
+        Number(
+            coordinates[2]
+        );
 
 
     if (
@@ -130,9 +144,71 @@ function normalizeUSGSEvent(feature) {
     }
 
 
-    const magnitude =
-        Number(properties.mag);
+    // --------------------------------------------------------
+    // MAGNITUDE
+    // --------------------------------------------------------
 
+    const magnitude =
+        Number(
+            properties.mag
+        );
+
+
+    // --------------------------------------------------------
+    // TIMESTAMP
+    // --------------------------------------------------------
+
+    let timestamp = null;
+
+    if (properties.time) {
+
+        try {
+
+            timestamp =
+                new Date(
+                    properties.time
+                ).toISOString();
+
+        }
+
+        catch {
+
+            timestamp = null;
+
+        }
+
+    }
+
+
+    // --------------------------------------------------------
+    // UPDATED
+    // --------------------------------------------------------
+
+    let updated = null;
+
+    if (properties.updated) {
+
+        try {
+
+            updated =
+                new Date(
+                    properties.updated
+                ).toISOString();
+
+        }
+
+        catch {
+
+            updated = null;
+
+        }
+
+    }
+
+
+    // --------------------------------------------------------
+    // RETURN NORMALIZED EVENT
+    // --------------------------------------------------------
 
     return {
 
@@ -145,9 +221,11 @@ function normalizeUSGSEvent(feature) {
                 ? magnitude
                 : 0,
 
-        latitude,
+        latitude:
+            latitude,
 
-        longitude,
+        longitude:
+            longitude,
 
         depth:
             Number.isFinite(depth)
@@ -159,18 +237,10 @@ function normalizeUSGSEvent(feature) {
             "Ubicación desconocida",
 
         timestamp:
-            properties.time
-                ? new Date(
-                    properties.time
-                ).toISOString()
-                : null,
+            timestamp,
 
         updated:
-            properties.updated
-                ? new Date(
-                    properties.updated
-                ).toISOString()
-                : null,
+            updated,
 
         source:
             "USGS",
@@ -188,10 +258,14 @@ function normalizeUSGSEvent(feature) {
             null,
 
         tsunami:
-            Number(properties.tsunami || 0) === 1,
+            Number(
+                properties.tsunami || 0
+            ) === 1,
 
         significance:
-            Number(properties.sig || 0),
+            Number(
+                properties.sig || 0
+            ),
 
         magnitudeType:
             properties.magType ||
@@ -240,7 +314,9 @@ export default async function handler(req, res) {
     // OPTIONS
     // ========================================================
 
-    if (req.method === "OPTIONS") {
+    if (
+        req.method === "OPTIONS"
+    ) {
 
         return res
             .status(200)
@@ -250,16 +326,27 @@ export default async function handler(req, res) {
 
 
     // ========================================================
-    // GET ONLY
+    // ONLY GET
     // ========================================================
 
-    if (req.method !== "GET") {
+    if (
+        req.method !== "GET"
+    ) {
 
         return res
             .status(405)
             .json({
 
                 success: false,
+
+                system:
+                    "Manaton Earthquake Alert",
+
+                systemCode:
+                    "MEA",
+
+                version:
+                    "0.2.0",
 
                 error:
                     "Method Not Allowed"
@@ -294,10 +381,12 @@ export default async function handler(req, res) {
 
 
         // ====================================================
-        // USGS RESPONSE ERROR
+        // USGS ERROR
         // ====================================================
 
-        if (!response.ok) {
+        if (
+            !response.ok
+        ) {
 
             throw new Error(
                 `USGS respondió con HTTP ${response.status}`
@@ -316,7 +405,9 @@ export default async function handler(req, res) {
 
         if (
             !feed ||
-            !Array.isArray(feed.features)
+            !Array.isArray(
+                feed.features
+            )
         ) {
 
             throw new Error(
@@ -327,7 +418,7 @@ export default async function handler(req, res) {
 
 
         // ====================================================
-        // NORMALIZE
+        // NORMALIZE EVENTS
         // ====================================================
 
         const earthquakes =
@@ -357,12 +448,19 @@ export default async function handler(req, res) {
         // ====================================================
         // SUCCESS RESPONSE
         // ====================================================
+        //
+        // IMPORTANTE:
+        // El frontend earthquake.js espera un array llamado
+        // "earthquakes".
+        //
+        // ====================================================
 
         return res
             .status(200)
             .json({
 
-                success: true,
+                success:
+                    true,
 
                 system:
                     "Manaton Earthquake Alert",
@@ -382,10 +480,13 @@ export default async function handler(req, res) {
                 source:
                     "USGS",
 
+                sourceFeed:
+                    MEA_API_CONFIG.USGS_FEED,
+
                 count:
                     earthquakes.length,
 
-                data:
+                earthquakes:
                     earthquakes,
 
                 generated:
@@ -403,6 +504,11 @@ export default async function handler(req, res) {
 
     }
 
+
+    // ========================================================
+    // API ERROR
+    // ========================================================
+
     catch (error) {
 
         console.error(
@@ -411,15 +517,12 @@ export default async function handler(req, res) {
         );
 
 
-        // ====================================================
-        // ERROR RESPONSE
-        // ====================================================
-
         return res
             .status(502)
             .json({
 
-                success: false,
+                success:
+                    false,
 
                 system:
                     "Manaton Earthquake Alert",
@@ -429,6 +532,9 @@ export default async function handler(req, res) {
 
                 version:
                     "0.2.0",
+
+                environment:
+                    "production",
 
                 status:
                     "offline",
@@ -447,3 +553,8 @@ export default async function handler(req, res) {
     }
 
 }
+
+
+// ============================================================
+// END OF MEA EARTHQUAKE API
+// ============================================================
