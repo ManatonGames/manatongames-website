@@ -1,16 +1,16 @@
 // ============================================================
 // MANATON EARTHQUAKE ALERT (MEA)
-// CORE ENGINE
+// EARTHQUAKE API
 // ============================================================
 //
 // Version: 0.2.0
 // Status: LIVE DATA
 //
-// MEA obtiene datos sísmicos reales mediante:
-// /api/earthquakes
-//
-// Fuente de datos:
+// Fuente:
 // U.S. Geological Survey (USGS)
+//
+// Endpoint:
+// /api/earthquakes
 //
 // ============================================================
 
@@ -18,260 +18,37 @@
 
 
 // ============================================================
-// MEA CONFIGURATION
+// CONFIGURATION
 // ============================================================
 
-const MEA_CONFIG = {
+const MEA_API_CONFIG = {
 
-    // --------------------------------------------------------
-    // SYSTEM
-    // --------------------------------------------------------
+    USGS_FEED:
+        "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_day.geojson",
 
-    name: "Manaton Earthquake Alert",
+    timeout:
+        10000,
 
-    shortName: "MEA",
-
-    version: "0.2.0",
-
-    environment: "production",
-
-
-    // --------------------------------------------------------
-    // SYSTEM STATUS
-    // --------------------------------------------------------
-
-    enabled: true,
-
-    initialized: false,
-
-    monitoring: false,
-
-
-    // --------------------------------------------------------
-    // EARTHQUAKE SETTINGS
-    // --------------------------------------------------------
-
-    minimumMagnitude: 0,
-
-    maximumAlertDistanceKm: 500,
-
-    locationAccuracyRequired: false,
-
-
-    // --------------------------------------------------------
-    // API
-    // --------------------------------------------------------
-
-    apiEndpoint: "/api/earthquakes",
-
-    requestTimeout: 10000,
-
-    updateInterval: 30000,
-
-
-    // --------------------------------------------------------
-    // DATA
-    // --------------------------------------------------------
-
-    maximumStoredEarthquakes: 100,
-
-
-    // --------------------------------------------------------
-    // DEBUG
-    // --------------------------------------------------------
-
-    debug: true
+    maxEvents:
+        100
 
 };
-
-
-// ============================================================
-// MEA STATE
-// ============================================================
-
-const MEA_STATE = {
-
-    // --------------------------------------------------------
-    // SYSTEM
-    // --------------------------------------------------------
-
-    initialized: false,
-
-    monitoring: false,
-
-    lastUpdate: null,
-
-    lastEarthquake: null,
-
-
-    // --------------------------------------------------------
-    // LOCATION
-    // --------------------------------------------------------
-
-    location: {
-
-        available: false,
-
-        latitude: null,
-
-        longitude: null,
-
-        accuracy: null
-
-    },
-
-
-    // --------------------------------------------------------
-    // EARTHQUAKES
-    // --------------------------------------------------------
-
-    earthquakes: [],
-
-    activeAlerts: [],
-
-    processedEarthquakes: [],
-
-
-    // --------------------------------------------------------
-    // CONNECTION
-    // --------------------------------------------------------
-
-    connected: false,
-
-    lastConnectionCheck: null,
-
-    lastConnectionError: null,
-
-    apiRequestInProgress: false,
-
-    lastApiResponse: null,
-
-    updateTimer: null
-
-};
-
-
-// ============================================================
-// MEA EVENTS
-// ============================================================
-
-const MEA_EVENTS = {
-
-    initialized: "mea:initialized",
-
-    update: "mea:update",
-
-    earthquake: "mea:earthquake",
-
-    alert: "mea:alert",
-
-    location: "mea:location",
-
-    error: "mea:error",
-
-    monitoringStarted: "mea:monitoring-started",
-
-    monitoringStopped: "mea:monitoring-stopped"
-
-};
-
-
-// ============================================================
-// DEBUG LOGGER
-// ============================================================
-
-function meaLog(...messages) {
-
-    if (!MEA_CONFIG.debug) {
-
-        return;
-
-    }
-
-
-    console.log(
-        "[MEA]",
-        ...messages
-    );
-
-}
-
-
-// ============================================================
-// ERROR LOGGER
-// ============================================================
-
-function meaError(...messages) {
-
-    console.error(
-        "[MEA ERROR]",
-        ...messages
-    );
-
-
-    dispatchMEAEvent(
-        MEA_EVENTS.error,
-        {
-            messages
-        }
-    );
-
-}
-
-
-// ============================================================
-// EVENT DISPATCHER
-// ============================================================
-
-function dispatchMEAEvent(
-    eventName,
-    detail = {}
-) {
-
-    try {
-
-        window.dispatchEvent(
-            new CustomEvent(
-                eventName,
-                {
-                    detail
-                }
-            )
-        );
-
-    }
-
-    catch (error) {
-
-        console.error(
-            "[MEA] Failed to dispatch event:",
-            error
-        );
-
-    }
-
-}
 
 
 // ============================================================
 // FETCH WITH TIMEOUT
 // ============================================================
 
-async function fetchMEAWithTimeout(
-    url,
-    timeout
-) {
+async function fetchWithTimeout(url, timeout) {
 
     const controller =
         new AbortController();
-
 
     const timer =
         setTimeout(
             () => controller.abort(),
             timeout
         );
-
 
     try {
 
@@ -282,449 +59,21 @@ async function fetchMEAWithTimeout(
                     method: "GET",
 
                     headers: {
-                        "Accept":
-                            "application/json"
+                        "Accept": "application/json"
                     },
-
-                    cache: "no-store",
 
                     signal:
                         controller.signal
                 }
             );
 
-
-        clearTimeout(timer);
-
-
         return response;
-
-    }
-
-    catch (error) {
-
-        clearTimeout(timer);
-
-        throw error;
-
-    }
-
-}
-
-
-// ============================================================
-// SYSTEM INITIALIZATION
-// ============================================================
-
-function initializeMEA() {
-
-    if (MEA_STATE.initialized) {
-
-        meaLog(
-            "MEA ya estaba inicializado."
-        );
-
-        return;
-
-    }
-
-
-    if (!MEA_CONFIG.enabled) {
-
-        meaLog(
-            "MEA está desactivado."
-        );
-
-        return;
-
-    }
-
-
-    meaLog(
-        `Inicializando ${MEA_CONFIG.name} v${MEA_CONFIG.version}...`
-    );
-
-
-    MEA_STATE.initialized = true;
-
-    MEA_STATE.lastUpdate =
-        new Date().toISOString();
-
-
-    dispatchMEAEvent(
-        MEA_EVENTS.initialized,
-        {
-            version:
-                MEA_CONFIG.version
-        }
-    );
-
-
-    meaLog(
-        "MEA inicializado correctamente."
-    );
-
-}
-
-
-// ============================================================
-// START MONITORING
-// ============================================================
-
-function startMEAMonitoring() {
-
-    if (!MEA_STATE.initialized) {
-
-        initializeMEA();
-
-    }
-
-
-    if (!MEA_CONFIG.enabled) {
-
-        meaError(
-            "No se puede iniciar MEA porque está desactivado."
-        );
-
-        return false;
-
-    }
-
-
-    if (MEA_STATE.monitoring) {
-
-        meaLog(
-            "MEA ya está monitoreando."
-        );
-
-        return true;
-
-    }
-
-
-    MEA_STATE.monitoring = true;
-
-
-    meaLog(
-        "Monitoreo sísmico iniciado."
-    );
-
-
-    dispatchMEAEvent(
-        MEA_EVENTS.monitoringStarted
-    );
-
-
-    // --------------------------------------------------------
-    // Primera actualización inmediata
-    // --------------------------------------------------------
-
-    updateMEA();
-
-
-    // --------------------------------------------------------
-    // Actualizaciones periódicas
-    // --------------------------------------------------------
-
-    MEA_STATE.updateTimer =
-        setInterval(
-            () => {
-
-                if (
-                    MEA_STATE.monitoring
-                ) {
-
-                    updateMEA();
-
-                }
-
-            },
-            MEA_CONFIG.updateInterval
-        );
-
-
-    return true;
-
-}
-
-
-// ============================================================
-// STOP MONITORING
-// ============================================================
-
-function stopMEAMonitoring() {
-
-    if (!MEA_STATE.monitoring) {
-
-        return;
-
-    }
-
-
-    MEA_STATE.monitoring = false;
-
-
-    // --------------------------------------------------------
-    // Detener timer
-    // --------------------------------------------------------
-
-    if (
-        MEA_STATE.updateTimer !== null
-    ) {
-
-        clearInterval(
-            MEA_STATE.updateTimer
-        );
-
-        MEA_STATE.updateTimer = null;
-
-    }
-
-
-    meaLog(
-        "Monitoreo sísmico detenido."
-    );
-
-
-    dispatchMEAEvent(
-        MEA_EVENTS.monitoringStopped
-    );
-
-}
-
-
-// ============================================================
-// UPDATE MEA
-// ============================================================
-
-async function updateMEA() {
-
-    if (!MEA_STATE.initialized) {
-
-        return null;
-
-    }
-
-
-    if (
-        MEA_STATE.apiRequestInProgress
-    ) {
-
-        meaLog(
-            "Ya existe una solicitud API en progreso."
-        );
-
-        return null;
-
-    }
-
-
-    MEA_STATE.lastUpdate =
-        new Date().toISOString();
-
-
-    meaLog(
-        "Actualizando estado de MEA..."
-    );
-
-
-    dispatchMEAEvent(
-        MEA_EVENTS.update,
-        {
-            timestamp:
-                MEA_STATE.lastUpdate
-        }
-    );
-
-
-    return fetchMEAEarthquakes();
-
-}
-
-
-// ============================================================
-// FETCH EARTHQUAKES
-// ============================================================
-
-async function fetchMEAEarthquakes() {
-
-    if (
-        MEA_STATE.apiRequestInProgress
-    ) {
-
-        return null;
-
-    }
-
-
-    MEA_STATE.apiRequestInProgress = true;
-
-
-    const connectionTime =
-        new Date().toISOString();
-
-
-    try {
-
-        meaLog(
-            "Consultando API sísmica:",
-            MEA_CONFIG.apiEndpoint
-        );
-
-
-        const response =
-            await fetchMEAWithTimeout(
-                MEA_CONFIG.apiEndpoint,
-                MEA_CONFIG.requestTimeout
-            );
-
-
-        // ----------------------------------------------------
-        // HTTP ERROR
-        // ----------------------------------------------------
-
-        if (!response.ok) {
-
-            throw new Error(
-                `API MEA respondió con HTTP ${response.status}`
-            );
-
-        }
-
-
-        // ----------------------------------------------------
-        // JSON
-        // ----------------------------------------------------
-
-        const result =
-            await response.json();
-
-
-        // ----------------------------------------------------
-        // VALIDATION
-        // ----------------------------------------------------
-
-        if (
-            !result ||
-            result.success !== true ||
-            !Array.isArray(result.data)
-        ) {
-
-            throw new Error(
-                "Respuesta inválida de la API MEA."
-            );
-
-        }
-
-
-        // ----------------------------------------------------
-        // CONNECTION SUCCESS
-        // ----------------------------------------------------
-
-        MEA_STATE.connected = true;
-
-        MEA_STATE.lastConnectionCheck =
-            connectionTime;
-
-        MEA_STATE.lastConnectionError =
-            null;
-
-        MEA_STATE.lastApiResponse =
-            result;
-
-
-        meaLog(
-            `API conectada. ${result.data.length} eventos recibidos.`
-        );
-
-
-        // ----------------------------------------------------
-        // REGISTER EVENTS
-        // ----------------------------------------------------
-
-        let newEarthquakes = 0;
-
-
-        for (
-            const earthquake
-            of result.data
-        ) {
-
-            const registered =
-                registerMEAEarthquake(
-                    earthquake
-                );
-
-
-            if (
-                registered &&
-                registered.__meaNew === true
-            ) {
-
-                newEarthquakes++;
-
-            }
-
-        }
-
-
-        // ----------------------------------------------------
-        // REMOVE INTERNAL FLAG
-        // ----------------------------------------------------
-
-        MEA_STATE.earthquakes =
-            MEA_STATE.earthquakes.map(
-                earthquake => {
-
-                    const clean =
-                        {
-                            ...earthquake
-                        };
-
-                    delete clean.__meaNew;
-
-                    return clean;
-
-                }
-            );
-
-
-        meaLog(
-            `Actualización completada. ${newEarthquakes} terremotos nuevos.`
-        );
-
-
-        return result;
-
-    }
-
-    catch (error) {
-
-        MEA_STATE.connected = false;
-
-        MEA_STATE.lastConnectionCheck =
-            connectionTime;
-
-
-        MEA_STATE.lastConnectionError =
-            error?.message ||
-            "Error desconocido";
-
-
-        meaError(
-            "No fue posible actualizar los datos sísmicos.",
-            error
-        );
-
-
-        return null;
 
     }
 
     finally {
 
-        MEA_STATE.apiRequestInProgress =
-            false;
+        clearTimeout(timer);
 
     }
 
@@ -732,44 +81,14 @@ async function fetchMEAEarthquakes() {
 
 
 // ============================================================
-// REGISTER EARTHQUAKE
+// NORMALIZE USGS EVENT
 // ============================================================
 
-function registerMEAEarthquake(
-    earthquake
-) {
-
-    if (!earthquake) {
-
-        meaError(
-            "Se intentó registrar un terremoto inexistente."
-        );
-
-        return null;
-
-    }
-
-
-    const normalized =
-        normalizeMEAEarthquake(
-            earthquake
-        );
-
-
-    if (!normalized) {
-
-        return null;
-
-    }
-
-
-    // --------------------------------------------------------
-    // MAGNITUDE FILTER
-    // --------------------------------------------------------
+function normalizeUSGSEvent(feature) {
 
     if (
-        normalized.magnitude <
-        MEA_CONFIG.minimumMagnitude
+        !feature ||
+        typeof feature !== "object"
     ) {
 
         return null;
@@ -777,112 +96,34 @@ function registerMEAEarthquake(
     }
 
 
-    // --------------------------------------------------------
-    // DUPLICATE CHECK
-    // --------------------------------------------------------
+    const properties =
+        feature.properties || {};
 
-    const exists =
-        MEA_STATE.earthquakes.some(
-            item =>
-                item.id === normalized.id
-        );
+    const geometry =
+        feature.geometry || {};
 
-
-    if (exists) {
-
-        return normalized;
-
-    }
+    const coordinates =
+        Array.isArray(
+            geometry.coordinates
+        )
+            ? geometry.coordinates
+            : [];
 
 
-    // --------------------------------------------------------
-    // MARK AS NEW
-    // --------------------------------------------------------
+    const longitude =
+        Number(coordinates[0]);
 
-    normalized.__meaNew = true;
+    const latitude =
+        Number(coordinates[1]);
 
+    const depth =
+        Number(coordinates[2]);
 
-    // --------------------------------------------------------
-    // STORE
-    // --------------------------------------------------------
-
-    MEA_STATE.earthquakes.unshift(
-        normalized
-    );
-
-
-    // --------------------------------------------------------
-    // LIMIT STORAGE
-    // --------------------------------------------------------
 
     if (
-        MEA_STATE.earthquakes.length >
-        MEA_CONFIG.maximumStoredEarthquakes
+        !Number.isFinite(longitude) ||
+        !Number.isFinite(latitude)
     ) {
-
-        MEA_STATE.earthquakes =
-            MEA_STATE.earthquakes.slice(
-                0,
-                MEA_CONFIG.maximumStoredEarthquakes
-            );
-
-    }
-
-
-    // --------------------------------------------------------
-    // LAST EARTHQUAKE
-    // --------------------------------------------------------
-
-    MEA_STATE.lastEarthquake =
-        normalized;
-
-
-    // --------------------------------------------------------
-    // PROCESSED
-    // --------------------------------------------------------
-
-    MEA_STATE.processedEarthquakes.push(
-        normalized.id
-    );
-
-
-    // --------------------------------------------------------
-    // EVENT
-    // --------------------------------------------------------
-
-    meaLog(
-        "Nuevo terremoto registrado:",
-        normalized
-    );
-
-
-    dispatchMEAEvent(
-        MEA_EVENTS.earthquake,
-        normalized
-    );
-
-
-    return normalized;
-
-}
-
-
-// ============================================================
-// NORMALIZE EARTHQUAKE
-// ============================================================
-
-function normalizeMEAEarthquake(
-    earthquake
-) {
-
-    if (
-        typeof earthquake !== "object" ||
-        earthquake === null
-    ) {
-
-        meaError(
-            "Formato de terremoto inválido."
-        );
 
         return null;
 
@@ -890,68 +131,19 @@ function normalizeMEAEarthquake(
 
 
     const magnitude =
-        Number(
-            earthquake.magnitude ?? 0
-        );
-
-
-    const latitude =
-        Number(
-            earthquake.latitude ?? 0
-        );
-
-
-    const longitude =
-        Number(
-            earthquake.longitude ?? 0
-        );
-
-
-    const depth =
-        earthquake.depth !== null &&
-        earthquake.depth !== undefined
-            ? Number(earthquake.depth)
-            : null;
-
-
-    if (
-        !Number.isFinite(magnitude) ||
-        !Number.isFinite(latitude) ||
-        !Number.isFinite(longitude)
-    ) {
-
-        meaError(
-            "Datos numéricos inválidos en terremoto."
-        );
-
-        return null;
-
-    }
-
-
-    if (
-        latitude < -90 ||
-        latitude > 90 ||
-        longitude < -180 ||
-        longitude > 180
-    ) {
-
-        meaError(
-            "Coordenadas sísmicas fuera de rango."
-        );
-
-        return null;
-
-    }
+        Number(properties.mag);
 
 
     return {
 
         id:
-            earthquake.id ||
-            `mea-${Date.now()}`,
+            feature.id ||
+            `usgs-${properties.code || Date.now()}`,
 
-        magnitude,
+        magnitude:
+            Number.isFinite(magnitude)
+                ? magnitude
+                : 0,
 
         latitude,
 
@@ -963,51 +155,54 @@ function normalizeMEAEarthquake(
                 : null,
 
         location:
-            earthquake.location ||
+            properties.place ||
             "Ubicación desconocida",
 
         timestamp:
-            earthquake.timestamp ||
-            new Date().toISOString(),
+            properties.time
+                ? new Date(
+                    properties.time
+                ).toISOString()
+                : null,
 
         updated:
-            earthquake.updated ||
-            null,
+            properties.updated
+                ? new Date(
+                    properties.updated
+                ).toISOString()
+                : null,
 
         source:
-            earthquake.source ||
-            "unknown",
+            "USGS",
 
         sourceUrl:
-            earthquake.sourceUrl ||
+            properties.url ||
             null,
 
         detailUrl:
-            earthquake.detailUrl ||
+            properties.detail ||
             null,
 
         alert:
-            earthquake.alert ||
+            properties.alert ||
             null,
 
         tsunami:
-            earthquake.tsunami === true,
+            Number(properties.tsunami || 0) === 1,
 
         significance:
-            Number(
-                earthquake.significance ?? 0
-            ),
+            Number(properties.sig || 0),
 
         magnitudeType:
-            earthquake.magnitudeType ||
+            properties.magType ||
             null,
 
         status:
-            earthquake.status ||
+            properties.status ||
             null,
 
         type:
-            earthquake.type ||
+            properties.type ||
             null
 
     };
@@ -1016,431 +211,239 @@ function normalizeMEAEarthquake(
 
 
 // ============================================================
-// GET EARTHQUAKES
+// API HANDLER
 // ============================================================
 
-function getMEAEarthquakes() {
+export default async function handler(req, res) {
 
-    return MEA_STATE.earthquakes.map(
-        earthquake => {
+    // ========================================================
+    // CORS
+    // ========================================================
 
-            const clean =
-                {
-                    ...earthquake
-                };
-
-            delete clean.__meaNew;
-
-            return clean;
-
-        }
+    res.setHeader(
+        "Access-Control-Allow-Origin",
+        "*"
     );
 
-}
+    res.setHeader(
+        "Access-Control-Allow-Methods",
+        "GET, OPTIONS"
+    );
+
+    res.setHeader(
+        "Access-Control-Allow-Headers",
+        "Content-Type"
+    );
 
 
-// ============================================================
-// GET MEA STATE
-// ============================================================
+    // ========================================================
+    // OPTIONS
+    // ========================================================
 
-function getMEAState() {
+    if (req.method === "OPTIONS") {
 
-    return {
-
-        ...MEA_STATE,
-
-        location: {
-
-            ...MEA_STATE.location
-
-        },
-
-        earthquakes:
-            getMEAEarthquakes(),
-
-        activeAlerts: [
-
-            ...MEA_STATE.activeAlerts
-
-        ]
-
-    };
-
-}
-
-
-// ============================================================
-// GET MEA CONFIG
-// ============================================================
-
-function getMEAConfig() {
-
-    return {
-
-        ...MEA_CONFIG
-
-    };
-
-}
-
-
-// ============================================================
-// SET LOCATION
-// ============================================================
-
-function setMEALocation(
-    latitude,
-    longitude,
-    accuracy = null
-) {
-
-    const lat =
-        Number(latitude);
-
-    const lon =
-        Number(longitude);
-
-
-    if (
-        !Number.isFinite(lat) ||
-        !Number.isFinite(lon)
-    ) {
-
-        meaError(
-            "Coordenadas inválidas."
-        );
-
-        return false;
+        return res
+            .status(200)
+            .end();
 
     }
 
 
-    if (
-        lat < -90 ||
-        lat > 90 ||
-        lon < -180 ||
-        lon > 180
-    ) {
+    // ========================================================
+    // GET ONLY
+    // ========================================================
 
-        meaError(
-            "Coordenadas fuera de rango."
-        );
+    if (req.method !== "GET") {
 
-        return false;
+        return res
+            .status(405)
+            .json({
+
+                success: false,
+
+                error:
+                    "Method Not Allowed"
+
+            });
 
     }
 
 
-    let normalizedAccuracy = null;
+    // ========================================================
+    // REQUEST USGS
+    // ========================================================
+
+    try {
+
+        console.log(
+            "[MEA API] Consultando USGS..."
+        );
 
 
-    if (
-        accuracy !== null &&
-        accuracy !== undefined
-    ) {
+        const response =
+            await fetchWithTimeout(
+                MEA_API_CONFIG.USGS_FEED,
+                MEA_API_CONFIG.timeout
+            );
 
-        const numericAccuracy =
-            Number(accuracy);
+
+        console.log(
+            "[MEA API] USGS HTTP:",
+            response.status
+        );
+
+
+        // ====================================================
+        // USGS RESPONSE ERROR
+        // ====================================================
+
+        if (!response.ok) {
+
+            throw new Error(
+                `USGS respondió con HTTP ${response.status}`
+            );
+
+        }
+
+
+        // ====================================================
+        // PARSE JSON
+        // ====================================================
+
+        const feed =
+            await response.json();
 
 
         if (
-            Number.isFinite(
-                numericAccuracy
-            ) &&
-            numericAccuracy >= 0
+            !feed ||
+            !Array.isArray(feed.features)
         ) {
 
-            normalizedAccuracy =
-                numericAccuracy;
+            throw new Error(
+                "USGS devolvió un formato GeoJSON inválido."
+            );
 
         }
+
+
+        // ====================================================
+        // NORMALIZE
+        // ====================================================
+
+        const earthquakes =
+            feed.features
+
+                .map(
+                    normalizeUSGSEvent
+                )
+
+                .filter(
+                    event =>
+                        event !== null
+                )
+
+                .slice(
+                    0,
+                    MEA_API_CONFIG.maxEvents
+                );
+
+
+        console.log(
+            "[MEA API] Terremotos obtenidos:",
+            earthquakes.length
+        );
+
+
+        // ====================================================
+        // SUCCESS RESPONSE
+        // ====================================================
+
+        return res
+            .status(200)
+            .json({
+
+                success: true,
+
+                system:
+                    "Manaton Earthquake Alert",
+
+                systemCode:
+                    "MEA",
+
+                version:
+                    "0.2.0",
+
+                environment:
+                    "production",
+
+                status:
+                    "online",
+
+                source:
+                    "USGS",
+
+                count:
+                    earthquakes.length,
+
+                data:
+                    earthquakes,
+
+                generated:
+                    feed.metadata &&
+                    feed.metadata.generated
+                        ? new Date(
+                            feed.metadata.generated
+                        ).toISOString()
+                        : null,
+
+                timestamp:
+                    new Date().toISOString()
+
+            });
 
     }
 
+    catch (error) {
 
-    MEA_STATE.location = {
+        console.error(
+            "[MEA API ERROR]",
+            error
+        );
 
-        available: true,
 
-        latitude: lat,
+        // ====================================================
+        // ERROR RESPONSE
+        // ====================================================
 
-        longitude: lon,
+        return res
+            .status(502)
+            .json({
 
-        accuracy:
-            normalizedAccuracy
+                success: false,
 
-    };
+                system:
+                    "Manaton Earthquake Alert",
 
+                systemCode:
+                    "MEA",
 
-    meaLog(
-        "Ubicación MEA actualizada:",
-        MEA_STATE.location
-    );
+                version:
+                    "0.2.0",
 
+                status:
+                    "offline",
 
-    dispatchMEAEvent(
-        MEA_EVENTS.location,
-        {
-            ...MEA_STATE.location
-        }
-    );
+                source:
+                    "USGS",
 
+                error:
+                    "No fue posible obtener los datos sísmicos.",
 
-    return true;
+                timestamp:
+                    new Date().toISOString()
 
-}
-
-
-// ============================================================
-// CLEAR LOCATION
-// ============================================================
-
-function clearMEALocation() {
-
-    MEA_STATE.location = {
-
-        available: false,
-
-        latitude: null,
-
-        longitude: null,
-
-        accuracy: null
-
-    };
-
-
-    meaLog(
-        "Ubicación MEA eliminada."
-    );
-
-
-    dispatchMEAEvent(
-        MEA_EVENTS.location,
-        {
-            ...MEA_STATE.location
-        }
-    );
-
-}
-
-
-// ============================================================
-// CLEAR EARTHQUAKE DATA
-// ============================================================
-
-function clearMEAEarthquakes() {
-
-    MEA_STATE.earthquakes = [];
-
-    MEA_STATE.activeAlerts = [];
-
-    MEA_STATE.processedEarthquakes = [];
-
-    MEA_STATE.lastEarthquake = null;
-
-
-    meaLog(
-        "Datos sísmicos locales limpiados."
-    );
-
-}
-
-
-// ============================================================
-// SYSTEM STATUS
-// ============================================================
-
-function getMEAStatus() {
-
-    return {
-
-        name:
-            MEA_CONFIG.name,
-
-        version:
-            MEA_CONFIG.version,
-
-        environment:
-            MEA_CONFIG.environment,
-
-        enabled:
-            MEA_CONFIG.enabled,
-
-        initialized:
-            MEA_STATE.initialized,
-
-        monitoring:
-            MEA_STATE.monitoring,
-
-        connected:
-            MEA_STATE.connected,
-
-        lastUpdate:
-            MEA_STATE.lastUpdate,
-
-        lastConnectionCheck:
-            MEA_STATE.lastConnectionCheck,
-
-        lastConnectionError:
-            MEA_STATE.lastConnectionError,
-
-        apiRequestInProgress:
-            MEA_STATE.apiRequestInProgress,
-
-        locationAvailable:
-            MEA_STATE.location.available,
-
-        earthquakeCount:
-            MEA_STATE.earthquakes.length,
-
-        activeAlertCount:
-            MEA_STATE.activeAlerts.length
-
-    };
-
-}
-
-
-// ============================================================
-// TEST EARTHQUAKE
-// ============================================================
-
-function testMEAEarthquake() {
-
-    const testEarthquake = {
-
-        id:
-            `mea-test-${Date.now()}`,
-
-        magnitude: 5.0,
-
-        latitude: 4.7110,
-
-        longitude: -74.0721,
-
-        depth: 10,
-
-        location:
-            "MEA Test Event",
-
-        timestamp:
-            new Date().toISOString(),
-
-        source:
-            "MEA_TEST"
-
-    };
-
-
-    return registerMEAEarthquake(
-        testEarthquake
-    );
-
-}
-
-
-// ============================================================
-// PUBLIC API
-// ============================================================
-
-window.MEA = {
-
-    // --------------------------------------------------------
-    // System
-    // --------------------------------------------------------
-
-    initialize:
-        initializeMEA,
-
-    start:
-        startMEAMonitoring,
-
-    stop:
-        stopMEAMonitoring,
-
-    update:
-        updateMEA,
-
-
-    // --------------------------------------------------------
-    // LIVE DATA
-    // --------------------------------------------------------
-
-    fetchEarthquakes:
-        fetchMEAEarthquakes,
-
-    getEarthquakes:
-        getMEAEarthquakes,
-
-
-    // --------------------------------------------------------
-    // State
-    // --------------------------------------------------------
-
-    getState:
-        getMEAState,
-
-    getConfig:
-        getMEAConfig,
-
-    getStatus:
-        getMEAStatus,
-
-
-    // --------------------------------------------------------
-    // Earthquakes
-    // --------------------------------------------------------
-
-    registerEarthquake:
-        registerMEAEarthquake,
-
-    testEarthquake:
-        testMEAEarthquake,
-
-    clearEarthquakes:
-        clearMEAEarthquakes,
-
-
-    // --------------------------------------------------------
-    // Location
-    // --------------------------------------------------------
-
-    setLocation:
-        setMEALocation,
-
-    clearLocation:
-        clearMEALocation,
-
-
-    // --------------------------------------------------------
-    // Events
-    // --------------------------------------------------------
-
-    events:
-        MEA_EVENTS
-
-};
-
-
-// ============================================================
-// AUTO INITIALIZATION
-// ============================================================
-
-document.addEventListener(
-    "DOMContentLoaded",
-    () => {
-
-        initializeMEA();
+            });
 
     }
-);
 
-
-// ============================================================
-// END
-// ============================================================
-
-meaLog(
-    `MEA Core v${MEA_CONFIG.version} cargado`
-);
+}
