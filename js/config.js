@@ -6,7 +6,7 @@
 // "public"  → Página normal
 // "private" → Pantalla privada
 
-const WEBSITE_MODE = "private";
+const WEBSITE_MODE = "public";
 
 
 // ==========================================
